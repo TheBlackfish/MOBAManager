@@ -6,6 +6,9 @@ namespace MOBAManager.Management.Heroes
 {
     partial class HeroManager
     {
+        /// <summary>
+        /// Creates all of the heros for the initial construction of the game. The heroes are immediately placed into the HeroManager's hero dictionary.
+        /// </summary>
         private void createHeroes()
         {
             Random rnd = new Random();

@@ -8,11 +8,32 @@ namespace MOBAManager.Management
 {
     class Hero
     {
+        #region Variables
+        /// <summary>
+        /// The ID of the hero.
+        /// </summary>
         private int _id;
+
+        /// <summary>
+        /// The name of the hero.
+        /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The base power level of the hero. This reflects how good the hero is in a vacuum.
+        /// </summary>
         private int powerLevel = 0;
+
+        /// <summary>
+        /// The synergistic combos with this hero. This represents certain heros performing better with other heros on their team.
+        /// </summary>
         private Dictionary<int, int> synergies;
+
+        /// <summary>
+        /// The counters to this hero. This represents certain heros being able to shut down this hero when on the opposing team, or this hero doing that much better.
+        /// </summary>
         private Dictionary<int, int> counters;
+        #endregion
 
         #region Accessors
         /// <summary>
@@ -40,7 +61,7 @@ namespace MOBAManager.Management
         /// </summary>
         /// <param name="friendlies">The list of all other heroes on the current team selecting.</param>
         /// <param name="enemies">The list of all other heroes on the enemy team.</param>
-        /// <returns></returns>
+        /// <returns>The skill level of the hero given the circumstances provided.</returns>
         public int calculatePerformance(List<int> friendlies, List<int> enemies)
         {
             int ret = this.powerLevel;
@@ -62,7 +83,7 @@ namespace MOBAManager.Management
                 }
             }
 
-            return 0;
+            return ret;
         }
 
         /// <summary>
@@ -108,6 +129,8 @@ namespace MOBAManager.Management
             _id = id;
             _name = name;
             powerLevel = pl;
+            synergies = new Dictionary<int, int>();
+            counters = new Dictionary<int, int>();
         }
         #endregion
     }

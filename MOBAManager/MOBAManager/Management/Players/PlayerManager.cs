@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MOBAManager.Management.Heroes
+namespace MOBAManager.Management.Players
 {
-    partial class HeroManager
+    partial class PlayerManager
     {
         #region Variables
         /// <summary>
         /// The dictionary containing all of the heroes.
         /// </summary>
-        private Dictionary<int, Hero> allHeroes;
+        private Dictionary<int, Player> allPlayers;
         #endregion
 
         #region Public Methods
@@ -20,9 +20,9 @@ namespace MOBAManager.Management.Heroes
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>
-        public List<Hero> getAllHeroes()
+        public List<Player> getAllHeroes()
         {
-            return allHeroes.Select(kvp => kvp.Value).ToList();
+            return allPlayers.Select(kvp => kvp.Value).ToList();
         }
         #endregion
 
@@ -30,9 +30,9 @@ namespace MOBAManager.Management.Heroes
         /// <summary>
         /// Creates the HeroManager object.
         /// </summary>
-        public HeroManager()
+        public PlayerManager()
         {
-            createHeroes();
+            createPlayers();
         }
         #endregion
     }
