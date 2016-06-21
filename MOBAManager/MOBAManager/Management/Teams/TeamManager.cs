@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOBAManager.Management.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,26 @@ namespace MOBAManager.Management.Teams
         public List<Team> getAllTeams()
         {
             return teams.Select(kvp => kvp.Value).ToList();
+        }
+
+        /// <summary>
+        /// Seeds all of the teams currently not legal with the players provided.
+        /// </summary>
+        /// <param name="population">The list of players eligible to </param>
+        public void populateTeams(List<Player> population)
+        {
+            Random rnd = new Random();
+            List<Team> tl = getAllTeams();
+
+            foreach (Team t in tl)
+            {
+                while (!t.isLegalTeam())
+                {
+                    Player curPlayer = population[rnd.Next(population.Count)];
+                    t.addMember(curPlayer);
+                    population = population.Where(n => n.ID != curPlayer.ID).ToList();
+                }
+            }
         }
         #endregion
 

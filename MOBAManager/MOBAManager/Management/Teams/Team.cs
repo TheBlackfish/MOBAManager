@@ -84,6 +84,15 @@ namespace MOBAManager.Management.Teams
         }
 
         /// <summary>
+        /// The team is legal if it has members equal to the maximum capacity.
+        /// </summary>
+        /// <returns>If the team is legal or not.</returns>
+        public bool isLegalTeam()
+        {
+            return (teammates.Count == MAX_CAPACITY);
+        }
+
+        /// <summary>
         /// Gets the team members of this team.
         /// </summary>
         /// <returns>The list of players on this team.</returns>
