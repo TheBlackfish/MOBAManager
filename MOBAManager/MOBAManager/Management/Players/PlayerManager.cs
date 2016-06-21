@@ -20,7 +20,7 @@ namespace MOBAManager.Management.Players
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>
-        public List<Player> getAllHeroes()
+        public List<Player> getAllPlayers()
         {
             return allPlayers.Select(kvp => kvp.Value).ToList();
         }

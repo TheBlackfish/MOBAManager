@@ -7,7 +7,8 @@ namespace MOBAManager.Management.Players
     partial class PlayerManager
     {
         /// <summary>
-        /// Creates all of the players for the initial construction of the game. The players are immediately placed into the PlayerManager's player dictionary.
+        /// Creates all of the players for the initial construction of the game.
+        /// The players are immediately placed into the PlayerManager's player dictionary.
         /// </summary>
         private void createPlayers()
         {

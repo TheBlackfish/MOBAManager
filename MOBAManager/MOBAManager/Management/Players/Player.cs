@@ -73,7 +73,7 @@ namespace MOBAManager.Management.Players
 
             int skill = 0;
             heroSkills.TryGetValue(heroID, out skill);
-            return skill; 
+            return skill + pureSkill; 
         }
 
         /// <summary>
@@ -109,6 +109,7 @@ namespace MOBAManager.Management.Players
             _id = id;
             _name = name;
             pureSkill = skill;
+            heroSkills = new Dictionary<int, int>();
         }
         #endregion
     }
