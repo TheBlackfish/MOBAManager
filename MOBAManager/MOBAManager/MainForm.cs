@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOBAManager.Management;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,7 @@ namespace MOBAManager
         public MainForm()
         {
             InitializeComponent();
+            GameManager gm = new GameManager();
         }
     }
 }

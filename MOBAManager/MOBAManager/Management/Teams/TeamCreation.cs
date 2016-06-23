@@ -20,7 +20,7 @@
 
             foreach (string n in names)
             {
-                var newTeam = new Team(teams.Count, n);
+                Team newTeam = new Team(teams.Count, n);
                 teams.Add(teams.Count, newTeam);
             }
         }

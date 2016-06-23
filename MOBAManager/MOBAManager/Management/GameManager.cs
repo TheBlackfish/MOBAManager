@@ -1,6 +1,7 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
 using MOBAManager.Management.Teams;
+using MOBAManager.MatchResolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace MOBAManager.Management
             playerManager = new PlayerManager();
 
             teamManager = new TeamManager();
+
             teamManager.populateTeams(playerManager.getAllPlayers());
         }
         #endregion

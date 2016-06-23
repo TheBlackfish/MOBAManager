@@ -24,6 +24,15 @@ namespace MOBAManager.Management.Heroes
         {
             return allHeroes.Select(kvp => kvp.Value).ToList();
         }
+
+        /// <summary>
+        /// Gets the dictionary of heroes with their IDs as the key.s
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, Hero> getHeroDictionary()
+        {
+            return allHeroes;
+        }
         #endregion
 
         #region Constructors
@@ -32,6 +41,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         public HeroManager()
         {
+            allHeroes = new Dictionary<int, Hero>();
             createHeroes();
         }
         #endregion

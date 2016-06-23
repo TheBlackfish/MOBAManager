@@ -32,6 +32,7 @@ namespace MOBAManager.Management.Players
         /// </summary>
         public PlayerManager()
         {
+            allPlayers = new Dictionary<int, Player>();
             createPlayers();
         }
         #endregion

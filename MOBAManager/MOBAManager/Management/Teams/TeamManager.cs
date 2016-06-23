@@ -53,6 +53,7 @@ namespace MOBAManager.Management.Teams
         /// </summary>
         public TeamManager()
         {
+            teams = new Dictionary<int, Team>();
             createTeams();   
         }
         #endregion

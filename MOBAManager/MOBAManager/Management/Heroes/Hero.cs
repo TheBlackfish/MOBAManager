@@ -4,10 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MOBAManager.Management
+namespace MOBAManager.Management.Heroes
 {
     class Hero
     {
+        #region Static Variables
+        /// <summary>
+        /// The number of heroes in the game currently.
+        /// </summary>
+        public static int NUM_HEROES = 0;
+        #endregion
+
         #region Variables
         /// <summary>
         /// The ID of the hero.
@@ -65,7 +72,7 @@ namespace MOBAManager.Management
         public int calculatePerformance(List<int> friendlies, List<int> enemies)
         {
             int ret = this.powerLevel;
-            foreach (var friendly in friendlies)
+            foreach (int friendly in friendlies)
             {
                 int toAdd;
                 if (this.synergies.TryGetValue(friendly, out toAdd))
@@ -74,7 +81,7 @@ namespace MOBAManager.Management
                 }
             }
 
-            foreach (var enemy in enemies)
+            foreach (int enemy in enemies)
             {
                 int toAdd;
                 if (this.synergies.TryGetValue(enemy, out toAdd))

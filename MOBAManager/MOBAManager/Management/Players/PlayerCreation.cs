@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOBAManager.Management.Heroes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,9 +80,9 @@ namespace MOBAManager.Management.Players
 
             while (playerNames.Length > 0 && initialSkill.Length > 0)
             {
-                var curPlayer = playerNames[rnd.Next(playerNames.Length)];
+                string curPlayer = playerNames[rnd.Next(playerNames.Length)];
 
-                var newPlayer = new Player(allPlayers.Count, curPlayer, initialSkill[0]);
+                Player newPlayer = new Player(allPlayers.Count, curPlayer, initialSkill[0]);
                 allPlayers.Add(allPlayers.Count, newPlayer);
 
                 playerNames = playerNames.Where(n => !n.Equals(curPlayer)).ToArray();
@@ -89,9 +90,49 @@ namespace MOBAManager.Management.Players
             }
             while (playerNames.Length > 0)
             {
-                var newPlayer = new Player(allPlayers.Count, playerNames[0]);
+                Player newPlayer = new Player(allPlayers.Count, playerNames[0]);
                 allPlayers.Add(allPlayers.Count, newPlayer);
                 playerNames = playerNames.Skip(1).ToArray();
+            }
+
+            //Create each player's personal hero skills.
+            List<Player> players = allPlayers.Select(kvp => kvp.Value).ToList();
+
+            
+
+            foreach (Player p in players)
+            {
+                List<int> allHeroIDs = new List<int>();
+                for (int i = 0; i < Hero.NUM_HEROES; i++)
+                {
+                    allHeroIDs.Add(i);
+                }
+
+                List<int> allSkills = new List<int>();
+                int maxSkill = rnd.Next(3) + 2;
+                int minSkill = 0 - rnd.Next(5);
+
+                for (int i = maxSkill; i >= 0; i--)
+                {
+                    for (int j = i; j <= maxSkill; j++)
+                    {
+                        allSkills.Add(i);
+                    }
+                }
+
+                for (int i = minSkill; i <= 0; i++)
+                {
+                    for (int j = i; j >= minSkill; j--)
+                    {
+                        allSkills.Add(i);
+                    }
+                }
+
+                foreach (int val in allSkills)
+                {
+                    int id = allHeroIDs[rnd.Next(allHeroIDs.Count)];
+                    p.setHeroSkill(id, val);
+                }
             }
         }
     }
