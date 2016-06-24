@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MOBAManager.MatchResolution
 {
-    class MatchSelector
+    partial class MatchAI
     {
         #region General Variables
         /// <summary>
@@ -385,7 +385,7 @@ namespace MOBAManager.MatchResolution
         /// <param name="heroes">The list of all heroes.</param>
         /// <param name="teamA">The first team participating.</param>
         /// <param name="teamB">The second team participating.</param>
-        public MatchSelector(Dictionary<int, Hero> heroes, List<Player> teamA, List<Player> teamB)
+        public MatchAI(Dictionary<int, Hero> heroes, List<Player> teamA, List<Player> teamB)
         {
             allHeroes = heroes;
             team1Players = teamA;

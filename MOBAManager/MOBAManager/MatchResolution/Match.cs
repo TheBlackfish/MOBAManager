@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.MatchResolution
 {
-    class Match
+    partial class Match
     {
         /// <summary>
         /// The match selection AI for this match.
         /// </summary>
-        private MatchSelector ms;
+        private MatchAI ms;
 
         /// <summary>
         /// The first team in this match.
@@ -59,6 +59,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private void reportMatchResults()
         {
+            Console.WriteLine("");
             Console.WriteLine("Match Setup");
             Console.WriteLine("----------");
             Console.WriteLine(team1.teamName);
@@ -96,6 +97,7 @@ namespace MOBAManager.MatchResolution
             {
                 Console.WriteLine("-" + h.HeroName);
             }
+            Console.WriteLine("The winner is team " + winner);
         }
 
         /// <summary>
@@ -135,6 +137,8 @@ namespace MOBAManager.MatchResolution
             ms.setTeamSelection(1, ms.team1Pick());
             ms.setTeamSelection(2, ms.team2Pick());
 
+            winner = ms.decideWinner();
+
             reportMatchResults();
         }
 
@@ -148,7 +152,7 @@ namespace MOBAManager.MatchResolution
         {
             team1 = one;
             team2 = two;
-            ms = new MatchSelector(allHeroes, one.getTeammates(), two.getTeammates());
+            ms = new MatchAI(allHeroes, one.getTeammates(), two.getTeammates());
         }
     }
 }
