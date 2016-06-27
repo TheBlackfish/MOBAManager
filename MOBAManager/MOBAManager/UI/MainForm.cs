@@ -1,4 +1,6 @@
 ﻿using MOBAManager.Management;
+using MOBAManager.MatchResolution;
+using MOBAManager.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +15,22 @@ namespace MOBAManager
 {
     public partial class MainForm : Form
     {
+        private GameManager gm;
+        private MatchResolutionControl mrc;
+        
+
         public MainForm()
         {
             InitializeComponent();
-            GameManager gm = new GameManager();
+            gm = new GameManager();
+            showNextPlayerMatch();
+        }
+
+        private void showNextPlayerMatch()
+        {
+            Match m = gm.getNextPlayerMatch();
+            mrc = new MatchResolutionControl(m);
+            Controls.Add(mrc);
         }
     }
 }

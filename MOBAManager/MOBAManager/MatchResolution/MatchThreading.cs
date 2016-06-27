@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MOBAManager.Management.Heroes;
+using MOBAManager.Management.Teams;
+using System;
+using System.Collections.Generic;
 
 namespace MOBAManager.MatchResolution
 {
@@ -31,7 +34,7 @@ namespace MOBAManager.MatchResolution
         /// <para>19 - Team 2 Pick</para>
         /// <para>20 - Resolution</para>
         /// </summary>
-        private int deferredPhase = -1;
+        private int deferredPhase = 0; //TODO Revert to -1.
 
         private int playerTeam = -1;
 
@@ -56,6 +59,14 @@ namespace MOBAManager.MatchResolution
             if (deferredPhase == 20)
             {
                 ms.decideWinner();
+            }
+        }
+
+        public bool isCurrentlyActing
+        {
+            get
+            {
+                return (deferredPhase != -1);
             }
         }
 
@@ -88,6 +99,16 @@ namespace MOBAManager.MatchResolution
                     }
                 }
                 return false;
+            }
+        }
+
+        public Match(bool threading, Team teamA, Team teamB, int whichTeamIsPlayer, Dictionary<int, Hero> allHeroes)
+            : this(teamA, teamB, allHeroes)
+        {
+            if (threading)
+            {
+                playerTeam = whichTeamIsPlayer;
+                ms = new MatchAI(true, this, allHeroes, teamA.getTeammates(), teamB.getTeammates());
             }
         }
     }

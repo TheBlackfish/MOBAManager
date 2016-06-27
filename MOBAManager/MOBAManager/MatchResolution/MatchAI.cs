@@ -443,7 +443,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> start = baselineHeroSelection(2);
             int selectionID = -1;
-            switch (team1SelectionMode)
+            switch (team2SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
                     selectionID = remainingHeroes[rnd.Next(remainingHeroes.Count)];

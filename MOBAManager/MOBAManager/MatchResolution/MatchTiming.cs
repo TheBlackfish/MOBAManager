@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MOBAManager.Management.Heroes;
+using MOBAManager.Management.Players;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
 
@@ -25,12 +28,14 @@ namespace MOBAManager.MatchResolution
         private void initTimer()
         {
             tickTimer = new System.Timers.Timer(250);
+            tickTimer.Enabled = true;
             tickTimer.Elapsed += OnTickTimerElapsed;
             tickTimer.AutoReset = true;
         }
 
         private void OnTickTimerElapsed(Object src, ElapsedEventArgs e)
         {
+            Console.WriteLine("MatchAI Timer Tick!");
             bool useRandomPick = false;
 
             //Update timers
@@ -152,6 +157,15 @@ namespace MOBAManager.MatchResolution
                 {
                     currentChoiceID = team1Pick();
                 }
+            }
+        }
+
+        public MatchAI(bool threading, Match match, Dictionary<int, Hero> dict, List<Player> team1, List<Player> team2)
+            : this(match, dict, team1, team2)
+        {
+            if (threading)
+            {
+                initTimer();
             }
         }
     }

@@ -29,6 +29,12 @@ namespace MOBAManager.Management
         private TeamManager teamManager;
         #endregion
 
+        public Match getNextPlayerMatch()
+        {
+            Match m = new Match(true, teamManager.getAllTeams()[0], teamManager.getAllTeams()[1], 1, heroManager.getHeroDictionary());
+            return m;
+        }
+
         #region Constructors
         /// <summary>
         /// Creates the game manager and all of its subordinate managers.
