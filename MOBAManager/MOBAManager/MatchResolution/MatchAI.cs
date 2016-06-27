@@ -67,6 +67,8 @@ namespace MOBAManager.MatchResolution
         /// <para>0 is a random selection method.</para>
         /// <para>1 is to select the best hero in the pool overall.</para>
         /// <para>2 is to select the best hero in the pool for the current player target.</para>
+        /// <para>3 is to select the worst overall choice for the team.</para>
+        /// <para>4 is to select the best counter to the opposing team.</para>
         /// </summary>
         private int team1SelectionMode = 0;
 
@@ -83,6 +85,8 @@ namespace MOBAManager.MatchResolution
         /// <para>0 is a random selection method.</para>
         /// <para>1 is to select the best hero in the pool overall.</para>
         /// <para>2 is to select the best hero in the pool for the current player target.</para>
+        /// <para>3 is to select the worst overall choice for the team.</para>
+        /// <para>4 is to select the best counter to the opposing team.</para>
         /// </summary>
         private int team2SelectionMode = 0;
 
@@ -120,8 +124,10 @@ namespace MOBAManager.MatchResolution
         /// This creates the baseline list of hero values for selection based on the team provided.
         /// </summary>
         /// <param name="team">1 or 2, depending on which team should be picked for.</param>
+        /// <param name="ignoreFriendlies"></param>
+        /// <param name="ignoreEnemies"></param>
         /// <returns>A dictionary with hero IDs as the key and their skill levels as the value.</returns>
-        private Dictionary<int, int> baselineHeroSelection(int team)
+        private Dictionary<int, int> baselineHeroSelection(int team, bool ignoreFriendlies, bool ignoreEnemies)
         {
             if (team > 2 || team < 1)
             {
@@ -138,6 +144,16 @@ namespace MOBAManager.MatchResolution
                 enemies = team1Picks;
             }
 
+            if (ignoreFriendlies)
+            {
+                friendlies = new List<int>();
+            }
+
+            if (ignoreEnemies)
+            {
+                enemies = new List<int>();
+            }
+
             foreach (int key in remainingHeroes)
             {
                 int value = allHeroes[key].calculatePerformance(friendlies, enemies);
@@ -145,6 +161,11 @@ namespace MOBAManager.MatchResolution
             }
 
             return ret;
+        }
+
+        private Dictionary<int, int> baselineHeroSelection(int team)
+        {
+            return baselineHeroSelection(team, false, false);
         }
 
         /// <summary>
@@ -207,6 +228,51 @@ namespace MOBAManager.MatchResolution
                 return selectBestOverallChoice(team);
             }
 
+        }
+
+        private int selectWorstOverallChoice(int team)
+        {
+            Dictionary<int, int> baseline = baselineHeroSelection(team);
+            List<int> finalists = baseline.OrderBy(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
+            int rando = rnd.Next(6);
+            if (rando < 3)
+            {
+                return finalists[0];
+            }
+            else if (rando < 5)
+            {
+                return finalists[1];
+            }
+            else
+            {
+                return finalists[2];
+            }
+        }
+
+        private int selectBestCounterToTeam(int team)
+        {
+            Dictionary<int, int> baseline = baselineHeroSelection(team, true, false);
+            List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
+            int rando = rnd.Next(6);
+            if (rando < 3)
+            {
+                return finalists[0];
+            }
+            else if (rando < 5)
+            {
+                return finalists[1];
+            }
+            else
+            {
+                return finalists[2];
+            }
+        }
+
+        private int selectRandomly()
+        {
+            Dictionary<int, int> baseline = baselineHeroSelection(1, true, true);
+            List<int> finalists = baseline.Select(kvp => kvp.Key).ToList();
+            return finalists[rnd.Next(finalists.Count)];
         }
         #endregion
 
@@ -320,8 +386,30 @@ namespace MOBAManager.MatchResolution
                 case 0:     //Random method of selection.
                     if (rnd.Next(2) == 1)
                     {
-                        int randomPlayer = team1Players[rnd.Next(team1Players.Count)].ID;
-                        selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                        if (rnd.Next(2) == 1)
+                        {
+                            if (rnd.Next(4) == 1)
+                            {
+                                selectionID = selectWorstOverallChoice(1);
+                            }
+                            else
+                            {
+                                selectionID = selectBestCounterToTeam(2);
+                            }
+                        }
+                        else
+                        {
+                            if (rnd.Next(2) == 1)
+                            {
+                                int randomPlayer = team1Players[rnd.Next(team1Players.Count)].ID;
+                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                            }
+                            else
+                            {
+                                int randomPlayer = team2Players[rnd.Next(team2Players.Count)].ID;
+                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                            }
+                        }
                     }
                     else
                     {
@@ -338,6 +426,12 @@ namespace MOBAManager.MatchResolution
                     }
                     selectionID = selectBestChoiceForPlayer(1, team1SelectionPlayerTarget);
                     break;
+                case 3:     //Worst overall choice
+                    selectionID = selectWorstOverallChoice(1);
+                    break;
+                case 4:     //Best counter to current team
+                    selectionID = selectBestCounterToTeam(2);
+                    break;
             }
             return selectionID;
         }
@@ -349,7 +443,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> start = baselineHeroSelection(2);
             int selectionID = -1;
-            switch (team2SelectionMode)
+            switch (team1SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
                     selectionID = remainingHeroes[rnd.Next(remainingHeroes.Count)];
@@ -357,23 +451,51 @@ namespace MOBAManager.MatchResolution
                 case 0:     //Random method of selection.
                     if (rnd.Next(2) == 1)
                     {
-                        int randomPlayer = team2Players[rnd.Next(team1Players.Count)].ID;
-                        selectionID = selectBestChoiceForPlayer(2, randomPlayer);
+                        if (rnd.Next(2) == 1)
+                        {
+                            if (rnd.Next(4) == 1)
+                            {
+                                selectionID = selectWorstOverallChoice(2);
+                            }
+                            else
+                            {
+                                selectionID = selectBestCounterToTeam(1);
+                            }
+                        }
+                        else
+                        {
+                            if (rnd.Next(2) == 1)
+                            {
+                                int randomPlayer = team1Players[rnd.Next(team1Players.Count)].ID;
+                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                            }
+                            else
+                            {
+                                int randomPlayer = team2Players[rnd.Next(team2Players.Count)].ID;
+                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                            }
+                        }
                     }
                     else
                     {
                         selectionID = selectBestOverallChoice(2);
                     }
                     break;
-                case 1:     //Select best hero in general
+                case 1:     //Best overall hero
                     selectionID = selectBestOverallChoice(2);
                     break;
-                case 2:     //Select best hero for a player
-                    if (team2SelectionPlayerTarget == -1)
+                case 2:     //Best hero for a player
+                    if (team1SelectionPlayerTarget == -1)
                     {
                         team2SelectionPlayerTarget = team2Players[rnd.Next(team2Players.Count)].ID;
                     }
                     selectionID = selectBestChoiceForPlayer(2, team2SelectionPlayerTarget);
+                    break;
+                case 3:     //Worst overall choice
+                    selectionID = selectWorstOverallChoice(2);
+                    break;
+                case 4:     //Best counter to current team
+                    selectionID = selectBestCounterToTeam(1);
                     break;
             }
             return selectionID;

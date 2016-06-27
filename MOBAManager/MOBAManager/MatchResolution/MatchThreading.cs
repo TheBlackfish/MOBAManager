@@ -35,6 +35,21 @@ namespace MOBAManager.MatchResolution
 
         private int playerTeam = -1;
 
+        private bool _changed = true;
+
+        public bool hasChanged
+        {
+            get
+            {
+                if (_changed)
+                {
+                    _changed = false;
+                    return true;
+                }
+                return false;
+            }
+        }
+
         public void advancePhase()
         {
             deferredPhase++;

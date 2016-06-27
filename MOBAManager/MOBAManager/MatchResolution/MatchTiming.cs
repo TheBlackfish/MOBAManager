@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Timers;
 
 namespace MOBAManager.MatchResolution
@@ -19,11 +20,11 @@ namespace MOBAManager.MatchResolution
         private int currentChoiceID = -1;
         private int currentChoiceRandomID = -1;
 
-        private Timer tickTimer;
+        private System.Timers.Timer tickTimer;
 
         private void initTimer()
         {
-            tickTimer = new Timer(250);
+            tickTimer = new System.Timers.Timer(250);
             tickTimer.Elapsed += OnTickTimerElapsed;
             tickTimer.AutoReset = true;
         }
@@ -33,8 +34,7 @@ namespace MOBAManager.MatchResolution
             bool useRandomPick = false;
 
             //Update timers
-            int curTeam = match.getCurrentActingTeam;
-            if (curTeam == 1)
+            if (match.getCurrentActingTeam == 1)
             {
                 if (team1RegularTimeCounter >= regularTimeMaximum)
                 {
@@ -68,6 +68,9 @@ namespace MOBAManager.MatchResolution
             if (useRandomPick)
             {
                 //Resolve random selection.
+                setTeamSelection(match.getCurrentActingTeam, currentChoiceRandomID, match.isCurrentPhasePicking);
+                match.advancePhase();
+                initSelectionThread();
             }
             else
             {
@@ -80,11 +83,12 @@ namespace MOBAManager.MatchResolution
                     {
                         setTeamSelection(match.getCurrentActingTeam, currentChoiceID, match.isCurrentPhasePicking);
                         setCurrentSelectionDelay();
-                        
+                        match.advancePhase();
+                        initSelectionThread();
                     }
                     else
                     {
-
+                        setCurrentSelectionDelay(false);
                     }
                 }
             }
@@ -116,6 +120,39 @@ namespace MOBAManager.MatchResolution
             }
 
             currentChoiceDelayMaximum += (time * 1000);
+        }
+
+        private void initSelectionThread()
+        {
+            Thread t = new Thread(threadedSelectHeroes);
+            t.Start();
+        }
+
+        private void threadedSelectHeroes()
+        {
+            currentChoiceRandomID = selectRandomly();
+            if (match.getCurrentActingTeam == 1)
+            {
+                if (match.isCurrentPhasePicking)
+                {
+                    currentChoiceID = team1Pick();
+                }
+                else
+                {
+                    currentChoiceID = team2Pick();
+                }
+            }
+            else
+            {
+                if (match.isCurrentPhasePicking)
+                {
+                    currentChoiceID = team2Pick();
+                }
+                else
+                {
+                    currentChoiceID = team1Pick();
+                }
+            }
         }
     }
 }
