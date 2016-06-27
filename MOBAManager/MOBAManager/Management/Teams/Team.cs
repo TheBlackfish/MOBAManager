@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Teams
 {
-    class Team
+    public class Team
     {
         #region Static Variables
         public static int MAX_CAPACITY = 5;

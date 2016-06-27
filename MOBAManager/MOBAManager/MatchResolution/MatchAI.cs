@@ -15,6 +15,8 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private Dictionary<int, Hero> allHeroes;
 
+        private Match match;
+
         /// <summary>
         /// The random number generator.
         /// </summary>
@@ -385,8 +387,10 @@ namespace MOBAManager.MatchResolution
         /// <param name="heroes">The list of all heroes.</param>
         /// <param name="teamA">The first team participating.</param>
         /// <param name="teamB">The second team participating.</param>
-        public MatchAI(Dictionary<int, Hero> heroes, List<Player> teamA, List<Player> teamB)
+        public MatchAI(Match m, Dictionary<int, Hero> heroes, List<Player> teamA, List<Player> teamB)
         {
+            match = m;
+
             allHeroes = heroes;
             team1Players = teamA;
             team2Players = teamB;

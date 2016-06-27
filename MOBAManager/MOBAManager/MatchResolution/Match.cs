@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.MatchResolution
 {
-    partial class Match
+    public partial class Match
     {
         /// <summary>
         /// The match selection AI for this match.
@@ -55,55 +55,9 @@ namespace MOBAManager.MatchResolution
         }
 
         /// <summary>
-        /// Outputs the match results to the console.
-        /// </summary>
-        private void reportMatchResults()
-        {
-            Console.WriteLine("");
-            Console.WriteLine("Match Setup");
-            Console.WriteLine("----------");
-            Console.WriteLine(team1.teamName);
-            foreach (Player p in team1.getTeammates())
-            {
-                Console.WriteLine("-" + p.playerName);
-            }
-            Console.WriteLine("----------");
-            Console.WriteLine(team2.teamName);
-            foreach (Player p in team2.getTeammates())
-            {
-                Console.WriteLine("-" + p.playerName);
-            }
-            Console.WriteLine("----------");
-            Console.WriteLine(team1.teamName + " Bans");
-            foreach (Hero h in ms.getTeamBans(1))
-            {
-                Console.WriteLine("-" + h.HeroName);
-            }
-            Console.WriteLine("----------");
-            Console.WriteLine(team1.teamName + " Picks");
-            foreach (Hero h in ms.getTeamSelections(1))
-            {
-                Console.WriteLine("-" + h.HeroName);
-            }
-            Console.WriteLine("----------");
-            Console.WriteLine(team2.teamName + " Bans");
-            foreach (Hero h in ms.getTeamBans(2))
-            {
-                Console.WriteLine("-" + h.HeroName);
-            }
-            Console.WriteLine("----------");
-            Console.WriteLine(team2.teamName + " Picks");
-            foreach (Hero h in ms.getTeamSelections(2))
-            {
-                Console.WriteLine("-" + h.HeroName);
-            }
-            Console.WriteLine("The winner is team " + winner);
-        }
-
-        /// <summary>
         /// Has both teams go through the ban/pick phase.
         /// </summary>
-        public void banPickPhase()
+        public void instantlyResolve()
         {
             //First Ban Phase
             ms.setTeamSelection(1, ms.team2Pick(), false);
@@ -138,8 +92,6 @@ namespace MOBAManager.MatchResolution
             ms.setTeamSelection(2, ms.team2Pick());
 
             winner = ms.decideWinner();
-
-            reportMatchResults();
         }
 
         /// <summary>
@@ -152,7 +104,7 @@ namespace MOBAManager.MatchResolution
         {
             team1 = one;
             team2 = two;
-            ms = new MatchAI(allHeroes, one.getTeammates(), two.getTeammates());
+            ms = new MatchAI(this, allHeroes, one.getTeammates(), two.getTeammates());
         }
     }
 }

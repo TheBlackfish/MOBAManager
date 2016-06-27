@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Players
 {
-    class Player
+    public class Player
     {
         #region Static Variables
         /// <summary>
