@@ -2,6 +2,7 @@
 using MOBAManager.Management.Teams;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MOBAManager.MatchResolution
 {
@@ -58,8 +59,15 @@ namespace MOBAManager.MatchResolution
             deferredPhase++;
             if (deferredPhase == 20)
             {
-                ms.decideWinner();
+                Thread t = new Thread(threadedResolveWinner);
+                t.Start();
             }
+            _changed = true;
+        }
+
+        public bool shouldContinue()
+        {
+            return (deferredPhase < 20);
         }
 
         public bool isCurrentlyActing
@@ -100,6 +108,12 @@ namespace MOBAManager.MatchResolution
                 }
                 return false;
             }
+        }
+
+        public void threadedResolveWinner()
+        {
+            winner = ms.decideWinner();
+            Console.WriteLine("Winner is team #" + winner);
         }
 
         public Match(bool threading, Team teamA, Team teamB, int whichTeamIsPlayer, Dictionary<int, Hero> allHeroes)

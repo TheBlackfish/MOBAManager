@@ -1,4 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
+using MOBAManager.Management.Players;
+using MOBAManager.Management.Teams;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +11,22 @@ namespace MOBAManager.MatchResolution
         public Tuple<string, string, string, string> getFormattedTimers()
         {
             return ms.getFormattedTimers();
+        }
+
+        public string getTeamInformation(int team)
+        {
+            Team t = team1;
+            if (team == 2)
+            {
+                t = team2;
+            }
+
+            string ret = t.teamName;
+            foreach (Player p in t.getTeammates())
+            {
+                ret += Environment.NewLine + p.playerName;
+            }
+            return ret;
         }
 
         public string getFormattedTeam1Bans()

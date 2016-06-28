@@ -19,6 +19,8 @@ namespace MOBAManager.UI
         {
             match = m;
             InitializeComponent();
+            team1Info.Text = m.getTeamInformation(1);
+            team2Info.Text = m.getTeamInformation(2);
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)

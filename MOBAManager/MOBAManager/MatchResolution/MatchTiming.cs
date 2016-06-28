@@ -31,11 +31,12 @@ namespace MOBAManager.MatchResolution
             tickTimer.Enabled = true;
             tickTimer.Elapsed += OnTickTimerElapsed;
             tickTimer.AutoReset = true;
+            setCurrentSelectionDelay();
+            initSelectionThread();
         }
 
         private void OnTickTimerElapsed(Object src, ElapsedEventArgs e)
         {
-            Console.WriteLine("MatchAI Timer Tick!");
             bool useRandomPick = false;
 
             //Update timers
@@ -75,7 +76,18 @@ namespace MOBAManager.MatchResolution
                 //Resolve random selection.
                 setTeamSelection(match.getCurrentActingTeam, currentChoiceRandomID, match.isCurrentPhasePicking);
                 match.advancePhase();
-                initSelectionThread();
+                if (match.shouldContinue())
+                {
+                    if (match.getCurrentActingTeam == 1)
+                    {
+                        team1RegularTimeCounter = 0;
+                    }
+                    else
+                    {
+                        team2RegularTimeCounter = 0;
+                    }
+                    initSelectionThread();
+                }
             }
             else
             {
@@ -89,7 +101,18 @@ namespace MOBAManager.MatchResolution
                         setTeamSelection(match.getCurrentActingTeam, currentChoiceID, match.isCurrentPhasePicking);
                         setCurrentSelectionDelay();
                         match.advancePhase();
-                        initSelectionThread();
+                        if (match.shouldContinue())
+                        {
+                            if (match.getCurrentActingTeam == 1)
+                            {
+                                team1RegularTimeCounter = 0;
+                            }
+                            else
+                            {
+                                team2RegularTimeCounter = 0;
+                            }
+                            initSelectionThread();
+                        }
                     }
                     else
                     {
@@ -124,7 +147,8 @@ namespace MOBAManager.MatchResolution
                 time += Math.Truncate(rnd.NextDouble() * 6);
             }
 
-            currentChoiceDelayMaximum += (time * 1000);
+            currentChoiceDelayMaximum += ((time+8) * 1000) + (rnd.Next(1000));
+            Console.WriteLine("Current delay is " + currentChoiceDelayMaximum);
         }
 
         private void initSelectionThread()
