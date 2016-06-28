@@ -118,6 +118,41 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        public int getCurrentPhase
+        {
+            get
+            {
+                if (deferredPhase >= 18)
+                {
+                    return 5;
+                }
+                else if (deferredPhase >= 16)
+                {
+                    return 4;
+                }
+                else if (deferredPhase >= 12)
+                {
+                    return 3;
+                }
+                else if (deferredPhase >= 8)
+                {
+                    return 2;
+                }
+                else if (deferredPhase >= 4)
+                {
+                    return 1;
+                }
+                else if (deferredPhase >= 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+
         /// <summary>
         /// Returns true if the current phase is a pick phase. Returns false if it is a ban phase.
         /// </summary>

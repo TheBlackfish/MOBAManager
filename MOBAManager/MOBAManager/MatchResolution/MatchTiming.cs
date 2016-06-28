@@ -136,6 +136,10 @@ namespace MOBAManager.MatchResolution
                     }
                     initSelectionThread();
                 }
+                else
+                {
+                    tickTimer.Enabled = false;
+                }
             }
             else
             {
@@ -161,6 +165,10 @@ namespace MOBAManager.MatchResolution
                             }
                             initSelectionThread();
                         }
+                        else
+                        {
+                            tickTimer.Enabled = false;
+                        }
                     }
                     else
                     {
@@ -184,25 +192,47 @@ namespace MOBAManager.MatchResolution
         /// <param name="reset">If true, this will clear any previous value the current selection delay had.</param>
         private void setCurrentSelectionDelay(bool reset)
         {
+            double time = Math.Truncate(rnd.NextDouble() * 5000);
+
+            if (rnd.Next(2) == 1)
+            {
+                time += 8000;
+            }
+            else if (rnd.Next(3) == 1)
+            {
+                time += 25000;
+            }
+            else
+            {
+                time += 1000;
+            }
+
             if (reset)
             {
                 currentChoiceDelayMaximum = 0;
                 currentChoiceDelayCounter = 0;
+
+                int phase = match.getCurrentPhase;
+                int iterations = 0;
+                if (phase == 3)
+                {
+                    iterations = 3;
+                }
+                else if (phase == 1 || phase == 2 || phase == 4)
+                {
+                    iterations = 2;
+                }
+
+                for (int i = 0; i < iterations; i++)
+                {
+                    if (rnd.Next(3) != 1)
+                    {
+                        double addOn = Math.Truncate(Math.Sqrt(rnd.NextDouble() * 25000));
+                    }
+                }
             }
 
-            int iterations = rnd.Next(3);
-            if (reset)
-            {
-                iterations += rnd.Next(6) - 1;
-            }
-
-            double time = 0.0;
-            for (int i = 0; i < iterations; i++)
-            {
-                time += Math.Truncate(rnd.NextDouble() * 6);
-            }
-
-            currentChoiceDelayMaximum += ((time+8) * 1000) + (rnd.Next(1000));
+            currentChoiceDelayMaximum += time;
             Console.WriteLine("Current delay is " + currentChoiceDelayMaximum);
         }
 

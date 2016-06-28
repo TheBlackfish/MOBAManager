@@ -45,6 +45,7 @@
             // 
             // team1TimerA
             // 
+            this.team1TimerA.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1TimerA.Location = new System.Drawing.Point(3, 3);
             this.team1TimerA.Multiline = true;
             this.team1TimerA.Name = "team1TimerA";
@@ -55,6 +56,7 @@
             // 
             // team1TimerB
             // 
+            this.team1TimerB.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1TimerB.Location = new System.Drawing.Point(3, 30);
             this.team1TimerB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.team1TimerB.Multiline = true;
@@ -66,6 +68,7 @@
             // 
             // team1Info
             // 
+            this.team1Info.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1Info.Location = new System.Drawing.Point(41, 3);
             this.team1Info.Name = "team1Info";
             this.team1Info.ReadOnly = true;
@@ -76,6 +79,7 @@
             // 
             // team1Bans
             // 
+            this.team1Bans.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1Bans.Location = new System.Drawing.Point(41, 119);
             this.team1Bans.Name = "team1Bans";
             this.team1Bans.ReadOnly = true;
@@ -86,6 +90,7 @@
             // 
             // team1Picks
             // 
+            this.team1Picks.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1Picks.Location = new System.Drawing.Point(41, 200);
             this.team1Picks.Name = "team1Picks";
             this.team1Picks.ReadOnly = true;
@@ -96,6 +101,7 @@
             // 
             // team2Picks
             // 
+            this.team2Picks.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Picks.Location = new System.Drawing.Point(187, 200);
             this.team2Picks.Name = "team2Picks";
             this.team2Picks.ReadOnly = true;
@@ -106,6 +112,7 @@
             // 
             // team2Bans
             // 
+            this.team2Bans.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Bans.Location = new System.Drawing.Point(187, 119);
             this.team2Bans.Name = "team2Bans";
             this.team2Bans.ReadOnly = true;
@@ -116,6 +123,7 @@
             // 
             // team2Info
             // 
+            this.team2Info.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Info.Location = new System.Drawing.Point(187, 3);
             this.team2Info.Name = "team2Info";
             this.team2Info.ReadOnly = true;
@@ -126,6 +134,7 @@
             // 
             // team2TimerB
             // 
+            this.team2TimerB.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2TimerB.Location = new System.Drawing.Point(333, 30);
             this.team2TimerB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
             this.team2TimerB.Multiline = true;
@@ -137,6 +146,7 @@
             // 
             // team2TimerA
             // 
+            this.team2TimerA.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2TimerA.Location = new System.Drawing.Point(333, 3);
             this.team2TimerA.Multiline = true;
             this.team2TimerA.Name = "team2TimerA";
