@@ -4,6 +4,10 @@ namespace MOBAManager.MatchResolution
 {
     partial class MatchAI
     {
+        /// <summary>
+        /// Gets a Tuple of strings containing the times left in each category formatted correctly.
+        /// </summary>
+        /// <returns></returns>
         public Tuple<string, string, string, string> getFormattedTimers()
         {
             string[] placeholder = new string[4];

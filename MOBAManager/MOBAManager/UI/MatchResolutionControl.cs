@@ -13,16 +13,17 @@ namespace MOBAManager.UI
 {
     public partial class MatchResolutionControl : UserControl
     {
+        #region Private variables
+        /// <summary>
+        /// The match this MRC controls.
+        /// </summary>
         private Match match;
+        #endregion
 
-        public MatchResolutionControl(Match m)
-        {
-            match = m;
-            InitializeComponent();
-            team1Info.Text = m.getTeamInformation(1);
-            team2Info.Text = m.getTeamInformation(2);
-        }
-
+        #region Private methods
+        /// <summary>
+        /// Updates the textboxes with the appropriate data from the match.
+        /// </summary>
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             Tuple<string, string, string, string> times = match.getFormattedTimers();
@@ -39,5 +40,20 @@ namespace MOBAManager.UI
                 team2Picks.Text = match.getFormattedTeam2Picks();
             }
         }
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Creates a new MRC user control.
+        /// </summary>
+        /// <param name="m">The match that this MRC is handling.</param>
+        public MatchResolutionControl(Match m)
+        {
+            match = m;
+            InitializeComponent();
+            team1Info.Text = m.getTeamInformation(1);
+            team2Info.Text = m.getTeamInformation(2);
+        }
+        #endregion
     }
 }

@@ -11,6 +11,7 @@ namespace MOBAManager.MatchResolution
 {
     public partial class Match
     {
+        #region Private variables
         /// <summary>
         /// The match selection AI for this match.
         /// </summary>
@@ -30,7 +31,9 @@ namespace MOBAManager.MatchResolution
         /// The control variable for who the winner is.
         /// </summary>
         private int winner = -1;
+        #endregion
 
+        #region Public methods
         /// <summary>
         /// Returns the ID of the winning team, or -1 if none has been decided yet.
         /// </summary>
@@ -55,7 +58,7 @@ namespace MOBAManager.MatchResolution
         }
 
         /// <summary>
-        /// Has both teams go through the ban/pick phase.
+        /// Has both teams go through the ban/pick phase instantly and then decides a winner.
         /// </summary>
         public void instantlyResolve()
         {
@@ -93,7 +96,9 @@ namespace MOBAManager.MatchResolution
 
             winner = ms.decideWinner();
         }
+        #endregion
 
+        #region Constructors
         /// <summary>
         /// Creates a new match using the teams provided
         /// </summary>
@@ -106,5 +111,6 @@ namespace MOBAManager.MatchResolution
             team2 = two;
             ms = new MatchAI(this, allHeroes, one.getTeammates(), two.getTeammates());
         }
+        #endregion
     }
 }

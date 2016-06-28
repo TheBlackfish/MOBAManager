@@ -8,6 +8,40 @@ namespace MOBAManager.MatchResolution
 {
     partial class MatchAI
     {
+        #region Public methods
+        /// <summary>
+        /// Decides the winner of the match and returns either 1 or 2 depending on if it was Team 1 or Team 2.
+        /// </summary>
+        /// <returns></returns>
+        public int decideWinner()
+        {
+            //Get Team 1's optimal skill
+            int team1 = totalTeamSkill(1);
+            team1 *= team1;
+
+            //Get Team 2's optimal skill
+            int team2 = totalTeamSkill(2);
+            team2 *= team2;
+
+            int dieRoll = rnd.Next(team1 + team2);
+
+            if (dieRoll < team1)
+            {
+                return 1;
+            }
+            else
+            {
+                return 2;
+            }
+        }
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Totals up a team's total skill for deciding the winner of a match.
+        /// </summary>
+        /// <param name="team">The team to calculate skill for.</param>
+        /// <returns></returns>
         private int totalTeamSkill(int team)
         {
             if ((team1Bans.Count == 5) && (team1Picks.Count == 5) && (team2Bans.Count == 5) && (team2Picks.Count == 5))
@@ -65,27 +99,6 @@ namespace MOBAManager.MatchResolution
             }
             return int.MinValue;
         }
-
-        public int decideWinner()
-        {
-            //Get Team 1's optimal skill
-            int team1 = totalTeamSkill(1);
-            team1 *= team1;
-
-            //Get Team 2's optimal skill
-            int team2 = totalTeamSkill(2);
-            team2 *= team2;
-
-            int dieRoll = rnd.Next(team1 + team2);
-
-            if (dieRoll < team1)
-            {
-                return 1;
-            }
-            else
-            {
-                return 2;
-            }
-        }
+        #endregion
     }
 }

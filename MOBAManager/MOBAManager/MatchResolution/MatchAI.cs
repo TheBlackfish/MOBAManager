@@ -15,6 +15,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private Dictionary<int, Hero> allHeroes;
 
+        /// <summary>
+        /// The match that this AI is controlling.
+        /// </summary>
         private Match match;
 
         /// <summary>
@@ -163,6 +166,11 @@ namespace MOBAManager.MatchResolution
             return ret;
         }
 
+        /// <summary>
+        /// This creates the baseline list of hero values for selection based on the team provided.
+        /// </summary>
+        /// <param name="team">1 or 2, depending on which team should be picked for.</param>
+        /// <returns></returns>
         private Dictionary<int, int> baselineHeroSelection(int team)
         {
             return baselineHeroSelection(team, false, false);
@@ -230,6 +238,13 @@ namespace MOBAManager.MatchResolution
 
         }
 
+        /// <summary>
+        /// Selects the worst possible hero for a team.
+        /// This selection mainly relies on hero skills, synergies, and counters.
+        /// Internally, the top 3 heroes are found and then randomly one is selected and returned.
+        /// </summary>
+        /// <param name="team">The team to select the hero for.</param>
+        /// <returns></returns>
         private int selectWorstOverallChoice(int team)
         {
             Dictionary<int, int> baseline = baselineHeroSelection(team);
@@ -249,6 +264,12 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Selects a hero based on how well they counter a specific team line-up.
+        /// This selection mainly relies on counters and hero skills, ignoring synergies.
+        /// </summary>
+        /// <param name="team">The team to find a counter for.</param>
+        /// <returns></returns>
         private int selectBestCounterToTeam(int team)
         {
             Dictionary<int, int> baseline = baselineHeroSelection(team, true, false);
@@ -268,6 +289,10 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Selects a random hero ID.
+        /// </summary>
+        /// <returns></returns>
         private int selectRandomly()
         {
             Dictionary<int, int> baseline = baselineHeroSelection(1, true, true);
@@ -277,6 +302,11 @@ namespace MOBAManager.MatchResolution
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Returns a list of all banned heroes for a specific team.
+        /// </summary>
+        /// <param name="team">The team to get bans for.</param>
+        /// <returns></returns>
         public List<Hero> getTeamBans(int team)
         {
             if (team > 2 || team < 1)
@@ -296,6 +326,7 @@ namespace MOBAManager.MatchResolution
             }
             return ret;
         }
+
         /// <summary>
         /// Returns the picks for the team selected.
         /// </summary>

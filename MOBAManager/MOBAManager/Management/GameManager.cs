@@ -29,11 +29,18 @@ namespace MOBAManager.Management
         private TeamManager teamManager;
         #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Returns the next match the player is involved in.
+        /// Placeholder function returns a generic match for now.
+        /// </summary>
+        /// <returns></returns>
         public Match getNextPlayerMatch()
         {
             Match m = new Match(true, teamManager.getAllTeams()[0], teamManager.getAllTeams()[1], 1, heroManager.getHeroDictionary());
             return m;
         }
+        #endregion
 
         #region Constructors
         /// <summary>

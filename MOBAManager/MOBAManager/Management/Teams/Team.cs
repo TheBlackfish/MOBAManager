@@ -10,6 +10,9 @@ namespace MOBAManager.Management.Teams
     public class Team
     {
         #region Static Variables
+        /// <summary>
+        /// The most amount of players a team can have.
+        /// </summary>
         public static int MAX_CAPACITY = 5;
         #endregion
 

@@ -8,7 +8,7 @@ namespace MOBAManager.MatchResolution
 {
     public partial class Match
     {
-
+        #region Private Variables
         /// <summary>
         /// The current phase of the deferred game.
         /// The numbers correspond to the following:
@@ -37,10 +37,21 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private int deferredPhase = 0; //TODO Revert to -1.
 
+        /// <summary>
+        /// The team that the player is controlling. -1 is the default.
+        /// </summary>
         private int playerTeam = -1;
 
+        /// <summary>
+        /// The control variable for if the match has changed in anyway and requires updating the user control.
+        /// </summary>
         private bool _changed = true;
+        #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Returns if the game has changed, but only once. If true, this will change to false immediately afterwards.
+        /// </summary>
         public bool hasChanged
         {
             get
@@ -54,6 +65,9 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Advances the current phase of the match.
+        /// </summary>
         public void advancePhase()
         {
             deferredPhase++;
@@ -65,11 +79,18 @@ namespace MOBAManager.MatchResolution
             _changed = true;
         }
 
+        /// <summary>
+        /// If a match is in the resolution phase, this returns false.
+        /// </summary>
+        /// <returns></returns>
         public bool shouldContinue()
         {
             return (deferredPhase < 20);
         }
 
+        /// <summary>
+        /// If a match is currently in a picking or banning phase, this returns true.
+        /// </summary>
         public bool isCurrentlyActing
         {
             get
@@ -78,6 +99,9 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Returns either 1 or 2, depending on which team should currently be acting.
+        /// </summary>
         public int getCurrentActingTeam
         {
             get
@@ -94,6 +118,9 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Returns true if the current phase is a pick phase. Returns false if it is a ban phase.
+        /// </summary>
         public bool isCurrentPhasePicking
         {
             get
@@ -110,12 +137,25 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Decides and reports the winner.
+        /// </summary>
         public void threadedResolveWinner()
         {
             winner = ms.decideWinner();
             Console.WriteLine("Winner is team #" + winner);
         }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Constructs a new match that utilizes threading. This should be the go-to overload for any match involving a player team.
+        /// </summary>
+        /// <param name="threading">Set to true to actually use all threading functionality.</param>
+        /// <param name="teamA">The team to take slot 1.</param>
+        /// <param name="teamB">The team to take slot 2.</param>
+        /// <param name="whichTeamIsPlayer">The team the player is controlling. 1 or 2 only.</param>
+        /// <param name="allHeroes">The Dictionary containing all heroes.</param>
         public Match(bool threading, Team teamA, Team teamB, int whichTeamIsPlayer, Dictionary<int, Hero> allHeroes)
             : this(teamA, teamB, allHeroes)
         {
@@ -125,5 +165,6 @@ namespace MOBAManager.MatchResolution
                 ms = new MatchAI(true, this, allHeroes, teamA.getTeammates(), teamB.getTeammates());
             }
         }
+        #endregion
     }
 }
