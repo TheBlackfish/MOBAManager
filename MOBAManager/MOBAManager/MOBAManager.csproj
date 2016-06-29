@@ -77,6 +77,12 @@
     <Compile Include="UI\MatchResolutionControl.Designer.cs">
       <DependentUpon>MatchResolutionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MatchResultsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MatchResultsControl.Designer.cs">
+      <DependentUpon>MatchResultsControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -91,6 +97,9 @@
     </Compile>
     <EmbeddedResource Include="UI\MatchResolutionControl.resx">
       <DependentUpon>MatchResolutionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MatchResultsControl.resx">
+      <DependentUpon>MatchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -39,6 +39,35 @@ namespace MOBAManager.MatchResolution
             return ret;
         }
 
+        public string getTeamName(int team)
+        {
+            if (team == 1)
+            {
+                return team1.teamName;
+            }
+            else if (team == 2)
+            {
+                return team2.teamName;
+            }
+            return "";
+        }
+              
+
+        public string getFormattedLineup(int team)
+        {
+            string ret = team1.teamName;
+            if (team == 2)
+            {
+                ret = team2.teamName;
+            }
+
+            ret += Environment.NewLine + "-----" + Environment.NewLine;
+
+            ret += ms.getFormattedTeamLineup(team);
+
+            return ret;
+        }
+
         /// <summary>
         /// Returns a multiline string containing all of Team 1's bans.
         /// </summary>

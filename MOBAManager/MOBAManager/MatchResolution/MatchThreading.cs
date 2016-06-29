@@ -46,6 +46,8 @@ namespace MOBAManager.MatchResolution
         /// The control variable for if the match has changed in anyway and requires updating the user control.
         /// </summary>
         private bool _changed = true;
+
+        private bool _finished = false;
         #endregion
 
         #region Public Methods
@@ -62,6 +64,14 @@ namespace MOBAManager.MatchResolution
                     return true;
                 }
                 return false;
+            }
+        }
+
+        public bool hasFinished
+        {
+            get
+            {
+                return _finished;
             }
         }
 
@@ -177,8 +187,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         public void threadedResolveWinner()
         {
-            winner = ms.decideWinner();
-            Console.WriteLine("Winner is team #" + winner);
+            _winner = ms.decideWinner();
+            Thread.Sleep(5000);
+            _finished = true;
         }
         #endregion
 

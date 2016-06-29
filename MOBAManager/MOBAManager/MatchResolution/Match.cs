@@ -30,28 +30,28 @@ namespace MOBAManager.MatchResolution
         /// <summary>
         /// The control variable for who the winner is.
         /// </summary>
-        private int winner = -1;
+        private int _winner = -1;
         #endregion
 
         #region Public methods
         /// <summary>
-        /// Returns the ID of the winning team, or -1 if none has been decided yet.
+        /// Returns the number of the winning team, or -1 if none has been decided yet.
         /// </summary>
-        public int winnerID
+        public int winner
         {
             get
             {
-                if (winner == -1)
+                if (_winner == -1)
                 {
                     return -1;
                 }
-                else if (winner == 1)
+                else if (_winner == 1)
                 {
-                    return team1.ID;
+                    return 1;
                 }
-                else if (winner == 2)
+                else if (_winner == 2)
                 {
-                    return team2.ID;
+                    return 2;
                 }
                 return -1;
             }
@@ -94,7 +94,7 @@ namespace MOBAManager.MatchResolution
             ms.setTeamSelection(1, ms.team1Pick());
             ms.setTeamSelection(2, ms.team2Pick());
 
-            winner = ms.decideWinner();
+            _winner = ms.decideWinner();
         }
         #endregion
 

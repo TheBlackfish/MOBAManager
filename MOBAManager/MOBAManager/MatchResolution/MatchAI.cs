@@ -63,6 +63,16 @@ namespace MOBAManager.MatchResolution
         private List<int> team2Bans;
 
         /// <summary>
+        /// The combinations of players and heroes for Team 1.
+        /// </summary>
+        private List<Tuple<Player, Hero>> team1Lineup;
+
+        /// <summary>
+        /// The combinations of players and heroes for Team 2.
+        /// </summary>
+        private List<Tuple<Player, Hero>> team2Lineup;
+
+        /// <summary>
         /// <para>The selection mode that Team 1 is currently using.
         /// 
         /// The pick numbers are as follows:</para>
@@ -354,6 +364,28 @@ namespace MOBAManager.MatchResolution
         }
 
         /// <summary>
+        /// Returns a formatted string containing all of the team's players and which heroes they're playing.
+        /// </summary>
+        /// <param name="team"></param>
+        /// <returns></returns>
+        public string getFormattedTeamLineup(int team)
+        {
+            string ret = "";
+            List<Tuple<Player, Hero>> lineup = team1Lineup;
+            if (team == 2)
+            {
+                lineup = team2Lineup;
+            }
+
+            foreach (Tuple<Player, Hero> tp in lineup)
+            {
+                ret += tp.Item1.playerName + " - " + tp.Item2.HeroName + Environment.NewLine;
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Sets a team's selection for either a pick or ban.
         /// </summary>
         /// <param name="team">The team making the selection.</param>
@@ -554,6 +586,8 @@ namespace MOBAManager.MatchResolution
             team2Picks = new List<int>();
             team1Bans = new List<int>();
             team2Bans = new List<int>();
+            team1Lineup = new List<Tuple<Player, Hero>>();
+            team2Lineup = new List<Tuple<Player, Hero>>();
         }
         #endregion
     }

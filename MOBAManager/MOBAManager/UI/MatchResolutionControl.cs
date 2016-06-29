@@ -40,6 +40,17 @@ namespace MOBAManager.UI
                 team2Bans.Text = match.getFormattedTeam2Bans();
                 team2Picks.Text = match.getFormattedTeam2Picks();
             }
+
+            if (match.hasFinished)
+            {
+                updateTimer.Enabled = false;
+
+                MainForm form = this.Parent as MainForm;
+                form.Controls.Remove(this);
+
+                MatchResultsControl results = new MatchResultsControl(match);
+                form.Controls.Add(results);
+            }
         }
         #endregion
 
