@@ -37,6 +37,7 @@
             // 
             // team2Info
             // 
+            this.team2Info.BackColor = System.Drawing.SystemColors.Control;
             this.team2Info.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Info.Location = new System.Drawing.Point(248, 108);
             this.team2Info.Name = "team2Info";

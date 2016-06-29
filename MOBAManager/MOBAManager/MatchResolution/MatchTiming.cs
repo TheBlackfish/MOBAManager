@@ -67,10 +67,18 @@ namespace MOBAManager.MatchResolution
         #endregion
 
         #region Private Methods
+        private void initInitialTimer()
+        {
+            tickTimer = new System.Timers.Timer(3000);
+            tickTimer.Enabled = true;
+            tickTimer.Elapsed += initActualTimer;
+            tickTimer.AutoReset = true;
+        }
+
         /// <summary>
         /// Initializes the timer and essentially starts the match.
         /// </summary>
-        private void initTimer()
+        private void initActualTimer(Object sender, EventArgs e)
         {
             tickTimer = new System.Timers.Timer(250);
             tickTimer.Enabled = true;
@@ -290,7 +298,7 @@ namespace MOBAManager.MatchResolution
         {
             if (threading)
             {
-                initTimer();
+                initInitialTimer();
             }
         }
         #endregion
