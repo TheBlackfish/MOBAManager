@@ -64,15 +64,18 @@ namespace MOBAManager.MatchResolution
         /// The timer controlling when updates are handled.
         /// </summary>
         private System.Timers.Timer tickTimer;
+
+        private System.Timers.Timer pregameTimer;
+
         #endregion
 
         #region Private Methods
         private void initInitialTimer()
         {
-            tickTimer = new System.Timers.Timer(3000);
-            tickTimer.Enabled = true;
-            tickTimer.Elapsed += initActualTimer;
-            tickTimer.AutoReset = true;
+            pregameTimer = new System.Timers.Timer(3000);
+            pregameTimer.Enabled = true;
+            pregameTimer.Elapsed += initActualTimer;
+            pregameTimer.AutoReset = true;
         }
 
         /// <summary>
@@ -80,6 +83,8 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private void initActualTimer(Object sender, EventArgs e)
         {
+            pregameTimer.Enabled = false;
+
             tickTimer = new System.Timers.Timer(250);
             tickTimer.Enabled = true;
             tickTimer.Elapsed += OnTickTimerElapsed;
