@@ -19,6 +19,11 @@ namespace MOBAManager.UI
         /// The match this MRC controls.
         /// </summary>
         private Match match;
+
+        /// <summary>
+        /// The list of action combinations for selection recommendations.
+        /// </summary>
+        private List<Tuple<int, int>> interactionsList;
         #endregion
 
         #region Private methods
@@ -65,7 +70,26 @@ namespace MOBAManager.UI
             InitializeComponent();
             team1Info.Text = m.getTeamInformation(1);
             team2Info.Text = m.getTeamInformation(2);
+
+            interactionsList = new List<Tuple<int, int>>();
+
+            foreach (Tuple<string, int, int> t in m.getPlayerInteractions())
+            {
+                userSelection.Items.Add(t.Item1);
+                interactionsList.Add(new Tuple<int, int>(t.Item2, t.Item3));
+            }
         }
         #endregion
+
+        /// <summary>
+        /// Called when the combo box's selection changes.
+        /// </summary>
+        /// <param name="sender">The combo box.</param>
+        /// <param name="e">The event parameters.</param>
+        private void userSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Tuple<int, int> selection = interactionsList[userSelection.SelectedIndex];
+            match.submitPlayerRecommendation(selection.Item1, selection.Item2);
+        }
     }
 }

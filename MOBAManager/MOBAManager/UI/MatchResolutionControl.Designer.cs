@@ -162,6 +162,7 @@
             this.userSelection.Name = "userSelection";
             this.userSelection.Size = new System.Drawing.Size(374, 21);
             this.userSelection.TabIndex = 10;
+            this.userSelection.SelectedIndexChanged += new System.EventHandler(this.userSelection_SelectedIndexChanged);
             // 
             // updateTimer
             // 

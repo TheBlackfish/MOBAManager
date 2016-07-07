@@ -25,6 +25,8 @@ namespace MOBAManager.MatchResolution
 
             int dieRoll = rnd.Next(team1 + team2);
 
+            Console.WriteLine("T1:" + team1 + " vs T2:" + team2 + " -- Die roll:" + dieRoll);
+
             if (dieRoll < team1)
             {
                 return 1;

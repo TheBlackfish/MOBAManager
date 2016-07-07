@@ -39,6 +39,11 @@ namespace MOBAManager.MatchResolution
             return ret;
         }
 
+        /// <summary>
+        /// Returns the name of the team in the specified slot.
+        /// </summary>
+        /// <param name="team">The slot to pick from. 1 or 2.</param>
+        /// <returns></returns>
         public string getTeamName(int team)
         {
             if (team == 1)
@@ -53,6 +58,11 @@ namespace MOBAManager.MatchResolution
         }
               
 
+        /// <summary>
+        /// Returns a formatted string that returns the full final line-up of a team.
+        /// </summary>
+        /// <param name="team"></param>
+        /// <returns></returns>
         public string getFormattedLineup(int team)
         {
             string ret = team1.teamName;
@@ -133,5 +143,55 @@ namespace MOBAManager.MatchResolution
             return "";
         }
         #endregion
+    }
+
+    partial class MatchAI
+    {
+        /// <summary>
+        /// Gets a Tuple of strings containing the times left in each category formatted correctly.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<string, string, string, string> getFormattedTimers()
+        {
+            string[] placeholder = new string[4];
+            double min = 0;
+
+            double seconds = Math.Truncate(bonusTimeMaximum / 1000) - Math.Truncate(team1BonusTimeCounter / 1000);
+            while (seconds > 60)
+            {
+                min++;
+                seconds -= 60;
+            }
+            placeholder[0] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
+
+            seconds = Math.Truncate(regularTimeMaximum / 1000) - Math.Truncate(team1RegularTimeCounter / 1000);
+            min = 0;
+            while (seconds > 60)
+            {
+                min++;
+                seconds -= 60;
+            }
+            placeholder[1] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
+
+            seconds = Math.Truncate(bonusTimeMaximum / 1000) - Math.Truncate(team2BonusTimeCounter / 1000);
+            min = 0;
+            while (seconds > 60)
+            {
+                min++;
+                seconds -= 60;
+            }
+            placeholder[2] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
+
+            seconds = Math.Truncate(regularTimeMaximum / 1000) - Math.Truncate(team2RegularTimeCounter / 1000);
+            min = 0;
+            while (seconds > 60)
+            {
+                min++;
+                seconds -= 60;
+            }
+            placeholder[3] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
+
+            return new Tuple<string, string, string, string>(placeholder[0], placeholder[1], placeholder[2], placeholder[3]);
+        }
     }
 }
