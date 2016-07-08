@@ -12,21 +12,21 @@ namespace MOBAManager.Management
 {
     class GameManager
     {
-        #region Variables
+        #region Temporarily Public Variables
         /// <summary>
         /// The hero manager of the current game.
         /// </summary>
-        private HeroManager heroManager;
+        public HeroManager heroManager;
 
         /// <summary>
         /// The player manager of the current game.
         /// </summary>
-        private PlayerManager playerManager;
+        public PlayerManager playerManager;
 
         /// <summary>
         /// The team manager of the current game.
         /// </summary>
-        private TeamManager teamManager;
+        public TeamManager teamManager;
         #endregion
 
         #region Public Methods

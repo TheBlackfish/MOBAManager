@@ -117,6 +117,57 @@ namespace MOBAManager.MatchResolution
             List<Hero> selections = ms.getTeamSelections(2);
             return formatHeroNames(selections);
         }
+
+        /// <summary>
+        /// Gets a descriptive text describing the events of the game after it has been fully resolved.
+        /// </summary>
+        /// <returns></returns>
+        public string getSummary()
+        {
+            string sum = "";
+
+            int winningTeam = winner;
+            int losingTeam = 3 - winningTeam;
+            if (winner == -1)
+            {
+                return "The match is still being decided.";
+            }
+
+            int diff = ms.getTeamLineupSkill(winningTeam) - ms.getTeamLineupSkill(3 - winningTeam);
+
+            sum += getTeamName(winningTeam);
+
+            if (diff >= 2000)
+            {
+                sum += " utterly decimated ";
+            }
+            else if (diff >= 1000)
+            {
+                sum += " handily beat ";
+            }
+            else if (diff >= 400)
+            {
+                sum += " edged out ";
+            }
+            else if (diff >= -400)
+            {
+                sum += " squeaked a victory from ";
+            }
+            else if (diff >= -1000)
+            {
+                sum += " outplayed ";
+            }
+            else if (diff >= -2000)
+            {
+                sum += " overcame the odds to beat ";
+            }
+            else
+            {
+                sum += " utterly humiliated ";
+            }
+
+            return sum + getTeamName(3 - winningTeam) + ".";
+        }
         #endregion
 
         #region Private methods

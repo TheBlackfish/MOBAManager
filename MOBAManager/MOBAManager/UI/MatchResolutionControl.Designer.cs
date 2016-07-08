@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.team1TimerA = new System.Windows.Forms.TextBox();
             this.team1TimerB = new System.Windows.Forms.TextBox();
             this.team1Info = new System.Windows.Forms.RichTextBox();
@@ -40,7 +39,6 @@
             this.team2TimerB = new System.Windows.Forms.TextBox();
             this.team2TimerA = new System.Windows.Forms.TextBox();
             this.userSelection = new System.Windows.Forms.ComboBox();
-            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // team1TimerA
@@ -164,11 +162,6 @@
             this.userSelection.TabIndex = 10;
             this.userSelection.SelectedIndexChanged += new System.EventHandler(this.userSelection_SelectedIndexChanged);
             // 
-            // updateTimer
-            // 
-            this.updateTimer.Enabled = true;
-            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
-            // 
             // MatchResolutionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,6 +197,5 @@
         private System.Windows.Forms.TextBox team2TimerB;
         private System.Windows.Forms.TextBox team2TimerA;
         private System.Windows.Forms.ComboBox userSelection;
-        private System.Windows.Forms.Timer updateTimer;
     }
 }

@@ -17,11 +17,9 @@ namespace MOBAManager.MatchResolution
         {
             //Get Team 1's optimal skill
             int team1 = totalTeamSkill(1);
-            team1 *= team1;
 
             //Get Team 2's optimal skill
             int team2 = totalTeamSkill(2);
-            team2 *= team2;
 
             int dieRoll = rnd.Next(team1 + team2);
 
@@ -34,6 +32,27 @@ namespace MOBAManager.MatchResolution
             else
             {
                 return 2;
+            }
+        }
+
+        /// <summary>
+        /// Returns the skill level of the team selected.
+        /// </summary>
+        /// <param name="team">The slot of the team to get the total skill for. 1 or 2.</param>
+        /// <returns></returns>
+        public int getTeamLineupSkill(int team)
+        {
+            if (team == 1)
+            {
+                return calculateLineupSkill(1, team1Lineup);
+            }
+            else if (team == 2)
+            {
+                return calculateLineupSkill(2, team2Lineup);
+            }
+            else
+            {
+                return int.MinValue;
             }
         }
         #endregion
@@ -108,7 +127,7 @@ namespace MOBAManager.MatchResolution
                     oppPicks);
                 finalValue += curVal;
             }
-            return finalValue;
+            return finalValue * finalValue;
         }
 
 

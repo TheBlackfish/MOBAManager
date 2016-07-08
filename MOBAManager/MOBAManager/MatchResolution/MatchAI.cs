@@ -441,8 +441,6 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> start = baselineHeroSelection(1);
             int selectionID = -1;
-            Console.WriteLine("Team1Pick - Selection  mode is " + team1SelectionMode);
-            Console.WriteLine("Team1Pick - Player selection is " + team1SelectionPlayerTarget);
             switch (team1SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
@@ -508,8 +506,6 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> start = baselineHeroSelection(2);
             int selectionID = -1;
-            Console.WriteLine("Team2Pick - Selection  mode is " + team2SelectionMode);
-            Console.WriteLine("Team2Pick - Player selection is " + team2SelectionPlayerTarget);
             switch (team2SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.

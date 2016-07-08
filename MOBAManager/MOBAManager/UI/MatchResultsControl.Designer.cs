@@ -88,6 +88,7 @@
             this.continueButton.TabIndex = 11;
             this.continueButton.Text = "Continue";
             this.continueButton.UseVisualStyleBackColor = true;
+            this.continueButton.Click += new System.EventHandler(this.continueButton_Click);
             // 
             // MatchResultsControl
             // 

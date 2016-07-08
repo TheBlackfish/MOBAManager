@@ -49,6 +49,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private bool _changed = true;
 
+        /// <summary>
+        /// The control variable for if the match is finished.
+        /// </summary>
         private bool _finished = false;
         #endregion
 
@@ -69,6 +72,9 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Returns if the game has finished.
+        /// </summary>
         public bool hasFinished
         {
             get
@@ -130,6 +136,15 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// <para>Returns the current phase of the ban/pick phase.</para>
+        /// <para>0 - First Ban Phase</para>
+        /// <para>1 - First Pick Phase</para>
+        /// <para>2 - Second Ban Phase</para>
+        /// <para>3 - Second Pick Phase</para>
+        /// <para>4 - Third Ban Phase</para>
+        /// <para>5 - Third Pick Phase</para>
+        /// </summary>
         public int getCurrentPhase
         {
             get
@@ -192,6 +207,25 @@ namespace MOBAManager.MatchResolution
             _winner = ms.decideWinner();
             Thread.Sleep(5000);
             _finished = true;
+        }
+
+        /// <summary>
+        /// Starts the AI's internal timers.
+        /// </summary>
+        public void startMatch()
+        {
+            if (isThreaded)
+            {
+                ms.initInitialTimer();
+            }
+        }
+
+        /// <summary>
+        /// Returns if the game is threaded and therefore a player match.
+        /// </summary>
+        public bool isThreaded
+        {
+            get { return ms.isThreaded; }
         }
         #endregion
 
@@ -272,27 +306,28 @@ namespace MOBAManager.MatchResolution
         /// <summary>
         /// The timer controlling when updates are handled.
         /// </summary>
-        private System.Timers.Timer tickTimer;
+        private System.Timers.Timer tickTimer = null;
 
         /// <summary>
         /// The timer controlling when the initial timer will start.
         /// </summary>
-        private System.Timers.Timer pregameTimer;
+        private System.Timers.Timer pregameTimer = null;
+        #endregion
 
+        #region Public Variables
+        /// <summary>
+        /// Returns if the AI is a part of a threaded match.
+        /// </summary>
+        public bool isThreaded
+        {
+            get
+            {
+                return (pregameTimer != null);
+            }
+        }
         #endregion
 
         #region Private Methods
-        /// <summary>
-        /// Initializes the pre-game timer.
-        /// </summary>
-        private void initInitialTimer()
-        {
-            pregameTimer = new System.Timers.Timer(3000);
-            pregameTimer.Enabled = true;
-            pregameTimer.Elapsed += initActualTimer;
-            pregameTimer.AutoReset = true;
-        }
-
         /// <summary>
         /// Initializes the timer and essentially starts the match.
         /// </summary>
@@ -511,6 +546,16 @@ namespace MOBAManager.MatchResolution
         }
         #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Initializes the pre-game timer.
+        /// </summary>
+        public void initInitialTimer()
+        {
+            pregameTimer.Enabled = true;
+        }
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Creates a new Match AI with threading.
@@ -525,7 +570,10 @@ namespace MOBAManager.MatchResolution
         {
             if (threading)
             {
-                initInitialTimer();
+                pregameTimer = new System.Timers.Timer(5000);
+                pregameTimer.Enabled = false;
+                pregameTimer.Elapsed += initActualTimer;
+                pregameTimer.AutoReset = true;
             }
         }
         #endregion

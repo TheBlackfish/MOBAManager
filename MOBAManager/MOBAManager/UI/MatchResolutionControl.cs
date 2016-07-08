@@ -21,9 +21,19 @@ namespace MOBAManager.UI
         private Match match;
 
         /// <summary>
+        /// The function to call when the results screen is closed.
+        /// </summary>
+        private Action<object, EventArgs> onCloseResultsFunc;
+
+        /// <summary>
         /// The list of action combinations for selection recommendations.
         /// </summary>
         private List<Tuple<int, int>> interactionsList;
+
+        /// <summary>
+        /// The internal timer for updating the screen.
+        /// </summary>
+        private System.Timers.Timer updateTimer;
         #endregion
 
         #region Private methods
@@ -31,6 +41,15 @@ namespace MOBAManager.UI
         /// Updates the textboxes with the appropriate data from the match.
         /// </summary>
         private void updateTimer_Tick(object sender, EventArgs e)
+        {
+            Action update = () => updateControl();
+            BeginInvoke(update);
+        }
+
+        /// <summary>
+        /// Updates all text and timers.
+        /// </summary>
+        private void updateControl()
         {
             Tuple<string, string, string, string> times = match.getFormattedTimers();
             team1TimerA.Text = times.Item1;
@@ -50,14 +69,24 @@ namespace MOBAManager.UI
             {
                 updateTimer.Enabled = false;
 
-                MainForm form = this.Parent as MainForm;
+                EventResolutionControl form = this.Parent as EventResolutionControl;
                 form.Controls.Remove(this);
 
-                MatchResultsControl results = new MatchResultsControl(match);
+                MatchResultsControl results = new MatchResultsControl(match, onCloseResultsFunc);
                 form.Controls.Add(results);
+                results.BringToFront();
             }
         }
         #endregion
+
+        /// <summary>
+        /// Returns the match this control is handling.
+        /// </summary>
+        /// <returns></returns>
+        public Match getMatch()
+        {
+            return match;
+        }
 
         #region Constructors
         /// <summary>
@@ -68,6 +97,11 @@ namespace MOBAManager.UI
         {
             match = m;
             InitializeComponent();
+
+            updateTimer = new System.Timers.Timer(250);
+            updateTimer.Elapsed += updateTimer_Tick;
+            updateTimer.Enabled = true;
+
             team1Info.Text = m.getTeamInformation(1);
             team2Info.Text = m.getTeamInformation(2);
 
@@ -78,6 +112,19 @@ namespace MOBAManager.UI
                 userSelection.Items.Add(t.Item1);
                 interactionsList.Add(new Tuple<int, int>(t.Item2, t.Item3));
             }
+
+            m.startMatch();
+        }
+
+        /// <summary>
+        /// Creates a new MRC user control with a function to call upon finishing.
+        /// </summary>
+        /// <param name="m">The match that this MRC is handling.</param>
+        /// <param name="onEndFunc">The function to call when the match is over.</param>
+        public MatchResolutionControl(Match m, Action<object, EventArgs> onEndFunc)
+            : this(m)
+        {
+            onCloseResultsFunc = onEndFunc;
         }
         #endregion
 

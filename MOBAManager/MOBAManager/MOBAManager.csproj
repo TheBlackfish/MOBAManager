@@ -49,6 +49,12 @@
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
+    <Compile Include="UI\EventResolutionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\EventResolutionControl.Designer.cs">
+      <DependentUpon>EventResolutionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +88,9 @@
     <Compile Include="UI\MatchResultsControl.Designer.cs">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\EventResolutionControl.resx">
+      <DependentUpon>EventResolutionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
