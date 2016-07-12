@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\Statistics\StatisticsManager.cs" />
+    <Compile Include="Management\Statistics\StatsBundle.cs" />
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />

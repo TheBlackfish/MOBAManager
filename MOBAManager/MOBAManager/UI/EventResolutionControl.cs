@@ -8,6 +8,7 @@ using System.Text;
 using System.Timers;
 using System.Windows.Forms;
 using MOBAManager.MatchResolution;
+using MOBAManager.Management.Statistics;
 
 namespace MOBAManager.UI
 {
@@ -37,6 +38,8 @@ namespace MOBAManager.UI
         /// The list of all games that can be played in any order.
         /// </summary>
         private List<Match> pugs;
+
+        private List<StatsBundle> statistics;
 
         /// <summary>
         /// The timer that controls when events are resolved.
@@ -105,6 +108,11 @@ namespace MOBAManager.UI
             resolutionTimer.Enabled = true;
         }
 
+        public List<StatsBundle> getStatistics()
+        {
+            return statistics;
+        }
+
         /// <summary>
         /// Adds a label to the event container with details about the match provided.
         /// </summary>
@@ -135,6 +143,7 @@ namespace MOBAManager.UI
             resolutionTimer = new System.Timers.Timer(4000);
             resolutionTimer.Enabled = true;
             resolutionTimer.Elapsed += resolveRandomEvent;
+            statistics = new List<StatsBundle>();
         }
     }
 }

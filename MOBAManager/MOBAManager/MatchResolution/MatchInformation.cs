@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,52 @@ namespace MOBAManager.MatchResolution
             }
 
             return sum + getTeamName(3 - winningTeam) + ".";
+        }
+
+        public StatsBundle getStats()
+        {
+            StatsBundle bundle = new StatsBundle();
+
+            //Throw winning team stats into the bundle.
+            if (winner != -1)
+            {
+                bundle.addTeamWin(team1.ID, winner == 1);
+                bundle.addTeamWin(team2.ID, winner == 2);
+
+                foreach(Player p in team1.getTeammates())
+                {
+                    bundle.addPlayerWin(p.ID, winner == 1);
+                }
+
+                foreach (Player p in team2.getTeammates())
+                {
+                    bundle.addPlayerWin(p.ID, winner == 2);
+                }
+
+                foreach (Hero h in ms.getTeamSelections(1))
+                {
+                    bundle.addHeroWin(h.ID, winner == 1);
+                    bundle.addHeroPickBan(h.ID, true);
+                }
+
+                foreach (Hero h in ms.getTeamSelections(2))
+                {
+                    bundle.addHeroWin(h.ID, winner == 2);
+                    bundle.addHeroPickBan(h.ID, true);
+                }
+
+                foreach (Hero h in ms.getTeamBans(1))
+                {
+                    bundle.addHeroPickBan(h.ID, false);
+                }
+
+                foreach (Hero h in ms.getTeamBans(2))
+                {
+                    bundle.addHeroPickBan(h.ID, false);
+                }
+            }
+
+            return bundle;
         }
         #endregion
 

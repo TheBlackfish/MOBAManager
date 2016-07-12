@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
 using MOBAManager.MatchResolution;
 using System;
@@ -22,6 +23,8 @@ namespace MOBAManager.Management
         /// The player manager of the current game.
         /// </summary>
         public PlayerManager playerManager;
+
+        public StatisticsManager statsManager;
 
         /// <summary>
         /// The team manager of the current game.
@@ -51,6 +54,8 @@ namespace MOBAManager.Management
             heroManager = new HeroManager();
 
             playerManager = new PlayerManager();
+
+            statsManager = new StatisticsManager();
 
             teamManager = new TeamManager();
 
