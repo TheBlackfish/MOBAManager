@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace MOBAManager.MatchResolution
 {
-    partial class MatchAI
+    partial class MatchAI : IDisposable
     {
         #region General Variables
         /// <summary>
@@ -562,6 +562,11 @@ namespace MOBAManager.MatchResolution
                     break;
             }
             return selectionID;
+        }
+
+        public void Dispose()
+        {
+
         }
         #endregion
 

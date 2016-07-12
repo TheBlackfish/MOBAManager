@@ -21,6 +21,25 @@ namespace MOBAManager.MatchResolution
             //Get Team 2's optimal skill
             int team2 = totalTeamSkill(2);
 
+            if (team1 < 0 && team2 < 0)
+            {
+                while (team1 < 100 && team2 < 100)
+                {
+                    team1 += 100;
+                    team2 += 100;
+                }
+            }
+            else if (team1 < 0 && team2 > 0)
+            {
+                team2 -= team1 - 100;
+                team1 = 100;
+            }
+            else if (team2 < 0 && team1 > 0)
+            {
+                team1 -= team2 - 100;
+                team2 = 100;
+            }
+
             int dieRoll = rnd.Next(team1 + team2);
 
             Console.WriteLine("T1:" + team1 + " vs T2:" + team2 + " -- Die roll:" + dieRoll);
@@ -127,7 +146,14 @@ namespace MOBAManager.MatchResolution
                     oppPicks);
                 finalValue += curVal;
             }
-            return finalValue * finalValue;
+            if (finalValue >= 0)
+            {
+                return finalValue * finalValue;
+            }
+            else
+            {
+                return -(finalValue * finalValue);
+            }
         }
 
 

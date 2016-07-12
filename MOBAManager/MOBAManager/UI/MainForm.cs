@@ -28,7 +28,7 @@ namespace MOBAManager
             List<Match> testPugs = new List<Match>();
             testPugs.Add(new Match(true, gm.teamManager.getAllTeams()[0], gm.teamManager.getAllTeams()[1], 1, gm.heroManager.getHeroDictionary()));
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 20; i++)
             {
                 var team1Index = rng.Next(gm.teamManager.getAllTeams().Count);
                 var team2Index = team1Index;
