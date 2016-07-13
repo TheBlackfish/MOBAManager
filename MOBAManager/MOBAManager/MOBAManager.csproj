@@ -51,6 +51,12 @@
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
+    <Compile Include="UI\DailyMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DailyMenu.Designer.cs">
+      <DependentUpon>DailyMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\EventResolutionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -90,6 +96,10 @@
     <Compile Include="UI\MatchResultsControl.Designer.cs">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\RNG.cs" />
+    <EmbeddedResource Include="UI\DailyMenu.resx">
+      <DependentUpon>DailyMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\EventResolutionControl.resx">
       <DependentUpon>EventResolutionControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -124,7 +134,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Management\Calendar\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

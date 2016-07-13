@@ -1,6 +1,7 @@
 ﻿using MOBAManager.Management;
 using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,6 @@ namespace MOBAManager.MatchResolution
         /// The match that this AI is controlling.
         /// </summary>
         private Match match;
-
-        /// <summary>
-        /// The random number generator.
-        /// </summary>
-        private Random rnd;
         #endregion
 
         #region Team-based Variables
@@ -197,7 +193,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> baseline = baselineHeroSelection(team);
             List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = rnd.Next(6);
+            int rando = RNG.roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -227,7 +223,7 @@ namespace MOBAManager.MatchResolution
             {
                 Dictionary<int, int> baseline = baselineHeroSelection(team);
                 List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value + actualPlayer.getHeroSkill(kvp.Key)).Take(3).Select(kvp => kvp.Key).ToList();
-                int rando = rnd.Next(6);
+                int rando = RNG.roll(6);
                 if (rando < 3)
                 {
                     return finalists[0];
@@ -259,7 +255,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> baseline = baselineHeroSelection(team);
             List<int> finalists = baseline.OrderBy(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = rnd.Next(6);
+            int rando = RNG.roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -284,7 +280,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> baseline = baselineHeroSelection(team, true, false);
             List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = rnd.Next(6);
+            int rando = RNG.roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -307,7 +303,7 @@ namespace MOBAManager.MatchResolution
         {
             Dictionary<int, int> baseline = baselineHeroSelection(1, true, true);
             List<int> finalists = baseline.Select(kvp => kvp.Key).ToList();
-            return finalists[rnd.Next(finalists.Count)];
+            return finalists[RNG.roll(finalists.Count)];
         }
         #endregion
 
@@ -444,14 +440,14 @@ namespace MOBAManager.MatchResolution
             switch (team1SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
-                    selectionID = remainingHeroes[rnd.Next(remainingHeroes.Count)];
+                    selectionID = remainingHeroes[RNG.roll(remainingHeroes.Count)];
                     break;
                 case 0:     //Random method of selection.
-                    if (rnd.Next(2) == 1)
+                    if (RNG.roll(2) == 1)
                     {
-                        if (rnd.Next(2) == 1)
+                        if (RNG.roll(2) == 1)
                         {
-                            if (rnd.Next(4) == 1)
+                            if (RNG.roll(4) == 1)
                             {
                                 selectionID = selectWorstOverallChoice(1);
                             }
@@ -462,14 +458,14 @@ namespace MOBAManager.MatchResolution
                         }
                         else
                         {
-                            if (rnd.Next(2) == 1)
+                            if (RNG.roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[rnd.Next(team1Players.Count)].ID;
+                                int randomPlayer = team1Players[RNG.roll(team1Players.Count)].ID;
                                 selectionID = selectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[rnd.Next(team2Players.Count)].ID;
+                                int randomPlayer = team2Players[RNG.roll(team2Players.Count)].ID;
                                 selectionID = selectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
@@ -485,7 +481,7 @@ namespace MOBAManager.MatchResolution
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team1SelectionPlayerTarget = team1Players[rnd.Next(team1Players.Count)].ID;
+                        team1SelectionPlayerTarget = team1Players[RNG.roll(team1Players.Count)].ID;
                     }
                     selectionID = selectBestChoiceForPlayer(1, team1SelectionPlayerTarget);
                     break;
@@ -509,14 +505,14 @@ namespace MOBAManager.MatchResolution
             switch (team2SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
-                    selectionID = remainingHeroes[rnd.Next(remainingHeroes.Count)];
+                    selectionID = remainingHeroes[RNG.roll(remainingHeroes.Count)];
                     break;
                 case 0:     //Random method of selection.
-                    if (rnd.Next(2) == 1)
+                    if (RNG.roll(2) == 1)
                     {
-                        if (rnd.Next(2) == 1)
+                        if (RNG.roll(2) == 1)
                         {
-                            if (rnd.Next(4) == 1)
+                            if (RNG.roll(4) == 1)
                             {
                                 selectionID = selectWorstOverallChoice(2);
                             }
@@ -527,14 +523,14 @@ namespace MOBAManager.MatchResolution
                         }
                         else
                         {
-                            if (rnd.Next(2) == 1)
+                            if (RNG.roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[rnd.Next(team1Players.Count)].ID;
+                                int randomPlayer = team1Players[RNG.roll(team1Players.Count)].ID;
                                 selectionID = selectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[rnd.Next(team2Players.Count)].ID;
+                                int randomPlayer = team2Players[RNG.roll(team2Players.Count)].ID;
                                 selectionID = selectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
@@ -550,7 +546,7 @@ namespace MOBAManager.MatchResolution
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team2SelectionPlayerTarget = team2Players[rnd.Next(team2Players.Count)].ID;
+                        team2SelectionPlayerTarget = team2Players[RNG.roll(team2Players.Count)].ID;
                     }
                     selectionID = selectBestChoiceForPlayer(2, team2SelectionPlayerTarget);
                     break;
@@ -585,7 +581,6 @@ namespace MOBAManager.MatchResolution
             team1Players = teamA;
             team2Players = teamB;
 
-            rnd = new Random();
             remainingHeroes = allHeroes.Select(kvp => kvp.Key).ToList();
             team1Picks = new List<int>();
             team2Picks = new List<int>();

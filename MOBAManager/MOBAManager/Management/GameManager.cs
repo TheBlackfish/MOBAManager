@@ -3,6 +3,7 @@ using MOBAManager.Management.Players;
 using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
 using MOBAManager.MatchResolution;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management
 {
-    class GameManager
+    public class GameManager
     {
         #region Temporarily Public Variables
         /// <summary>
@@ -42,6 +43,31 @@ namespace MOBAManager.Management
         {
             Match m = new Match(true, teamManager.getAllTeams()[0], teamManager.getAllTeams()[1], 1, heroManager.getHeroDictionary());
             return m;
+        }
+
+        public Match getNextMatch()
+        {
+            int team1Index = -1;
+            int team2Index = -1;
+
+            while (team1Index == -1)
+            {
+                team1Index = RNG.roll(teamManager.getAllTeams().Count);
+            }
+
+            while (team2Index == -1 || team1Index == team2Index)
+            {
+                team2Index = RNG.roll(teamManager.getAllTeams().Count);
+            }
+
+            if (team1Index == 0 || team2Index == 0)
+            {
+                return new Match(true, teamManager.getAllTeams()[team1Index], teamManager.getAllTeams()[team2Index], (team1Index == 0) ? 1 : 2, heroManager.getHeroDictionary());
+            }
+            else
+            {
+                return new Match(teamManager.getAllTeams()[team1Index], teamManager.getAllTeams()[team2Index], heroManager.getHeroDictionary());
+            }
         }
         #endregion
 

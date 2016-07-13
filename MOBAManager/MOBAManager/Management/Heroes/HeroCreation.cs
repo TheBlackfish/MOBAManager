@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOBAManager.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,8 +13,6 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         private void createHeroes()
         {
-            Random rnd = new Random();
-
             string[] heroNames = new string[]
             {
                 "Abdul Alhazred",
@@ -53,7 +52,7 @@ namespace MOBAManager.Management.Heroes
             //Create initial heroes
             while (heroNames.Length > 0 && initialSkill.Length > 0)
             {
-                string curHero = heroNames[rnd.Next(heroNames.Length)];
+                string curHero = heroNames[RNG.roll(heroNames.Length)];
 
                 Hero newHero = new Hero(allHeroes.Count, curHero, initialSkill[0]);
                 allHeroes.Add(allHeroes.Count, newHero);
@@ -105,7 +104,7 @@ namespace MOBAManager.Management.Heroes
 
             foreach (int[] p in synergyPairs)
             {
-                int index = rnd.Next(synergyValues.Count);
+                int index = RNG.roll(synergyValues.Count);
                 int val = synergyValues[index];
 
                 allHeroes[p[0]].setSynergy(p[1], val);
@@ -130,10 +129,10 @@ namespace MOBAManager.Management.Heroes
 
             foreach (int[] p in counterPairs)
             {
-                int index = rnd.Next(counterValues.Count);
+                int index = RNG.roll(counterValues.Count);
                 int[] val = counterValues[index];
 
-                if (rnd.Next(2) == 0)
+                if (RNG.roll(2) == 0)
                 {
                     allHeroes[p[0]].setCounter(p[1], val[0]);
                     allHeroes[p[1]].setCounter(p[0], val[1]);

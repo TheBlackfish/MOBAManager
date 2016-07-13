@@ -1,4 +1,5 @@
 ﻿using MOBAManager.Management.Players;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Teams
 {
-    partial class TeamManager
+    public partial class TeamManager
     {
         #region Variables
         /// <summary>
@@ -32,14 +33,13 @@ namespace MOBAManager.Management.Teams
         /// <param name="population">The list of players eligible to </param>
         public void populateTeams(List<Player> population)
         {
-            Random rnd = new Random();
             List<Team> tl = getAllTeams();
 
             foreach (Team t in tl)
             {
                 while (!t.isLegalTeam())
                 {
-                    Player curPlayer = population[rnd.Next(population.Count)];
+                    Player curPlayer = population[RNG.roll(population.Count)];
                     t.addMember(curPlayer);
                     population = population.Where(n => n.ID != curPlayer.ID).ToList();
                 }

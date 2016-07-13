@@ -1,4 +1,5 @@
 ﻿using MOBAManager.Management.Heroes;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,6 @@ namespace MOBAManager.Management.Players
         /// </summary>
         private void createPlayers()
         {
-            Random rnd = new Random();
-
             string[] playerNames = new string[]
             {
                 "TheBlackfish",
@@ -80,7 +79,7 @@ namespace MOBAManager.Management.Players
 
             while (playerNames.Length > 0 && initialSkill.Length > 0)
             {
-                string curPlayer = playerNames[rnd.Next(playerNames.Length)];
+                string curPlayer = playerNames[RNG.roll(playerNames.Length)];
 
                 Player newPlayer = new Player(allPlayers.Count, curPlayer, initialSkill[0]);
                 allPlayers.Add(allPlayers.Count, newPlayer);
@@ -109,8 +108,8 @@ namespace MOBAManager.Management.Players
                 }
 
                 List<int> allSkills = new List<int>();
-                int maxSkill = rnd.Next(3) + 2;
-                int minSkill = 0 - rnd.Next(5);
+                int maxSkill = RNG.roll(3) + 2;
+                int minSkill = 0 - RNG.roll(5);
 
                 for (int i = maxSkill; i >= 0; i--)
                 {
@@ -130,7 +129,7 @@ namespace MOBAManager.Management.Players
 
                 foreach (int val in allSkills)
                 {
-                    int id = allHeroIDs[rnd.Next(allHeroIDs.Count)];
+                    int id = allHeroIDs[RNG.roll(allHeroIDs.Count)];
                     p.setHeroSkill(id, val);
                 }
             }

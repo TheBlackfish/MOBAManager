@@ -9,16 +9,12 @@ using System.Timers;
 using System.Windows.Forms;
 using MOBAManager.MatchResolution;
 using MOBAManager.Management.Statistics;
+using MOBAManager.Utility;
 
 namespace MOBAManager.UI
 {
     public partial class EventResolutionControl : UserControl
     {
-        /// <summary>
-        /// The random number generator.
-        /// </summary>
-        private Random rng;
-
         /// <summary>
         /// The position new labels should take when placed in the display.
         /// </summary>
@@ -56,7 +52,7 @@ namespace MOBAManager.UI
                 resolutionTimer.Enabled = false;
 
                 //Choose a PUG to resolve.
-                int curIndex = rng.Next(pugs.Count);
+                int curIndex = RNG.roll(pugs.Count);
                 Match cur = pugs[curIndex];
                 pugs.RemoveAt(curIndex);
 
@@ -139,7 +135,6 @@ namespace MOBAManager.UI
             newLabelPosition = new Point(4, 4);
             labelSize = new Size(eventContainer.Width - 16, 16);
             pugs = pickupGames;
-            rng = new Random();
             resolutionTimer = new System.Timers.Timer(4000);
             resolutionTimer.Enabled = true;
             resolutionTimer.Elapsed += resolveRandomEvent;

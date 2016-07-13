@@ -1,6 +1,7 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
 using MOBAManager.Management.Teams;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -455,13 +456,13 @@ namespace MOBAManager.MatchResolution
         /// <param name="reset">If true, this will clear any previous value the current selection delay had.</param>
         private void setCurrentSelectionDelay(bool reset)
         {
-            double time = Math.Truncate(rnd.NextDouble() * 5000);
+            double time = Math.Truncate(RNG.rollDouble(5000));
 
-            if (rnd.Next(2) == 1)
+            if (RNG.roll(2) == 1)
             {
                 time += 8000;
             }
-            else if (rnd.Next(3) == 1)
+            else if (RNG.roll(3) == 1)
             {
                 time += 25000;
             }
@@ -488,9 +489,9 @@ namespace MOBAManager.MatchResolution
 
                 for (int i = 0; i < iterations; i++)
                 {
-                    if (rnd.Next(3) != 1)
+                    if (RNG.roll(3) != 1)
                     {
-                        double addOn = Math.Truncate(Math.Sqrt(rnd.NextDouble() * 25000));
+                        double addOn = Math.Truncate(Math.Sqrt(RNG.rollDouble(25000)));
                     }
                 }
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Statistics
 {
-    class StatisticsManager
+    public class StatisticsManager
     {
         private class heroStats
         {
@@ -150,6 +150,13 @@ namespace MOBAManager.Management.Statistics
                     teamDict[id].losses++;
                 }
             }
+        }
+
+        public StatisticsManager()
+        {
+            heroDict = new Dictionary<int, heroStats>();
+            playerDict = new Dictionary<int, playerStats>();
+            teamDict = new Dictionary<int, teamStats>();
         }
     }
 }

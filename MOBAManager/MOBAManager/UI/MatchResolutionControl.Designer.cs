@@ -73,10 +73,11 @@
             this.team1Info.ShortcutsEnabled = false;
             this.team1Info.Size = new System.Drawing.Size(140, 110);
             this.team1Info.TabIndex = 2;
-            this.team1Info.Text = "Example Team\n-----\nBritishname Complicated\nUsername\nUsername\nUsername\nUsername";
+            this.team1Info.Text = "";
             // 
             // team1Bans
             // 
+            this.team1Bans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(159)))), ((int)(((byte)(34)))), ((int)(((byte)(20)))));
             this.team1Bans.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1Bans.Location = new System.Drawing.Point(41, 119);
             this.team1Bans.Name = "team1Bans";
@@ -84,10 +85,11 @@
             this.team1Bans.ShortcutsEnabled = false;
             this.team1Bans.Size = new System.Drawing.Size(140, 75);
             this.team1Bans.TabIndex = 3;
-            this.team1Bans.Text = "Ban 1\nBan 2\nBan 3\nBan 4\nBan 5";
+            this.team1Bans.Text = "";
             // 
             // team1Picks
             // 
+            this.team1Picks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(194)))), ((int)(((byte)(63)))));
             this.team1Picks.Cursor = System.Windows.Forms.Cursors.Default;
             this.team1Picks.Location = new System.Drawing.Point(41, 200);
             this.team1Picks.Name = "team1Picks";
@@ -95,10 +97,11 @@
             this.team1Picks.ShortcutsEnabled = false;
             this.team1Picks.Size = new System.Drawing.Size(140, 75);
             this.team1Picks.TabIndex = 4;
-            this.team1Picks.Text = "Ban 1\nBan 2\nBan 3\nBan 4\nBan 5";
+            this.team1Picks.Text = "";
             // 
             // team2Picks
             // 
+            this.team2Picks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(194)))), ((int)(((byte)(63)))));
             this.team2Picks.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Picks.Location = new System.Drawing.Point(187, 200);
             this.team2Picks.Name = "team2Picks";
@@ -106,10 +109,11 @@
             this.team2Picks.ShortcutsEnabled = false;
             this.team2Picks.Size = new System.Drawing.Size(140, 75);
             this.team2Picks.TabIndex = 7;
-            this.team2Picks.Text = "Ban 1\nBan 2\nBan 3\nBan 4\nBan 5";
+            this.team2Picks.Text = "";
             // 
             // team2Bans
             // 
+            this.team2Bans.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(159)))), ((int)(((byte)(34)))), ((int)(((byte)(20)))));
             this.team2Bans.Cursor = System.Windows.Forms.Cursors.Default;
             this.team2Bans.Location = new System.Drawing.Point(187, 119);
             this.team2Bans.Name = "team2Bans";
@@ -117,7 +121,7 @@
             this.team2Bans.ShortcutsEnabled = false;
             this.team2Bans.Size = new System.Drawing.Size(140, 75);
             this.team2Bans.TabIndex = 6;
-            this.team2Bans.Text = "Ban 1\nBan 2\nBan 3\nBan 4\nBan 5";
+            this.team2Bans.Text = "";
             // 
             // team2Info
             // 
@@ -128,7 +132,7 @@
             this.team2Info.ShortcutsEnabled = false;
             this.team2Info.Size = new System.Drawing.Size(140, 110);
             this.team2Info.TabIndex = 5;
-            this.team2Info.Text = "Example Team\n-----\nBritishname Complicated\nUsername\nUsername\nUsername\nUsername";
+            this.team2Info.Text = "";
             // 
             // team2TimerB
             // 

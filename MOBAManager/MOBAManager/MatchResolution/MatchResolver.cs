@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace MOBAManager.MatchResolution
                 team2 = 100;
             }
 
-            int dieRoll = rnd.Next(team1 + team2);
+            int dieRoll = RNG.roll(team1 + team2);
 
             Console.WriteLine("T1:" + team1 + " vs T2:" + team2 + " -- Die roll:" + dieRoll);
 
