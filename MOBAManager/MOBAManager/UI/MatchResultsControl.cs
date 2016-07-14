@@ -74,5 +74,18 @@ namespace MOBAManager.UI
             onCloseFunc?.Invoke(this, new EventArgs());
         }
         #endregion
+
+        private void MatchResultsControl_ParentChanged(object sender, EventArgs e)
+        {
+            if (Parent != null)
+            {
+                Size = Parent.ClientSize;
+                centerPanel.Location = new Point(
+                        (Size.Width - centerPanel.Size.Width) / 2,
+                        (Size.Height - centerPanel.Size.Height) / 2
+                    );
+                centerPanel.Invalidate();
+            }
+        }
     }
 }

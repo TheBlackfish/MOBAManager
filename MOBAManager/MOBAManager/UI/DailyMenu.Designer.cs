@@ -38,6 +38,8 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 3);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
@@ -49,6 +51,8 @@
             // 
             // teamButton
             // 
+            this.teamButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.teamButton.Location = new System.Drawing.Point(3, 47);
             this.teamButton.Name = "teamButton";
             this.teamButton.Size = new System.Drawing.Size(1034, 50);
@@ -58,6 +62,8 @@
             // 
             // calendarButton
             // 
+            this.calendarButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.calendarButton.Location = new System.Drawing.Point(3, 103);
             this.calendarButton.Name = "calendarButton";
             this.calendarButton.Size = new System.Drawing.Size(1034, 50);
@@ -67,6 +73,8 @@
             // 
             // metaButton
             // 
+            this.metaButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.metaButton.Location = new System.Drawing.Point(3, 159);
             this.metaButton.Name = "metaButton";
             this.metaButton.Size = new System.Drawing.Size(1034, 50);
@@ -76,7 +84,9 @@
             // 
             // resolutionButton
             // 
-            this.resolutionButton.Location = new System.Drawing.Point(3, 753);
+            this.resolutionButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resolutionButton.Location = new System.Drawing.Point(3, 337);
             this.resolutionButton.Name = "resolutionButton";
             this.resolutionButton.Size = new System.Drawing.Size(1034, 50);
             this.resolutionButton.TabIndex = 4;
@@ -86,11 +96,15 @@
             // 
             // dailySummaryArea
             // 
-            this.dailySummaryArea.Location = new System.Drawing.Point(0, 215);
+            this.dailySummaryArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dailySummaryArea.Location = new System.Drawing.Point(3, 215);
             this.dailySummaryArea.Multiline = true;
             this.dailySummaryArea.Name = "dailySummaryArea";
             this.dailySummaryArea.ReadOnly = true;
-            this.dailySummaryArea.Size = new System.Drawing.Size(1034, 532);
+            this.dailySummaryArea.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dailySummaryArea.Size = new System.Drawing.Size(1034, 116);
             this.dailySummaryArea.TabIndex = 5;
             this.dailySummaryArea.Text = "Daily Summary goes here.";
             // 
@@ -105,7 +119,8 @@
             this.Controls.Add(this.teamButton);
             this.Controls.Add(this.label1);
             this.Name = "DailyMenu";
-            this.Size = new System.Drawing.Size(1040, 806);
+            this.Size = new System.Drawing.Size(1040, 391);
+            this.ParentChanged += new System.EventHandler(this.DailyMenu_ParentChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 

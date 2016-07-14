@@ -45,5 +45,13 @@ namespace MOBAManager.UI
             Controls.Add(erc);
             erc.BringToFront();
         }
+
+        private void DailyMenu_ParentChanged(object sender, EventArgs e)
+        {
+            if (Parent != null)
+            {
+                Size = Parent.ClientSize;
+            }
+        }
     }
 }

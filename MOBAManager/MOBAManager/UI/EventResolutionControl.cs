@@ -140,5 +140,13 @@ namespace MOBAManager.UI
             resolutionTimer.Elapsed += resolveRandomEvent;
             statistics = new List<StatsBundle>();
         }
+
+        private void EventResolutionControl_ParentChanged(object sender, EventArgs e)
+        {
+            if (Parent != null)
+            {
+                Size = Parent.ClientSize;
+            }
+        }
     }
 }

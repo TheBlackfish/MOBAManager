@@ -138,5 +138,18 @@ namespace MOBAManager.UI
             Tuple<int, int> selection = interactionsList[userSelection.SelectedIndex];
             match.submitPlayerRecommendation(selection.Item1, selection.Item2);
         }
+
+        private void MatchResolutionControl_ParentChanged(object sender, EventArgs e)
+        {
+            if (Parent != null)
+            {
+                Size = Parent.Size;
+                centerPanel.Location = new Point(
+                        (Size.Width - centerPanel.Size.Width) / 2,
+                        (Size.Height - centerPanel.Size.Height) / 2
+                    );
+                centerPanel.Invalidate();
+            }
+        }
     }
 }

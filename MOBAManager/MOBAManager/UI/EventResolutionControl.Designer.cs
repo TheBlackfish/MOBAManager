@@ -44,6 +44,9 @@
             // 
             // eventContainer
             // 
+            this.eventContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.eventContainer.AutoScroll = true;
             this.eventContainer.Location = new System.Drawing.Point(3, 32);
             this.eventContainer.Name = "eventContainer";
@@ -58,6 +61,7 @@
             this.Controls.Add(this.titleText);
             this.Name = "EventResolutionControl";
             this.Size = new System.Drawing.Size(700, 600);
+            this.ParentChanged += new System.EventHandler(this.EventResolutionControl_ParentChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
