@@ -25,6 +25,9 @@ namespace MOBAManager.Management
         /// </summary>
         public PlayerManager playerManager;
 
+        /// <summary>
+        /// The statistics manager of the current game.
+        /// </summary>
         public StatisticsManager statsManager;
 
         /// <summary>
@@ -45,6 +48,10 @@ namespace MOBAManager.Management
             return m;
         }
 
+        /// <summary>
+        /// Generic placeholder method that generates a new match. If the player's team is involved, it is created as a threaded match.
+        /// </summary>
+        /// <returns></returns>
         public Match getNextMatch()
         {
             int team1Index = -1;

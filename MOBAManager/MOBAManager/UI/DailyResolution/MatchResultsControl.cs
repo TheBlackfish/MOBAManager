@@ -75,6 +75,10 @@ namespace MOBAManager.UI
         }
         #endregion
 
+        #region Event responses
+        /// <summary>
+        /// Called when this control's parent is changed. Expands the background to fit the parent and then centers all information in the center of the control.
+        /// </summary>
         private void MatchResultsControl_ParentChanged(object sender, EventArgs e)
         {
             if (Parent != null)
@@ -87,5 +91,6 @@ namespace MOBAManager.UI
                 centerPanel.Invalidate();
             }
         }
+        #endregion
     }
 }

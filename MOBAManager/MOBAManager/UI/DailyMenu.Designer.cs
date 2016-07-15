@@ -81,6 +81,7 @@
             this.metaButton.TabIndex = 3;
             this.metaButton.Text = "View Meta (In Progress)";
             this.metaButton.UseVisualStyleBackColor = true;
+            this.metaButton.Click += new System.EventHandler(this.metaButton_Click);
             // 
             // resolutionButton
             // 
@@ -90,7 +91,7 @@
             this.resolutionButton.Name = "resolutionButton";
             this.resolutionButton.Size = new System.Drawing.Size(1034, 50);
             this.resolutionButton.TabIndex = 4;
-            this.resolutionButton.Text = "Resolve Today\'s Events (In Progress)";
+            this.resolutionButton.Text = "Resolve Today\'s Events";
             this.resolutionButton.UseVisualStyleBackColor = true;
             this.resolutionButton.Click += new System.EventHandler(this.resolutionButton_Click);
             // 

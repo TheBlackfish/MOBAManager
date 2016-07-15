@@ -17,6 +17,16 @@ namespace MOBAManager.Management.Heroes
 
         #region Public Methods
         /// <summary>
+        /// Returns the name of the hero specified
+        /// </summary>
+        /// <param name="id">The ID of the hero to get the name for.</param>
+        /// <returns></returns>
+        public string getHeroName(int id)
+        {
+            return allHeroes[id].HeroName;
+        }
+
+        /// <summary>
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>

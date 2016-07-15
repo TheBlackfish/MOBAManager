@@ -6,6 +6,7 @@ namespace MOBAManager.MatchResolution
 {
     public partial class Match
     {
+        #region Public methods
         /// <summary>
         /// Returns the full list of possible actions for the player interactions.
         /// </summary>
@@ -46,10 +47,12 @@ namespace MOBAManager.MatchResolution
         {
             ms.setTeamDecisionProcess(playerTeam, manuever, targetPlayerID);
         }
+        #endregion
     }
 
     public partial class MatchAI
     {
+        #region Public methods
         /// <summary>
         /// Sets a team's selection process.
         /// </summary>
@@ -74,5 +77,6 @@ namespace MOBAManager.MatchResolution
                 setCurrentSelectionDelay(false);
             }
         }
+        #endregion
     }
 }

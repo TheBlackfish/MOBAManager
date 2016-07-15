@@ -16,8 +16,7 @@ namespace MOBAManager
 {
     public partial class MainForm : Form
     {
-        private GameManager gm;
-        private EventResolutionControl erc;        
+        private GameManager gm;      
 
         public MainForm()
         {
@@ -30,6 +29,11 @@ namespace MOBAManager
             DailyMenu dm = new DailyMenu(gm);
 
             Controls.Add(dm);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            //Add fullscreen eventually.
         }
     }
 }

@@ -170,11 +170,14 @@ namespace MOBAManager.MatchResolution
             return sum + getTeamName(3 - winningTeam) + ".";
         }
 
+        /// <summary>
+        /// Generates and returns a stats bundle with information pertaining to this match.
+        /// </summary>
+        /// <returns></returns>
         public StatsBundle getStats()
         {
             StatsBundle bundle = new StatsBundle();
 
-            //Throw winning team stats into the bundle.
             if (winner != -1)
             {
                 bundle.addTeamWin(team1.ID, winner == 1);
@@ -245,6 +248,7 @@ namespace MOBAManager.MatchResolution
 
     partial class MatchAI
     {
+        #region Public methods
         /// <summary>
         /// Gets a Tuple of strings containing the times left in each category formatted correctly.
         /// </summary>
@@ -291,5 +295,6 @@ namespace MOBAManager.MatchResolution
 
             return new Tuple<string, string, string, string>(placeholder[0], placeholder[1], placeholder[2], placeholder[3]);
         }
+        #endregion
     }
 }

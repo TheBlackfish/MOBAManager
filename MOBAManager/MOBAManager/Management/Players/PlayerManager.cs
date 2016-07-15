@@ -17,6 +17,16 @@ namespace MOBAManager.Management.Players
 
         #region Public Methods
         /// <summary>
+        /// Returns the name of the player specified.
+        /// </summary>
+        /// <param name="id">The ID of the player to get the name of.</param>
+        /// <returns></returns>
+        public string getPlayerName(int id)
+        {
+            return allPlayers[id].playerName;
+        }
+
+        /// <summary>
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>

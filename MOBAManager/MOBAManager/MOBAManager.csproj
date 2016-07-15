@@ -57,10 +57,10 @@
     <Compile Include="UI\DailyMenu.Designer.cs">
       <DependentUpon>DailyMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\EventResolutionControl.cs">
+    <Compile Include="UI\DailyResolution\EventResolutionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\EventResolutionControl.Designer.cs">
+    <Compile Include="UI\DailyResolution\EventResolutionControl.Designer.cs">
       <DependentUpon>EventResolutionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MainForm.cs">
@@ -84,23 +84,29 @@
     <Compile Include="MatchResolution\MatchAI.cs" />
     <Compile Include="MatchResolution\MatchResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\MatchResolutionControl.cs">
+    <Compile Include="UI\DailyResolution\MatchResolutionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\MatchResolutionControl.Designer.cs">
+    <Compile Include="UI\DailyResolution\MatchResolutionControl.Designer.cs">
       <DependentUpon>MatchResolutionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MatchResultsControl.cs">
+    <Compile Include="UI\DailyResolution\MatchResultsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\MatchResultsControl.Designer.cs">
+    <Compile Include="UI\DailyResolution\MatchResultsControl.Designer.cs">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Meta\StatisticsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Meta\StatisticsControl.Designer.cs">
+      <DependentUpon>StatisticsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\RNG.cs" />
     <EmbeddedResource Include="UI\DailyMenu.resx">
       <DependentUpon>DailyMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\EventResolutionControl.resx">
+    <EmbeddedResource Include="UI\DailyResolution\EventResolutionControl.resx">
       <DependentUpon>EventResolutionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
@@ -115,11 +121,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\MatchResolutionControl.resx">
+    <EmbeddedResource Include="UI\DailyResolution\MatchResolutionControl.resx">
       <DependentUpon>MatchResolutionControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\MatchResultsControl.resx">
+    <EmbeddedResource Include="UI\DailyResolution\MatchResultsControl.resx">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Meta\StatisticsControl.resx">
+      <DependentUpon>StatisticsControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -136,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Management\Calendar\" />
-    <Folder Include="UI\Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

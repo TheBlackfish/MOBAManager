@@ -128,6 +128,7 @@ namespace MOBAManager.UI
         }
         #endregion
 
+        #region Event responses
         /// <summary>
         /// Called when the combo box's selection changes.
         /// </summary>
@@ -139,6 +140,11 @@ namespace MOBAManager.UI
             match.submitPlayerRecommendation(selection.Item1, selection.Item2);
         }
 
+        /// <summary>
+        /// Called when this control's parent changes. Centers the control in the center of the parent.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MatchResolutionControl_ParentChanged(object sender, EventArgs e)
         {
             if (Parent != null)
@@ -151,5 +157,6 @@ namespace MOBAManager.UI
                 centerPanel.Invalidate();
             }
         }
+        #endregion
     }
 }

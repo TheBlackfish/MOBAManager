@@ -19,6 +19,16 @@ namespace MOBAManager.Management.Teams
 
         #region Public Methods
         /// <summary>
+        /// Returns the name of the team with the ID specified.
+        /// </summary>
+        /// <param name="id">The ID of the team.</param>
+        /// <returns></returns>
+        public string getTeamName(int id)
+        {
+            return teams[id].teamName;
+        }
+
+        /// <summary>
         /// Gets all of the teams in a list.
         /// </summary>
         /// <returns>The list containing all teams.</returns>

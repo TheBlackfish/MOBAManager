@@ -41,6 +41,7 @@
             this.titleText.Size = new System.Drawing.Size(158, 25);
             this.titleText.TabIndex = 0;
             this.titleText.Text = "Example Date";
+            this.titleText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EventResolutionControl_MouseClick);
             // 
             // eventContainer
             // 
@@ -52,6 +53,7 @@
             this.eventContainer.Name = "eventContainer";
             this.eventContainer.Size = new System.Drawing.Size(694, 565);
             this.eventContainer.TabIndex = 1;
+            this.eventContainer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EventResolutionControl_MouseClick);
             // 
             // EventResolutionControl
             // 
@@ -61,6 +63,7 @@
             this.Controls.Add(this.titleText);
             this.Name = "EventResolutionControl";
             this.Size = new System.Drawing.Size(700, 600);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EventResolutionControl_MouseClick);
             this.ParentChanged += new System.EventHandler(this.EventResolutionControl_ParentChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
