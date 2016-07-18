@@ -58,7 +58,7 @@ namespace MOBAManager.Management
 
         public void fillCalendar()
         {
-            for (int i = 0; i < teamManager.getAllTeams().Count; i++)
+            for (int i = 1; i < teamManager.getAllTeams().Count; i++)
             {
                 for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
                 {

@@ -146,21 +146,21 @@ namespace MOBAManager.UI.Meta
             switch (e.TabPageIndex)
             {
                 case 0:
-                    if (heroDataGridView.DataSource != null)
+                    if (heroDataGridView.DataSource == null)
                     {
                         Thread ht = new Thread(displayHeroStats);
                         ht.Start();
                     }
                     break;
                 case 1:
-                    if (playerDataGridView.DataSource != null)
+                    if (playerDataGridView.DataSource == null)
                     {
                         Thread pt = new Thread(displayPlayerStats);
                         pt.Start();
                     }
                     break;
                 case 2:
-                    if (teamDataGridView.DataSource != null)
+                    if (teamDataGridView.DataSource == null)
                     {
                         Thread tt = new Thread(displayTeamStats);
                         tt.Start();

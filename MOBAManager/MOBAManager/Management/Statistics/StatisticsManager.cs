@@ -70,7 +70,7 @@ namespace MOBAManager.Management.Statistics
                 {
                     if (wins + losses > 0)
                     {
-                        return wins / (wins + losses);
+                        return (double)wins / (wins + losses);
                     }
                     else
                     {
@@ -126,7 +126,7 @@ namespace MOBAManager.Management.Statistics
                 {
                     if (wins + losses > 0)
                     {
-                        return wins / (wins + losses);
+                        return (double)wins / (wins + losses);
                     }
                     else
                     {
@@ -182,7 +182,7 @@ namespace MOBAManager.Management.Statistics
                 {
                     if (wins + losses > 0)
                     {
-                        return wins / (wins + losses);
+                        return (double)wins / (wins + losses);
                     }
                     else
                     {

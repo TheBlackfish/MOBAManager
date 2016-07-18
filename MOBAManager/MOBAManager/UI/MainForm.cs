@@ -27,6 +27,9 @@ namespace MOBAManager
             gm = new GameManager();
 
             gm.fillCalendar();
+            gm.fillCalendar();
+            gm.fillCalendar();
+            gm.fillCalendar();
 
             DailyMenu dm = new DailyMenu(gm);
 
