@@ -26,6 +26,8 @@ namespace MOBAManager
             
             gm = new GameManager();
 
+            gm.fillCalendar();
+
             DailyMenu dm = new DailyMenu(gm);
 
             Controls.Add(dm);

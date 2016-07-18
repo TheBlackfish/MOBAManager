@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MOBAManager.Management;
 using MOBAManager.MatchResolution;
 using MOBAManager.UI.Meta;
+using MOBAManager.Management.Calendar;
 
 namespace MOBAManager.UI
 {
@@ -99,13 +100,16 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void resolutionButton_Click(object sender, EventArgs e)
         {
-            //Add events to event manager
             List<Match> pickupgames = new List<Match>();
 
-            pickupgames.Add(gameManager.getNextPlayerMatch());
-            for (int i = 0; i < 12; i++)
+            foreach (CalendarEvent ce in gameManager.calendarManager.getTodaysEvents())
             {
-                pickupgames.Add(gameManager.getNextMatch());
+                switch (ce.type)
+                {
+                    case CalendarEvent.EventType.PUG:
+                        pickupgames.Add(gameManager.translateEventToMatch(ce));
+                        break;
+                }
             }
 
             EventResolutionControl erc = new EventResolutionControl(pickupgames, resolveDailyResolution);

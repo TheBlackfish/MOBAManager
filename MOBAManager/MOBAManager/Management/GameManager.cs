@@ -1,4 +1,5 @@
-﻿using MOBAManager.Management.Heroes;
+﻿using MOBAManager.Management.Calendar;
+using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
 using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
@@ -15,6 +16,8 @@ namespace MOBAManager.Management
     public class GameManager
     {
         #region Temporarily Public Variables
+        public CalendarManager calendarManager;
+
         /// <summary>
         /// The hero manager of the current game.
         /// </summary>
@@ -37,43 +40,30 @@ namespace MOBAManager.Management
         #endregion
 
         #region Public Methods
-        /// <summary>
-        /// Returns the next match the player is involved in.
-        /// Placeholder function returns a generic match for now.
-        /// </summary>
-        /// <returns></returns>
-        public Match getNextPlayerMatch()
+        public Match translateEventToMatch(CalendarEvent ce)
         {
-            Match m = new Match(true, teamManager.getAllTeams()[0], teamManager.getAllTeams()[1], 1, heroManager.getHeroDictionary());
-            return m;
-        }
-
-        /// <summary>
-        /// Generic placeholder method that generates a new match. If the player's team is involved, it is created as a threaded match.
-        /// </summary>
-        /// <returns></returns>
-        public Match getNextMatch()
-        {
-            int team1Index = -1;
-            int team2Index = -1;
-
-            while (team1Index == -1)
+            if (ce.team1ID == 0)
             {
-                team1Index = RNG.roll(teamManager.getAllTeams().Count);
+                return new Match(true, teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), 1, heroManager.getHeroDictionary());
             }
-
-            while (team2Index == -1 || team1Index == team2Index)
+            else if (ce.team2ID == 0)
             {
-                team2Index = RNG.roll(teamManager.getAllTeams().Count);
-            }
-
-            if (team1Index == 0 || team2Index == 0)
-            {
-                return new Match(true, teamManager.getAllTeams()[team1Index], teamManager.getAllTeams()[team2Index], (team1Index == 0) ? 1 : 2, heroManager.getHeroDictionary());
+                return new Match(true, teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), 2, heroManager.getHeroDictionary());
             }
             else
             {
-                return new Match(teamManager.getAllTeams()[team1Index], teamManager.getAllTeams()[team2Index], heroManager.getHeroDictionary());
+                return new Match(teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), heroManager.getHeroDictionary());
+            }
+        }
+
+        public void fillCalendar()
+        {
+            for (int i = 0; i < teamManager.getAllTeams().Count; i++)
+            {
+                for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
+                {
+                    calendarManager.addPickupGame(i, j);
+                }
             }
         }
         #endregion
@@ -84,6 +74,8 @@ namespace MOBAManager.Management
         /// </summary>
         public GameManager()
         {
+            calendarManager = new CalendarManager();
+
             heroManager = new HeroManager();
 
             playerManager = new PlayerManager();

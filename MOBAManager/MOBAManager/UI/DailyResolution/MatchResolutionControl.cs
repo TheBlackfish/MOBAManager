@@ -80,6 +80,7 @@ namespace MOBAManager.UI
         }
         #endregion
 
+        #region Public methods
         /// <summary>
         /// Returns the match this control is handling.
         /// </summary>
@@ -88,6 +89,7 @@ namespace MOBAManager.UI
         {
             return match;
         }
+        #endregion
 
         #region Constructors
         /// <summary>

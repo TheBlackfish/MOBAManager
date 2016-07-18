@@ -18,6 +18,19 @@ namespace MOBAManager.Management.Teams
         #endregion
 
         #region Public Methods
+        public Team getTeamByID(int id)
+        {
+            List<Team> results = teams.Where(kvp => kvp.Key == id).Select(kvp => kvp.Value).ToList();
+            if (results.Count == 1)
+            {
+                return results[0];
+            }
+            else
+            {
+                throw new Exception("TeamManager.getTeamByID - Failed to find team with specified ID.");
+            }
+        }
+
         /// <summary>
         /// Returns the name of the team with the ID specified.
         /// </summary>
