@@ -88,9 +88,9 @@ namespace MOBAManager.Management
 
             playerManager = new PlayerManager();
 
-            statsManager = new StatisticsManager();
-
             teamManager = new TeamManager();
+
+            statsManager = new StatisticsManager(heroManager.getHeroDictionary(), playerManager.getPlayerDictionary(), teamManager.getTeamDictionary());
 
             teamManager.populateTeams(playerManager.getAllPlayers());
         }

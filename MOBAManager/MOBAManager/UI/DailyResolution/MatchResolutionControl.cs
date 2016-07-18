@@ -63,6 +63,7 @@ namespace MOBAManager.UI
                 team1Picks.Text = match.getFormattedTeam1Picks();
                 team2Bans.Text = match.getFormattedTeam2Bans();
                 team2Picks.Text = match.getFormattedTeam2Picks();
+                userSelection.SelectedIndex = 0;
             }
 
             if (match.hasFinished)
