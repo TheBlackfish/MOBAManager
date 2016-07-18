@@ -38,6 +38,15 @@ namespace MOBAManager.Management.Teams
         }
 
         /// <summary>
+        /// Returns all of the teams in a ID-aligned dictionary.
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, Team> getTeamDictionary()
+        {
+            return teams;
+        }
+
+        /// <summary>
         /// Seeds all of the teams currently not legal with the players provided.
         /// </summary>
         /// <param name="population">The list of players eligible to </param>

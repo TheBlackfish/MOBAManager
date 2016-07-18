@@ -34,6 +34,15 @@ namespace MOBAManager.Management.Players
         {
             return allPlayers.Select(kvp => kvp.Value).ToList();
         }
+
+        /// <summary>
+        /// Returns a list of all the players in an ID-aligned dictionary.
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, Player> getPlayerDictionary()
+        {
+            return allPlayers;
+        }
         #endregion
 
         #region Constructors

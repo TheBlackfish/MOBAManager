@@ -396,13 +396,30 @@ namespace MOBAManager.Management.Statistics
 
         #region Constructors
         /// <summary>
-        /// Creates a new StatisticsManager.
+        /// Creates a new statistics manager and fills it with all currently known data.
         /// </summary>
-        public StatisticsManager()
+        /// <param name="heroIDs">The dictionary of all heroes in the game.</param>
+        /// <param name="playerIDs">The dictionary of all players in the game.</param>
+        /// <param name="teamIDs">The dictionary of all teams in the game.</param>
+        public StatisticsManager(Dictionary<int, Hero> heroIDs, Dictionary<int, Player> playerIDs, Dictionary<int, Team> teamIDs)
         {
             heroDict = new Dictionary<int, heroStats>();
+            foreach (KeyValuePair<int, Hero> kvp in heroIDs)
+            {
+                heroDict.Add(kvp.Key, new heroStats(kvp.Value.HeroName));
+            }
+
             playerDict = new Dictionary<int, playerStats>();
+            foreach (KeyValuePair<int, Player> kvp in playerIDs)
+            {
+                playerDict.Add(kvp.Key, new playerStats(kvp.Value.playerName));
+            }
+
             teamDict = new Dictionary<int, teamStats>();
+            foreach (KeyValuePair<int, Team> kvp in teamIDs)
+            {
+                teamDict.Add(kvp.Key, new teamStats(kvp.Value.teamName));
+            }
         }
         #endregion
     }
