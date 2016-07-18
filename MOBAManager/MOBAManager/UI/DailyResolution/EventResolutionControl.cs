@@ -51,6 +51,10 @@ namespace MOBAManager.UI
         /// </summary>
         private bool allEventsResolved = false;
 
+        private Match currentPlayerMatch = null;
+
+        private bool waitingToStartPlayerMatch = false;
+
         /// <summary>
         /// The function that is called when the user clicks to close this control.
         /// </summary>
@@ -75,13 +79,10 @@ namespace MOBAManager.UI
                 //Either create a new Match resolution control for the player match, or instantly resolve it.
                 if (cur.isThreaded)
                 {
-                    MatchResolutionControl pm = new MatchResolutionControl(cur, onPlayerMatchResolved);
-                    Action addition = () =>
-                    {
-                        Controls.Add(pm);
-                        pm.BringToFront();
-                    };
-                    BeginInvoke(addition);
+                    currentPlayerMatch = cur;
+                    waitingToStartPlayerMatch = true;
+                    resolutionTimer.Enabled = false;
+                    addEventNotification("Click to begin the match against " + cur.getAITeamName());
                 }
                 else
                 {
@@ -95,6 +96,7 @@ namespace MOBAManager.UI
             {
                 //Display "Click anywhere..." message.
                 addEventNotification("Click anywhere to continue...");
+                resolutionTimer.Enabled = false;
                 allEventsResolved = true;
             }
         }
@@ -126,6 +128,8 @@ namespace MOBAManager.UI
                 statistics.Add(completed.getStats());
             }
             resolutionTimer.Enabled = true;
+            currentPlayerMatch = null;
+            waitingToStartPlayerMatch = false;
         }
 
         /// <summary>
@@ -167,6 +171,20 @@ namespace MOBAManager.UI
             newLabelPosition.Y += l.Height + 4;
             Action action = () => eventContainer.Controls.Add(l);
             BeginInvoke(action);
+        }
+        
+        /// <summary>
+        /// Adds the current player match to the event resolution.
+        /// </summary>
+        private void startCurrentPlayerMatch()
+        {
+            MatchResolutionControl pm = new MatchResolutionControl(currentPlayerMatch, onPlayerMatchResolved);
+            Action addition = () =>
+            {
+                Controls.Add(pm);
+                pm.BringToFront();
+            };
+            BeginInvoke(addition);
         }
         #endregion
 
@@ -210,6 +228,10 @@ namespace MOBAManager.UI
             if (allEventsResolved && onCloseFunc != null)
             {
                 onCloseFunc?.Invoke();
+            }
+            else if (waitingToStartPlayerMatch && currentPlayerMatch != null)
+            {
+                startCurrentPlayerMatch();
             }
         }
         #endregion

@@ -57,7 +57,23 @@ namespace MOBAManager.MatchResolution
             }
             return "";
         }
-              
+
+        public string getAITeamName()
+        {
+            if (isThreaded)
+            {
+                if (playerTeam == 1)
+                {
+                    return team2.teamName;
+                }
+                else
+                {
+                    return team1.teamName;
+                }
+            }
+
+            return "ERROR";
+        }              
 
         /// <summary>
         /// Returns a formatted string that returns the full final line-up of a team.
