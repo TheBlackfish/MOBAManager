@@ -151,7 +151,7 @@ namespace MOBAManager.UI
         {
             Label l = new Label();
             l.Text = s;
-            l.Location = new Point(newLabelPosition.X, newLabelPosition.Y);
+            l.Location = new Point(newLabelPosition.X, newLabelPosition.Y + eventContainer.AutoScrollPosition.Y);
             l.Size = labelSize;
             newLabelPosition.Y += l.Height + 4;
             Action action = () => eventContainer.Controls.Add(l);
@@ -166,7 +166,7 @@ namespace MOBAManager.UI
         {
             Label l = new Label();
             l.Text = m.getSummary();
-            l.Location = new Point(newLabelPosition.X, newLabelPosition.Y);
+            l.Location = new Point(newLabelPosition.X, newLabelPosition.Y + eventContainer.AutoScrollPosition.Y);
             l.Size = labelSize;
             newLabelPosition.Y += l.Height + 4;
             Action action = () => eventContainer.Controls.Add(l);
