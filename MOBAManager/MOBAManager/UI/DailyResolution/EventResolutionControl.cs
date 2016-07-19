@@ -199,10 +199,11 @@ namespace MOBAManager.UI
         /// Creates a new EventResolutionControl.
         /// </summary>
         /// <param name="pickupGames">The list of all games in which order of resolution does not matter.</param>
-        public EventResolutionControl(List<Match> pickupGames, Action onClose)
+        public EventResolutionControl(string title, List<Match> pickupGames, Action onClose)
         {
             InitializeComponent();
 
+            titleText.Text = title;
             newLabelPosition = new Point(4, 4);
             labelSize = new Size(eventContainer.Width - 16, 16);
             onCloseFunc = onClose;

@@ -51,6 +51,7 @@ namespace MOBAManager.UI
                 }
             }
             gameManager.calendarManager.incrementCalender();
+            label1.Text = gameManager.calendarManager.getFormattedDate();
         }
         #endregion
 
@@ -78,6 +79,7 @@ namespace MOBAManager.UI
             {
                 Size = Parent.ClientSize;
             }
+            label1.Text = gameManager.calendarManager.getFormattedDate();
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace MOBAManager.UI
                 }
             }
 
-            EventResolutionControl erc = new EventResolutionControl(pickupgames, resolveDailyResolution);
+            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.getFormattedDate(), pickupgames, resolveDailyResolution);
 
             //Display event manager
             setButtonStates(false);
