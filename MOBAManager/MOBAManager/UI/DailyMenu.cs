@@ -11,6 +11,7 @@ using MOBAManager.Management;
 using MOBAManager.MatchResolution;
 using MOBAManager.UI.Meta;
 using MOBAManager.Management.Calendar;
+using System.Threading;
 
 namespace MOBAManager.UI
 {
@@ -49,6 +50,7 @@ namespace MOBAManager.UI
                     setButtonStates(true);
                 }
             }
+            gameManager.calendarManager.incrementCalender();
         }
         #endregion
 
@@ -85,7 +87,19 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void metaButton_Click(object sender, EventArgs e)
         {
-            StatisticsControl sc = new StatisticsControl(gameManager.statsManager);
+            Action closeStats = () =>
+            {
+                foreach (Control c in Controls)
+                {
+                    if (c is StatisticsControl)
+                    {
+                        c.Hide();
+                        Controls.Remove(c);
+                        setButtonStates(true);
+                    }
+                }
+            };
+            StatisticsControl sc = new StatisticsControl(gameManager.statsManager, closeStats);
 
             //Display statistics
             setButtonStates(false);

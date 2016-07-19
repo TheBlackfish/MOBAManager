@@ -19,6 +19,8 @@ namespace MOBAManager.UI.Meta
         /// The statistics manager this control displays data for.
         /// </summary>
         private StatisticsManager sm;
+
+        private Action onCloseFunc = null;
         #endregion
 
         #region Private methods
@@ -130,9 +132,10 @@ namespace MOBAManager.UI.Meta
         /// Creates a new statistics control.
         /// </summary>
         /// <param name="stats">The manager for the statistics to display.</param>
-        public StatisticsControl(StatisticsManager stats)
+        public StatisticsControl(StatisticsManager stats, Action closeFunc)
         {
             InitializeComponent();
+            onCloseFunc = closeFunc;
             sm = stats;
         }
         #endregion
@@ -191,5 +194,15 @@ namespace MOBAManager.UI.Meta
             ht.Start();
         }
         #endregion
+
+        /// <summary>
+        /// Called when the Return button is clicked. Hides and removes the control from the daily menu control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            onCloseFunc?.Invoke();
+        }
     }
 }

@@ -69,11 +69,19 @@ namespace MOBAManager.Management
         /// </summary>
         public void fillCalendar()
         {
-            for (int i = 0; i < teamManager.getAllTeams().Count; i++)
+            for (int i = 1; i < teamManager.getAllTeams().Count; i++)
             {
                 for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
                 {
                     calendarManager.addPickupGame(i, j);
+                }
+            }
+
+            for (int i = 3; i < teamManager.getAllTeams().Count; i++)
+            {
+                for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
+                {
+                    calendarManager.addPickupGame(i, j, DateTime.Now.AddDays(1));
                 }
             }
         }
