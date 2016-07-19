@@ -64,17 +64,19 @@ namespace MOBAManager.Management.Statistics
             /// <summary>
             /// Returns the winrate of the hero, or 0 if the hero has never been picked.
             /// </summary>
-            public double winrate
+            public string winrate
             {
                 get
                 {
                     if (wins + losses > 0)
                     {
-                        return (double)wins / (wins + losses);
+                        double temp = (double)wins / (wins + losses);
+                        temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
+                        return temp.ToString("0.00");
                     }
                     else
                     {
-                        return 0.0;
+                        return "-";
                     }
                 }
             }
@@ -120,17 +122,19 @@ namespace MOBAManager.Management.Statistics
             /// <summary>
             /// Returns the winrate of the player, or 0 if they have played 0 games.
             /// </summary>
-            public double winrate
+            public string winrate
             {
                 get
                 {
                     if (wins + losses > 0)
                     {
-                        return (double)wins / (wins + losses);
+                        double temp = (double)wins / (wins + losses);
+                        temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
+                        return temp.ToString("0.00");
                     }
                     else
                     {
-                        return 0.0;
+                        return "-";
                     }
                 }
             }
@@ -176,17 +180,19 @@ namespace MOBAManager.Management.Statistics
             /// <summary>
             /// Returns the winrate of the team, or 0 if they haven't played in any matches.
             /// </summary>
-            public double winrate
+            public string winrate
             {
                 get
                 {
                     if (wins + losses > 0)
                     {
-                        return (double)wins / (wins + losses);
+                        double temp = (double)wins / (wins + losses);
+                        temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
+                        return temp.ToString("0.00");
                     }
                     else
                     {
-                        return 0.0;
+                        return "-";
                     }
                 }
             }
@@ -342,7 +348,7 @@ namespace MOBAManager.Management.Statistics
 
             foreach (heroStats hs in hStats)
             {
-                Tuple<string, double, int, int> res = new Tuple<string, double, int, int>(hs.name, hs.winrate, hs.bans, hs.picks);
+                Tuple<string, string, int, int> res = new Tuple<string, string, int, int>(hs.name, hs.winrate, hs.bans, hs.picks);
                 bs.Add(res);
             }
 
@@ -364,7 +370,7 @@ namespace MOBAManager.Management.Statistics
 
             foreach (playerStats ps in pStats)
             {
-                Tuple<string, double, int> res = new Tuple<string, double, int>(ps.name, ps.winrate, ps.wins + ps.losses);
+                Tuple<string, string, int> res = new Tuple<string, string, int>(ps.name, ps.winrate, ps.wins + ps.losses);
                 bs.Add(res);
             }
 
@@ -386,7 +392,7 @@ namespace MOBAManager.Management.Statistics
 
             foreach (teamStats ts in tStats)
             {
-                Tuple<string, double, int> res = new Tuple<string, double, int>(ts.name, ts.winrate, ts.wins + ts.losses);
+                Tuple<string, string, int> res = new Tuple<string, string, int>(ts.name, ts.winrate, ts.wins + ts.losses);
                 bs.Add(res);
             }
 

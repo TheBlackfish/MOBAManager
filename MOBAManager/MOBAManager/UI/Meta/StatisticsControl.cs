@@ -39,21 +39,25 @@ namespace MOBAManager.UI.Meta
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item1";
                 column.Name = "Hero";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 heroDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item2";
                 column.Name = "Win Rate";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 heroDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item3";
                 column.Name = "Games Banned";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 heroDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item4";
                 column.Name = "Games Picked";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 heroDataGridView.Columns.Add(column);
 
                 heroDataGridView.Invalidate();
@@ -77,16 +81,19 @@ namespace MOBAManager.UI.Meta
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item1";
                 column.Name = "Player";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 playerDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item2";
                 column.Name = "Win Rate";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 playerDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item3";
                 column.Name = "Games Played";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 playerDataGridView.Columns.Add(column);
 
                 playerDataGridView.Invalidate();
@@ -109,16 +116,19 @@ namespace MOBAManager.UI.Meta
                 DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item1";
                 column.Name = "Team";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 teamDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item2";
                 column.Name = "Win Rate";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 teamDataGridView.Columns.Add(column);
 
                 column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Item3";
                 column.Name = "Games Played";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 teamDataGridView.Columns.Add(column);
 
                 teamDataGridView.Invalidate();
