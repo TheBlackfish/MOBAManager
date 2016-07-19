@@ -58,6 +58,10 @@ namespace MOBAManager.MatchResolution
             return "";
         }
 
+        /// <summary>
+        /// Gets the name of the team that is currently not player-controlled.
+        /// </summary>
+        /// <returns></returns>
         public string getAITeamName()
         {
             if (isThreaded)

@@ -79,7 +79,7 @@
             this.metaButton.Name = "metaButton";
             this.metaButton.Size = new System.Drawing.Size(1034, 50);
             this.metaButton.TabIndex = 3;
-            this.metaButton.Text = "View Meta (In Progress)";
+            this.metaButton.Text = "View Meta";
             this.metaButton.UseVisualStyleBackColor = true;
             this.metaButton.Click += new System.EventHandler(this.metaButton_Click);
             // 

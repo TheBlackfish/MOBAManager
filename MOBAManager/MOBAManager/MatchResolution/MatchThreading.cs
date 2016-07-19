@@ -51,6 +51,11 @@ namespace MOBAManager.MatchResolution
         private bool _changed = true;
 
         /// <summary>
+        /// The control variable for if the match has changed due to the player's team acting.
+        /// </summary>
+        private bool _playerTeamActed = false;
+
+        /// <summary>
         /// The control variable for if the match is finished.
         /// </summary>
         private bool _finished = false;
@@ -85,10 +90,30 @@ namespace MOBAManager.MatchResolution
         }
 
         /// <summary>
+        /// Returns if the player team has just acted.
+        /// </summary>
+        public bool playerTeamActed
+        {
+            get
+            {
+                if (_playerTeamActed)
+                {
+                    _playerTeamActed = false;
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Advances the current phase of the match.
         /// </summary>
         public void advancePhase()
         {
+            if (getCurrentActingTeam == playerTeam)
+            {
+                _playerTeamActed = true;
+            }
             deferredPhase++;
             if (deferredPhase == 20)
             {

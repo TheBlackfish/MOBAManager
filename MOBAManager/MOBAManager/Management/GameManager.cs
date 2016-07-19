@@ -16,6 +16,9 @@ namespace MOBAManager.Management
     public class GameManager
     {
         #region Temporarily Public Variables
+        /// <summary>
+        /// The calendar manager of the current game.
+        /// </summary>
         public CalendarManager calendarManager;
 
         /// <summary>
@@ -40,6 +43,11 @@ namespace MOBAManager.Management
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Turns a calendar event into a match.
+        /// </summary>
+        /// <param name="ce">The CalendarEvent to translate.</param>
+        /// <returns></returns>
         public Match translateEventToMatch(CalendarEvent ce)
         {
             if (ce.team1ID == 0)
@@ -56,9 +64,12 @@ namespace MOBAManager.Management
             }
         }
 
+        /// <summary>
+        /// Adds a bunch of temporary matches to the calendar.
+        /// </summary>
         public void fillCalendar()
         {
-            for (int i = 1; i < teamManager.getAllTeams().Count; i++)
+            for (int i = 0; i < teamManager.getAllTeams().Count; i++)
             {
                 for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
                 {

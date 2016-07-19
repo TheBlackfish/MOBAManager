@@ -51,8 +51,14 @@ namespace MOBAManager.UI
         /// </summary>
         private bool allEventsResolved = false;
 
+        /// <summary>
+        /// The current player match to be resolved
+        /// </summary>
         private Match currentPlayerMatch = null;
 
+        /// <summary>
+        /// The control variable for if the player has a match to resolve.
+        /// </summary>
         private bool waitingToStartPlayerMatch = false;
 
         /// <summary>

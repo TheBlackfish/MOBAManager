@@ -18,6 +18,11 @@ namespace MOBAManager.Management.Teams
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Returns a team based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of the team being sought.</param>
+        /// <returns></returns>
         public Team getTeamByID(int id)
         {
             List<Team> results = teams.Where(kvp => kvp.Key == id).Select(kvp => kvp.Value).ToList();
