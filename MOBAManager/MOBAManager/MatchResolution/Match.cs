@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.MatchResolution
 {
-    public partial class Match
+    public partial class Match : IDisposable
     {
         #region Private variables
         /// <summary>
@@ -110,6 +110,27 @@ namespace MOBAManager.MatchResolution
             team1 = one;
             team2 = two;
             ms = new MatchAI(this, allHeroes, one.getTeammates(), two.getTeammates());
+        }
+        #endregion
+
+        #region Disposal methods
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ms.Dispose();
+            }
+        }
+
+        ~Match()
+        {
+            Dispose(false);
         }
         #endregion
     }

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MOBAManager.MatchResolution
 {
-    partial class MatchAI
+    partial class MatchAI : IDisposable
     {
         #region General Variables
         /// <summary>
@@ -583,6 +583,28 @@ namespace MOBAManager.MatchResolution
             team2Bans = new List<int>();
             team1Lineup = new List<Tuple<Player, Hero>>();
             team2Lineup = new List<Tuple<Player, Hero>>();
+        }
+        #endregion
+
+        #region Disposal methods
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                pregameTimer.Dispose();
+                tickTimer.Dispose();
+            }
+        }
+
+        ~MatchAI()
+        {
+            Dispose(false);
         }
         #endregion
     }
