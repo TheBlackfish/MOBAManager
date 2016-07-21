@@ -114,12 +114,19 @@ namespace MOBAManager.MatchResolution
         #endregion
 
         #region Disposal methods
+        /// <summary>
+        /// Disposes the Match entirely.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Deallocates resources depending on what type of disposing to perform.
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -128,6 +135,9 @@ namespace MOBAManager.MatchResolution
             }
         }
 
+        /// <summary>
+        /// Finalizer.
+        /// </summary>
         ~Match()
         {
             Dispose(false);

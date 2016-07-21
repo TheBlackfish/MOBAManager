@@ -145,8 +145,6 @@ namespace MOBAManager.Management.Heroes
 
                 counterValues.RemoveAt(index);
             }
-
-            Hero.NUM_HEROES = allHeroes.Count;
         }
     }
 }

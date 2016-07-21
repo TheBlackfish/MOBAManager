@@ -12,6 +12,7 @@ using MOBAManager.MatchResolution;
 using MOBAManager.UI.Meta;
 using MOBAManager.Management.Calendar;
 using System.Threading;
+using MOBAManager.UI.Calendar;
 
 namespace MOBAManager.UI
 {
@@ -135,6 +136,21 @@ namespace MOBAManager.UI
             Controls.Add(erc);
             erc.BringToFront();
         }
+
+        /// <summary>
+        /// Called when the Calendar button is clicked. Brings up the calendar screen and provides it with the appropriate managers.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void calendarButton_Click(object sender, EventArgs e)
+        {
+            CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager);
+            setButtonStates(false);
+            Controls.Add(cvc);
+            cvc.BringToFront();
+        }
         #endregion
+
+
     }
 }

@@ -8,13 +8,6 @@ namespace MOBAManager.Management.Players
 {
     public class Player
     {
-        #region Static Variables
-        /// <summary>
-        /// The starting skill for a player with a hero if that skill has not already been assigned. This represents a player playing a hero they don't know.
-        /// </summary>
-        public static int STARTING_HEROSKILL = -4;
-        #endregion
-
         #region Variables
         /// <summary>
         /// The ID of the player.
@@ -68,7 +61,7 @@ namespace MOBAManager.Management.Players
         {
             if (!heroSkills.ContainsKey(heroID))
             {
-                heroSkills.Add(heroID, STARTING_HEROSKILL);
+                heroSkills.Add(heroID, -4);
             }
 
             int skill = 0;

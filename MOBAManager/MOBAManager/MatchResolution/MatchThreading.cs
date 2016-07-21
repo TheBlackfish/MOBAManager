@@ -4,6 +4,7 @@ using MOBAManager.Management.Teams;
 using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 
@@ -546,7 +547,10 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private void threadedSelectHeroes()
         {
-            currentChoiceRandomID = selectRandomly();
+            Dictionary<int, int> baseline = baselineHeroSelection(1, true, true);
+            List<int> finalists = baseline.Select(kvp => kvp.Key).ToList();
+            currentChoiceRandomID = finalists[RNG.roll(finalists.Count)];
+
             if (match.getCurrentActingTeam == 1)
             {
                 if (match.isCurrentPhasePicking)

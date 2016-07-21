@@ -53,6 +53,12 @@
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
+    <Compile Include="UI\Calendar\CalendarViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Calendar\CalendarViewControl.Designer.cs">
+      <DependentUpon>CalendarViewControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DailyMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -105,6 +111,9 @@
       <DependentUpon>StatisticsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\RNG.cs" />
+    <EmbeddedResource Include="UI\Calendar\CalendarViewControl.resx">
+      <DependentUpon>CalendarViewControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DailyMenu.resx">
       <DependentUpon>DailyMenu.cs</DependentUpon>
     </EmbeddedResource>

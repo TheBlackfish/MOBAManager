@@ -8,14 +8,7 @@ namespace MOBAManager.Management.Heroes
 {
     public class Hero
     {
-        #region Static Variables
-        /// <summary>
-        /// The number of heroes in the game currently.
-        /// </summary>
-        public static int NUM_HEROES = 0;
-        #endregion
-
-        #region Variables
+        #region Private Variables
         /// <summary>
         /// The ID of the hero.
         /// </summary>

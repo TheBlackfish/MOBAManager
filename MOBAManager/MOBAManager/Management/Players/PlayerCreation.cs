@@ -97,12 +97,10 @@ namespace MOBAManager.Management.Players
             //Create each player's personal hero skills.
             List<Player> players = allPlayers.Select(kvp => kvp.Value).ToList();
 
-            
-
             foreach (Player p in players)
             {
                 List<int> allHeroIDs = new List<int>();
-                for (int i = 0; i < Hero.NUM_HEROES; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     allHeroIDs.Add(i);
                 }

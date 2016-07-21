@@ -68,8 +68,9 @@
             this.calendarButton.Name = "calendarButton";
             this.calendarButton.Size = new System.Drawing.Size(1034, 50);
             this.calendarButton.TabIndex = 2;
-            this.calendarButton.Text = "View Calendar (In Progress)";
+            this.calendarButton.Text = "View Calendar";
             this.calendarButton.UseVisualStyleBackColor = true;
+            this.calendarButton.Click += new System.EventHandler(this.calendarButton_Click);
             // 
             // metaButton
             // 

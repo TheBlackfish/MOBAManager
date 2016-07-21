@@ -294,17 +294,6 @@ namespace MOBAManager.MatchResolution
                 return finalists[2];
             }
         }
-
-        /// <summary>
-        /// Selects a random hero ID.
-        /// </summary>
-        /// <returns></returns>
-        private int selectRandomly()
-        {
-            Dictionary<int, int> baseline = baselineHeroSelection(1, true, true);
-            List<int> finalists = baseline.Select(kvp => kvp.Key).ToList();
-            return finalists[RNG.roll(finalists.Count)];
-        }
         #endregion
 
         #region Public Methods
