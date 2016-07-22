@@ -14,12 +14,38 @@ namespace MOBAManager.UI.Calendar
 {
     public partial class CalendarViewControl : UserControl
     {
+        #region Private variables
+        /// <summary>
+        /// The calendar manager of the control.
+        /// </summary>
         private CalendarManager cm;
-        private TeamManager tm;
+
+        /// <summary>
+        /// The DateTime corresponding to the first day of the current month.
+        /// </summary>
         private DateTime baseline;
-        private int currentMonthOffset = 0;
+
+        /// <summary>
+        /// The dictionary containing all of the month grids generated thus far, stored by string in the form of "MM-YYYY".
+        /// </summary>
         private Dictionary<string, TableLayoutPanel> monthGrids;
 
+        /// <summary>
+        /// The current offset from 
+        /// </summary>
+        private int currentMonthOffset = 0;
+
+        /// <summary>
+        /// The team manager of the current game.
+        /// </summary>
+        private TeamManager tm;        
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Figures out which month to show and then either a) retrieves its grid from the dictionary of grids, or b) constructs a new grid for that month. Either way,
+        /// the grid is then shown on-screen.
+        /// </summary>
         private void updateCalendarContainer()
         {
             int monthToShow = baseline.Month + currentMonthOffset;
@@ -51,6 +77,12 @@ namespace MOBAManager.UI.Calendar
             newMonth.BringToFront();
         }
 
+        /// <summary>
+        /// This either returns a previously created grid for the specified month and year, or creates a new one.
+        /// </summary>
+        /// <param name="month">The month to get a grid for.</param>
+        /// <param name="year">The year to get a grid for.</param>
+        /// <returns></returns>
         private TableLayoutPanel getMonthlyPanel(int month, int year)
         {
             string key = month + "-" + year;
@@ -118,7 +150,14 @@ namespace MOBAManager.UI.Calendar
                 return monthGrid;
             }
         }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Creates a new calendar control.
+        /// </summary>
+        /// <param name="cm">The calendar manager of the current game.</param>
+        /// <param name="tm">The team manager of the current game.</param>
         public CalendarViewControl(CalendarManager cm, TeamManager tm)
         {
             InitializeComponent();
@@ -130,15 +169,23 @@ namespace MOBAManager.UI.Calendar
 
             updateCalendarContainer();
         }
+        #endregion
 
+        #region Events
+        /// <summary>
+        /// Called when the calendar control's parent changes. Resizes the control to fits its parent.
+        /// </summary>
         private void CalendarViewControl_ParentChanged(object sender, EventArgs e)
         {
             if (Parent != null)
             {
-                Size = Parent.Size;
+                Size = Parent.ClientSize;
             }
         }
 
+        /// <summary>
+        /// Called when the calendar control resizes. Resizes all table grids to fit the center panel better due to absolute sizing.
+        /// </summary>
         private void calendarContainer_Resize(object sender, EventArgs e)
         {
             foreach(TableLayoutPanel tlp in monthGrids.Values)
@@ -147,12 +194,15 @@ namespace MOBAManager.UI.Calendar
                 tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Width - 96);
                 for (int i = 0; i < tlp.RowCount - 1; i++)
                 {
-                    Control temp = tlp.GetControlFromPosition(1, i);
-                    temp.Size = new Size(tlp.Size.Width - 96, 48);
+                    tlp.GetControlFromPosition(1, i).MaximumSize = new Size(tlp.Size.Width - 96, 0);
+                    tlp.GetControlFromPosition(1, i).MinimumSize = new Size(tlp.Size.Width - 96, 48);
                 }
             }
         }
 
+        /// <summary>
+        /// Called when the PREV button is clicked. Decrements the month offset.
+        /// </summary>
         private void prevMonthButton_Click(object sender, EventArgs e)
         {
             currentMonthOffset--;
@@ -166,6 +216,9 @@ namespace MOBAManager.UI.Calendar
             }
         }
 
+        /// <summary>
+        /// Called when the NEXT button is click. Increments the month offset.
+        /// </summary>
         private void nextMonthButton_Click(object sender, EventArgs e)
         {
             currentMonthOffset++;
@@ -178,5 +231,6 @@ namespace MOBAManager.UI.Calendar
                 updateCalendarContainer();
             }
         }
+        #endregion
     }
 }
