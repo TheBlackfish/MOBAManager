@@ -48,11 +48,18 @@
   <ItemGroup>
     <Compile Include="Management\Calendar\CalendarEvent.cs" />
     <Compile Include="Management\Calendar\CalendarManager.cs" />
+    <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
+    <Compile Include="UI\Calendar\CalendarScheduleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Calendar\CalendarScheduleControl.Designer.cs">
+      <DependentUpon>CalendarScheduleControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Calendar\CalendarViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -111,6 +118,9 @@
       <DependentUpon>StatisticsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utility\RNG.cs" />
+    <EmbeddedResource Include="UI\Calendar\CalendarScheduleControl.resx">
+      <DependentUpon>CalendarScheduleControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Calendar\CalendarViewControl.resx">
       <DependentUpon>CalendarViewControl.cs</DependentUpon>
     </EmbeddedResource>

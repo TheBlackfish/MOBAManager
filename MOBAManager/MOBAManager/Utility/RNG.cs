@@ -33,6 +33,11 @@ namespace MOBAManager.Utility
             return dice.NextDouble() * max;
         }
 
+        public static bool coinflip()
+        {
+            return (dice.Next(2) == 0);
+        }
+
         /// <summary>
         /// Initializes the RNG.
         /// </summary>

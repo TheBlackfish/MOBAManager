@@ -63,28 +63,6 @@ namespace MOBAManager.Management
                 return new Match(teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), heroManager.getHeroDictionary());
             }
         }
-
-        /// <summary>
-        /// Adds a bunch of temporary matches to the calendar.
-        /// </summary>
-        public void fillCalendar()
-        {
-            for (int i = 0; i < teamManager.getAllTeams().Count; i++)
-            {
-                for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
-                {
-                    calendarManager.addPickupGame(i, j);
-                }
-            }
-
-            for (int i = 3; i < teamManager.getAllTeams().Count; i++)
-            {
-                for (int j = i + 1; j < teamManager.getAllTeams().Count; j++)
-                {
-                    calendarManager.addPickupGame(i, j, DateTime.Now.AddDays(1));
-                }
-            }
-        }
         #endregion
 
         #region Constructors
@@ -93,13 +71,13 @@ namespace MOBAManager.Management
         /// </summary>
         public GameManager()
         {
-            calendarManager = new CalendarManager();
-
             heroManager = new HeroManager();
 
             playerManager = new PlayerManager();
 
             teamManager = new TeamManager();
+
+            calendarManager = new CalendarManager(teamManager);
 
             statsManager = new StatisticsManager(heroManager.getHeroDictionary(), playerManager.getPlayerDictionary(), teamManager.getTeamDictionary());
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Calendar
 {
-    public class CalendarManager
+    public partial class CalendarManager
     {
         #region Private variables
         /// <summary>
@@ -19,6 +19,8 @@ namespace MOBAManager.Management.Calendar
         /// The list of all calendar events.
         /// </summary>
         private List<CalendarEvent> allEvents;
+
+        private TeamManager tm;
         #endregion
 
         #region Public methods
@@ -38,6 +40,17 @@ namespace MOBAManager.Management.Calendar
         public DateTime getFormattedDateTime()
         {
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        }
+
+        public int getDaysToDate(DateTime futureTime)
+        {
+            return (int)(futureTime - currentDate).Days;
+        }
+
+        public bool addCalendarEvent(CalendarEvent ce)
+        {
+            allEvents.Add(ce);
+            return true;
         }
 
         /// <summary>
@@ -65,6 +78,12 @@ namespace MOBAManager.Management.Calendar
             return true;
         }
 
+        public bool addPickupGame(int team1ID, int team2ID, int offset)
+        {
+            allEvents.Add(new CalendarEvent(CalendarEvent.EventType.PUG, offset, team1ID, team2ID));
+            return true;
+        }
+
         /// <summary>
         /// Returns a list containing all events that should happen on the current in-game date.
         /// </summary>
@@ -87,6 +106,16 @@ namespace MOBAManager.Management.Calendar
             currentDate = currentDate.AddDays(1);
         }
 
+        public bool teamHasEventsOnDate(int teamID, int dayOffset)
+        {
+            return (allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).Count() > 0);
+        }
+
+        public List<CalendarEvent> getEventsForTeamOnDate(int teamID, int dayOffset)
+        {
+            return allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).ToList();
+        }
+
         /// <summary>
         /// Returns a list of tuples that describe a team's events over the course of a month. The tuples are stored in the list in order of the days they occur.
         /// The statuses themselves consist of an integer and a string description. If the integer is -1, the day has already occurred and no events are possible on that day.
@@ -98,7 +127,7 @@ namespace MOBAManager.Management.Calendar
         /// <param name="year">The year</param>
         /// <param name="tm">The TeamManager object as reference</param>
         /// <returns></returns>
-        public List<Tuple<int, string>> getEventStatusForTeamInMonth(int teamID, int month, int year, TeamManager tm)
+        public List<Tuple<int, string>> getEventStatusForTeamInMonth(int teamID, int month, int year)
         {
             DateTime targetDate = new DateTime(year, month, 1);
             int minOffset = (targetDate - currentDate).Days;
@@ -115,7 +144,7 @@ namespace MOBAManager.Management.Calendar
                 }
                 else
                 {
-                    List<CalendarEvent> allEventsOnDate = allEvents.Where(ce => ce.daysToResolution == i).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).ToList();
+                    List<CalendarEvent> allEventsOnDate = getEventsForTeamOnDate(teamID, i);
                     if (allEventsOnDate.Count > 0)
                     {
                         //Find out what type of events and concat descriptions of them.
@@ -156,10 +185,12 @@ namespace MOBAManager.Management.Calendar
         /// <summary>
         /// Creates a new calendar manager.
         /// </summary>
-        public CalendarManager()
+        public CalendarManager(TeamManager tm)
         {
+            this.tm = tm;
             currentDate = DateTime.Now;
             allEvents = new List<CalendarEvent>();
+            scheduleRandomEventsForEachAITeam(4);
         }
         #endregion
     }

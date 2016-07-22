@@ -38,7 +38,21 @@ namespace MOBAManager.UI.Calendar
         /// <summary>
         /// The team manager of the current game.
         /// </summary>
-        private TeamManager tm;        
+        private TeamManager tm;
+        #endregion
+
+        #region Public methods
+        public void submitCalenderEvent(CalendarEvent submit)
+        {
+            cm.addCalendarEvent(submit);
+            foreach (Control c in Controls)
+            {
+                if (c is CalendarScheduleControl)
+                {
+                    Controls.Remove(c);
+                }
+            }
+        }
         #endregion
 
         #region Private methods
@@ -92,7 +106,8 @@ namespace MOBAManager.UI.Calendar
             }
             else
             {
-                List<Tuple<int, string>> playerEvents = cm.getEventStatusForTeamInMonth(0, month, year, tm);
+                List<Tuple<int, string>> playerEvents = cm.getEventStatusForTeamInMonth(0, month, year);
+                int baseDayOffset = cm.getDaysToDate(new DateTime(year, month, 1));
 
                 TableLayoutPanel monthGrid = new TableLayoutPanel();
                 monthGrid.Location = new System.Drawing.Point(3, 3);
@@ -126,6 +141,14 @@ namespace MOBAManager.UI.Calendar
                     affectDate.Size = new Size(48, 48);
                     affectDate.Margin = new Padding(0);
 
+                    int affectOffset = baseDayOffset + i - 1;
+                    Action<object, EventArgs> action = (object sender, EventArgs e) =>
+                    {
+                        showScheduleControl(affectOffset);
+                    };
+                    affectDate.Click += new EventHandler(action);
+
+
                     if (playerEvents[i - 1].Item1 == -1)
                     {
                         dateLabel.ForeColor = Color.Gray;
@@ -149,6 +172,13 @@ namespace MOBAManager.UI.Calendar
                 monthGrids.Add(key, monthGrid);
                 return monthGrid;
             }
+        }
+
+        private void showScheduleControl(int offset)
+        {
+            CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset);
+            Controls.Add(csc);
+            csc.BringToFront();
         }
         #endregion
 
