@@ -31,6 +31,8 @@ namespace MOBAManager.MatchResolution
         /// The control variable for who the winner is.
         /// </summary>
         private int _winner = -1;
+
+        private Dictionary<int, Hero> allHeroes;
         #endregion
 
         #region Public methods
@@ -109,7 +111,32 @@ namespace MOBAManager.MatchResolution
         {
             team1 = one;
             team2 = two;
-            ms = new MatchAI(this, allHeroes, one.getTeammates(), two.getTeammates());
+            this.allHeroes = allHeroes;
+            ms = new MatchAI(this, this.allHeroes, one.getTeammates(), two.getTeammates());
+        }
+
+        /// <summary>
+        /// Creates a copy of this match.
+        /// </summary>
+        /// <returns></returns>
+        public Match Clone()
+        {
+            return Clone(false);
+        }
+
+        /// <summary>
+        /// Creates a copy of this match. If the parameter is set to true, the two teams will switch sides.
+        /// </summary>
+        /// <param name="switchTeams">If true, the two sides will switch sides.</param>
+        /// <returns></returns>
+        public Match Clone(bool switchTeams)
+        {
+            Match m = new Match(isThreaded, team1, team2, playerTeam, allHeroes);
+            if (switchTeams)
+            {
+                m = new Match(isThreaded, team2, team1, playerTeam, allHeroes);
+            }
+            return m;
         }
         #endregion
 

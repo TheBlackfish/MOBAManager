@@ -192,6 +192,26 @@ namespace MOBAManager.UI
             };
             BeginInvoke(addition);
         }
+
+        /// <summary>
+        /// Takes a list of pick-up games and creates 2-5 matches between the participants of those matches.
+        /// </summary>
+        /// <param name="pickupMatches">The list to extrapolate.</param>
+        private List<Match> randomizePickupGames(List<Match> pickupMatches)
+        {
+            List<Match> ret = new List<Match>();
+
+            foreach (Match m in pickupMatches)
+            {
+                int max = RNG.roll(4) + 2;
+                for (int i = 0; i < max; i++)
+                {
+                    ret.Add(m.Clone((i % 2 == 0)));
+                }
+            }
+
+            return ret;
+        }
         #endregion
 
         #region Constructors
@@ -207,7 +227,7 @@ namespace MOBAManager.UI
             newLabelPosition = new Point(4, 4);
             labelSize = new Size(eventContainer.Width - 16, 16);
             onCloseFunc = onClose;
-            pugs = pickupGames;
+            pugs = randomizePickupGames(pickupGames);
             resolutionTimer = new System.Timers.Timer(4000);
             resolutionTimer.Enabled = true;
             resolutionTimer.Elapsed += resolveRandomEvent;
