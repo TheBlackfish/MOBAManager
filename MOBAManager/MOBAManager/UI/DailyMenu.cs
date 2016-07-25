@@ -144,7 +144,20 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void calendarButton_Click(object sender, EventArgs e)
         {
-            CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager);
+            Action closeStats = () =>
+            {
+                foreach (Control c in Controls)
+                {
+                    if (c is CalendarViewControl)
+                    {
+                        c.Hide();
+                        Controls.Remove(c);
+                        setButtonStates(true);
+                    }
+                }
+            };
+            CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager, closeStats);
+
             setButtonStates(false);
             Controls.Add(cvc);
             cvc.BringToFront();

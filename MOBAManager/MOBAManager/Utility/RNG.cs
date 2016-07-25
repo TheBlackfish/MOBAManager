@@ -33,6 +33,10 @@ namespace MOBAManager.Utility
             return dice.NextDouble() * max;
         }
 
+        /// <summary>
+        /// Returns a random true/false value.
+        /// </summary>
+        /// <returns></returns>
         public static bool coinflip()
         {
             return (dice.Next(2) == 0);

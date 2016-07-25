@@ -20,6 +20,9 @@ namespace MOBAManager.Management.Calendar
         /// </summary>
         private List<CalendarEvent> allEvents;
 
+        /// <summary>
+        /// The team manager that corresponds to the same game as this calendar manager.
+        /// </summary>
         private TeamManager tm;
         #endregion
 
@@ -42,11 +45,21 @@ namespace MOBAManager.Management.Calendar
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         }
 
+        /// <summary>
+        /// Returns how many days are between the current and the future date.
+        /// </summary>
+        /// <param name="futureTime"></param>
+        /// <returns></returns>
         public int getDaysToDate(DateTime futureTime)
         {
             return (int)(futureTime - currentDate).Days;
         }
 
+        /// <summary>
+        /// Directly adds a calendar event to the list of events.
+        /// </summary>
+        /// <param name="ce"></param>
+        /// <returns></returns>
         public bool addCalendarEvent(CalendarEvent ce)
         {
             allEvents.Add(ce);
@@ -106,11 +119,23 @@ namespace MOBAManager.Management.Calendar
             currentDate = currentDate.AddDays(1);
         }
 
+        /// <summary>
+        /// Returns true if the team specified has any events on the day specified.
+        /// </summary>
+        /// <param name="teamID">The ID of the team</param>
+        /// <param name="dayOffset">The day to search events for.</param>
+        /// <returns></returns>
         public bool teamHasEventsOnDate(int teamID, int dayOffset)
         {
             return (allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).Count() > 0);
         }
 
+        /// <summary>
+        /// Returns a list of all events involving a team on the specified date.
+        /// </summary>
+        /// <param name="teamID">The team to get all events on the date for.</param>
+        /// <param name="dayOffset">The day to search events for.</param>
+        /// <returns></returns>
         public List<CalendarEvent> getEventsForTeamOnDate(int teamID, int dayOffset)
         {
             return allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).ToList();

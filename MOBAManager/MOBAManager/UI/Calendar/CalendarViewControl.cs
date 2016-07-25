@@ -39,17 +39,30 @@ namespace MOBAManager.UI.Calendar
         /// The team manager of the current game.
         /// </summary>
         private TeamManager tm;
+
+        /// <summary>
+        /// The function to call when the calender control should be closed.
+        /// </summary>
+        private Action closeFunc = null;
         #endregion
 
         #region Public methods
+        /// <summary>
+        /// Submits the given event to the calendar manager and updates the current month grid to reflect the new data.
+        /// </summary>
+        /// <param name="submit"></param>
         public void submitCalenderEvent(CalendarEvent submit)
         {
-            cm.addCalendarEvent(submit);
-            foreach (Control c in Controls)
+            if (submit != null)
             {
-                if (c is CalendarScheduleControl)
+                cm.addCalendarEvent(submit);
+                updateCalendarContainer(true);
+                foreach (Control c in Controls)
                 {
-                    Controls.Remove(c);
+                    if (c is CalendarScheduleControl)
+                    {
+                        Controls.Remove(c);
+                    }
                 }
             }
         }
@@ -62,14 +75,6 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         private void updateCalendarContainer()
         {
-            int monthToShow = baseline.Month + currentMonthOffset;
-            int yearToShow = baseline.Year;
-            while (monthToShow > 12)
-            {
-                monthToShow -= 12;
-                yearToShow++;
-            }
-
             DateTime toShow = baseline.AddMonths(currentMonthOffset);
             monthLabel.Text = toShow.ToString("MMMM yyyy");
 
@@ -91,6 +96,23 @@ namespace MOBAManager.UI.Calendar
             newMonth.BringToFront();
         }
 
+        private void updateCalendarContainer(bool fullUpdate)
+        {
+            if (fullUpdate)
+            {
+                DateTime toShow = baseline.AddMonths(currentMonthOffset);
+                monthLabel.Text = toShow.ToString("MMMM yyyy");
+
+                TableLayoutPanel newMonth = getMonthlyPanel(toShow.Month, toShow.Year);
+                calendarContainer.Controls.Remove(newMonth);
+                foreach (KeyValuePair<string, TableLayoutPanel> item in monthGrids.Where(kvp => kvp.Value == newMonth).ToList())
+                {
+                    monthGrids.Remove(item.Key);
+                }
+            }
+            updateCalendarContainer();
+        }
+
         /// <summary>
         /// This either returns a previously created grid for the specified month and year, or creates a new one.
         /// </summary>
@@ -110,7 +132,7 @@ namespace MOBAManager.UI.Calendar
                 int baseDayOffset = cm.getDaysToDate(new DateTime(year, month, 1));
 
                 TableLayoutPanel monthGrid = new TableLayoutPanel();
-                monthGrid.Location = new System.Drawing.Point(3, 3);
+                monthGrid.Location = new Point(3, 3);
                 monthGrid.Name = month + "-" + year + "Grid";
                 monthGrid.Size = new Size(calendarContainer.ClientSize.Width - 20, calendarContainer.Size.Height - 6);
                 monthGrid.RowCount = DateTime.DaysInMonth(year, month);
@@ -176,7 +198,7 @@ namespace MOBAManager.UI.Calendar
 
         private void showScheduleControl(int offset)
         {
-            CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset);
+            CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset, submitCalenderEvent);
             Controls.Add(csc);
             csc.BringToFront();
         }
@@ -188,11 +210,12 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         /// <param name="cm">The calendar manager of the current game.</param>
         /// <param name="tm">The team manager of the current game.</param>
-        public CalendarViewControl(CalendarManager cm, TeamManager tm)
+        public CalendarViewControl(CalendarManager cm, TeamManager tm, Action onClose)
         {
             InitializeComponent();
             this.cm = cm;
             this.tm = tm;
+            closeFunc = onClose;
             baseline = cm.getFormattedDateTime();
 
             monthGrids = new Dictionary<string, TableLayoutPanel>();
@@ -222,7 +245,7 @@ namespace MOBAManager.UI.Calendar
             {
                 tlp.Size = new Size(calendarContainer.ClientSize.Width - 20, tlp.Size.Height);
                 tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Width - 96);
-                for (int i = 0; i < tlp.RowCount - 1; i++)
+                for (int i = 0; i < tlp.RowCount; i++)
                 {
                     tlp.GetControlFromPosition(1, i).MaximumSize = new Size(tlp.Size.Width - 96, 0);
                     tlp.GetControlFromPosition(1, i).MinimumSize = new Size(tlp.Size.Width - 96, 48);
@@ -259,6 +282,14 @@ namespace MOBAManager.UI.Calendar
             else
             {
                 updateCalendarContainer();
+            }
+        }
+        
+        private void returnButton_Click(object sender, EventArgs e)
+        {
+            if (closeFunc != null)
+            {
+                closeFunc.Invoke();
             }
         }
         #endregion

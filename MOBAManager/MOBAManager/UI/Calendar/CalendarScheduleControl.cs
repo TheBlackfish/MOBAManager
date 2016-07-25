@@ -15,12 +15,37 @@ namespace MOBAManager.UI.Calendar
 {
     public partial class CalendarScheduleControl : UserControl
     {
+        #region Private Variables
+        /// <summary>
+        /// The calendar manager of the schedule control
+        /// </summary>
         private CalendarManager cm;
-        private TeamManager tm;
-        private int dayOffset;
-        private List<CalendarEvent> possibleEvents;
-        private Action<CalendarEvent> submissionFunction;
 
+        /// <summary>
+        /// The team manager of the team control
+        /// </summary>
+        private TeamManager tm;
+
+        /// <summary>
+        /// The offset that the schedule control represents
+        /// </summary>
+        private int dayOffset;
+
+        /// <summary>
+        /// The list of all possible events possible on the offset that this schedule control represents.
+        /// </summary>
+        private List<CalendarEvent> possibleEvents;
+
+        /// <summary>
+        /// The function called to pass any chosen event onto the calender manager.
+        /// </summary>
+        private Action<CalendarEvent> submissionFunction;
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Creates a list of all possible events that the player can schedule on the date represented by this schedule control.
+        /// </summary>
         private void createAllPossibleEvents()
         {
             //Get all possible PUGs from cm and create events for them.
@@ -43,6 +68,9 @@ namespace MOBAManager.UI.Calendar
             }
         }
 
+        /// <summary>
+        /// Creates clickable buttons for each possible event found by this schedule control.
+        /// </summary>
         private void createAllButtons()
         {
             int curButtonOffset = 0;
@@ -83,7 +111,16 @@ namespace MOBAManager.UI.Calendar
                 curButtonOffset += btn.Size.Height;
             }
         }
+        #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Creates a new schedule control.
+        /// </summary>
+        /// <param name="cm">The calendar manager this control coorresponds with.</param>
+        /// <param name="tm">The team manager this control cooresponds with.</param>
+        /// <param name="offset">The offset that cooresponds with the day this schedule control represents.</param>
+        /// <param name="submit">The function that should be called when an event is chosen.</param>
         public CalendarScheduleControl(CalendarManager cm, TeamManager tm, int offset, Action<CalendarEvent> submit)
         {
             InitializeComponent();
@@ -93,7 +130,11 @@ namespace MOBAManager.UI.Calendar
             submissionFunction = submit;
             possibleEvents = new List<CalendarEvent>();
         }
+        #endregion
 
+        /// <summary>
+        /// Called when the parent of the control changes. Centers the control and creates all possible events while adding UI for them to itself.
+        /// </summary>
         private void CalendarScheduleControl_ParentChanged(object sender, EventArgs e)
         {
             if (Parent != null)
@@ -104,6 +145,9 @@ namespace MOBAManager.UI.Calendar
             }
         }
 
+        /// <summary>
+        /// Called when the return button is clicked. Closes the control.
+        /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
