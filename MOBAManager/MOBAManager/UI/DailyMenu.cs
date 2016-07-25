@@ -52,6 +52,7 @@ namespace MOBAManager.UI
                 }
             }
             gameManager.calendarManager.incrementCalender();
+            gameManager.calendarManager.scheduleRandomEventsForEachAITeam();
             label1.Text = gameManager.calendarManager.getFormattedDate();
         }
         #endregion

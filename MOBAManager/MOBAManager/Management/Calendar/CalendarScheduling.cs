@@ -7,11 +7,18 @@ namespace MOBAManager.Management.Calendar
 {
     public partial class CalendarManager
     {
+        /// <summary>
+        /// Schedules a random event for each AI team.
+        /// </summary>
         public void scheduleRandomEventsForEachAITeam()
         {
             scheduleRandomEventsForEachAITeam(1);
         }
 
+        /// <summary>
+        /// Schedules any number of random events for each AI team.
+        /// </summary>
+        /// <param name="iterations">The number of events each AI team should schedule.</param>
         public void scheduleRandomEventsForEachAITeam(int iterations)
         {
             if (iterations < 1)
