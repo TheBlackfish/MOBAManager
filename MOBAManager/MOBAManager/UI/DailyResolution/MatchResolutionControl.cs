@@ -51,7 +51,7 @@ namespace MOBAManager.UI
         /// </summary>
         private void updateControl()
         {
-            Tuple<string, string, string, string> times = match.getFormattedTimers();
+            Tuple<string, string, string, string> times = match.getTimerDisplayInformation();
             team1TimerA.Text = times.Item1;
             team1TimerB.Text = times.Item2;
             team2TimerA.Text = times.Item3;
@@ -59,10 +59,10 @@ namespace MOBAManager.UI
 
             if (match.hasChanged)
             {
-                team1Bans.Text = match.getFormattedTeam1Bans();
-                team1Picks.Text = match.getFormattedTeam1Picks();
-                team2Bans.Text = match.getFormattedTeam2Bans();
-                team2Picks.Text = match.getFormattedTeam2Picks();
+                team1Bans.Text = match.getTeamPBDisplayInformation(1, false);
+                team1Picks.Text = match.getTeamPBDisplayInformation(1, true);
+                team2Bans.Text = match.getTeamPBDisplayInformation(2, false);
+                team2Picks.Text = match.getTeamPBDisplayInformation(2, true);
                 if (match.playerTeamActed)
                 {
                     userSelection.SelectedIndex = 0;
@@ -108,8 +108,8 @@ namespace MOBAManager.UI
             updateTimer.Elapsed += updateTimer_Tick;
             updateTimer.Enabled = true;
 
-            team1Info.Text = m.getTeamInformation(1);
-            team2Info.Text = m.getTeamInformation(2);
+            team1Info.Text = m.getTeamDisplayInformation(1);
+            team2Info.Text = m.getTeamDisplayInformation(2);
 
             interactionsList = new List<Tuple<int, int>>();
 

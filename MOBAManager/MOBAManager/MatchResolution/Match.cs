@@ -98,6 +98,11 @@ namespace MOBAManager.MatchResolution
 
             _winner = ms.decideWinner();
         }
+
+        public void resolveMatchEffects()
+        {
+            ms.resolveMatchEffects();
+        }
         #endregion
 
         #region Constructors
@@ -134,7 +139,14 @@ namespace MOBAManager.MatchResolution
             Match m = new Match(isThreaded, team1, team2, playerTeam, allHeroes);
             if (switchTeams)
             {
-                m = new Match(isThreaded, team2, team1, playerTeam, allHeroes);
+                if (playerTeam == -1)
+                {
+                    m = new Match(isThreaded, team2, team1, playerTeam, allHeroes);
+                }
+                else
+                {
+                    m = new Match(isThreaded, team2, team1, 3 - playerTeam, allHeroes);
+                }
             }
             return m;
         }

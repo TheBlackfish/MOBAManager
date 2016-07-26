@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MOBAManager.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,12 @@ namespace MOBAManager.Management.Players
         /// <summary>
         /// The pure skill of the player. This represents the player just being amazing at the game.
         /// </summary>
-        private int pureSkill;
+        private double pureSkill;
 
         /// <summary>
         /// The dictionary of skill using different heroes for this player.
         /// </summary>
-        private Dictionary<int, int> heroSkills;
+        private Dictionary<int, double> heroSkills;
         #endregion
 
         #region Accessors
@@ -51,20 +52,62 @@ namespace MOBAManager.Management.Players
         #endregion
 
         #region Public Methods
+        public void gainExperience(int heroID)
+        {
+            //Determine a random way to gain experience.
+            int type = RNG.roll(2);
+            switch (type)
+            {
+                case 0:
+                    gainHeroExperience(heroID);
+                    break;
+                case 1:
+                    gainPSExperience();
+                    break;
+            }
+        }
+
+        public void gainPSExperience()
+        {
+            double RNGRoll = 10;
+            if (pureSkill + 1 > RNGRoll)
+            {
+                RNGRoll = pureSkill + 1;
+            }
+            if (RNG.rollDouble(RNGRoll) > pureSkill)
+            {
+                pureSkill += 0.1;
+            }
+        }
+
+        public void gainHeroExperience(int heroID)
+        {
+            double RNGRoll = 10;
+            double hs = getHeroSkill(heroID);
+            if (hs + 1 > RNGRoll)
+            {
+                RNGRoll = hs + 1;
+            }
+            if (RNG.rollDouble(RNGRoll) > hs)
+            {
+                setHeroSkill(heroID, hs + 0.1);
+            }
+        }
+
         /// <summary>
         /// Returns the amount of skill the player has with the provided hero.
         /// If the player does not have a set skill with a hero, this method will set it to STARTING_HEROSKILL first, then return it.
         /// </summary>
         /// <param name="heroID">The ID of the hero to get the skill for.</param>
         /// <returns>The player's skill level with the hero.</returns>
-        public int getHeroSkill(int heroID)
+        public double getHeroSkill(int heroID)
         {
             if (!heroSkills.ContainsKey(heroID))
             {
                 heroSkills.Add(heroID, -4);
             }
 
-            int skill = 0;
+            double skill = 0.0;
             heroSkills.TryGetValue(heroID, out skill);
             return skill + pureSkill; 
         }
@@ -74,7 +117,7 @@ namespace MOBAManager.Management.Players
         /// </summary>
         /// <param name="heroID">The hero to provide a skill level for.</param>
         /// <param name="heroSkill">The skill level to set.</param>
-        public void setHeroSkill(int heroID, int heroSkill)
+        public void setHeroSkill(int heroID, double heroSkill)
         {
             heroSkills[heroID] = heroSkill;
         }
@@ -102,7 +145,7 @@ namespace MOBAManager.Management.Players
             _id = id;
             _name = name;
             pureSkill = skill;
-            heroSkills = new Dictionary<int, int>();
+            heroSkills = new Dictionary<int, double>();
         }
         #endregion
     }

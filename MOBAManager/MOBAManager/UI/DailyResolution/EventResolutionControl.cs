@@ -171,7 +171,7 @@ namespace MOBAManager.UI
         private void addEventNotification(Match m)
         {
             Label l = new Label();
-            l.Text = m.getSummary();
+            l.Text = m.getMatchSummary();
             l.Location = new Point(newLabelPosition.X, newLabelPosition.Y + eventContainer.AutoScrollPosition.Y);
             l.Size = labelSize;
             newLabelPosition.Y += l.Height + 4;

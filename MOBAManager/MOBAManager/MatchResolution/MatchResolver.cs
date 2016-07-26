@@ -17,10 +17,10 @@ namespace MOBAManager.MatchResolution
         public int decideWinner()
         {
             //Get Team 1's optimal skill
-            int team1 = totalTeamSkill(1);
+            double team1 = totalTeamSkill(1);
 
             //Get Team 2's optimal skill
-            int team2 = totalTeamSkill(2);
+            double team2 = totalTeamSkill(2);
 
             if (team1 < 0 && team2 < 0)
             {
@@ -41,7 +41,7 @@ namespace MOBAManager.MatchResolution
                 team2 = 100;
             }
 
-            int dieRoll = RNG.roll(team1 + team2);
+            double dieRoll = RNG.rollDouble(team1 + team2);
 
             Console.WriteLine("T1:" + team1 + " vs T2:" + team2 + " -- Die roll:" + dieRoll);
 
@@ -60,7 +60,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The slot of the team to get the total skill for. 1 or 2.</param>
         /// <returns></returns>
-        public int getTeamLineupSkill(int team)
+        public double getTeamLineupSkill(int team)
         {
             if (team == 1)
             {
@@ -72,7 +72,20 @@ namespace MOBAManager.MatchResolution
             }
             else
             {
-                return int.MinValue;
+                return double.MinValue;
+            }
+        }
+
+        public void resolveMatchEffects()
+        {
+            foreach (Tuple<Player, Hero> tph in team1Lineup)
+            {
+                tph.Item1.gainExperience(tph.Item2.ID);
+            }
+
+            foreach (Tuple<Player, Hero> tph in team2Lineup)
+            {
+                tph.Item1.gainExperience(tph.Item2.ID);
             }
         }
         #endregion
@@ -88,7 +101,7 @@ namespace MOBAManager.MatchResolution
             List<Tuple<Player, Hero>> lineup = new List<Tuple<Player, Hero>>();
             List<Player> curTeam = null;
             List<int> curPicks = null;
-            List<Tuple<int, int, int>> phVals = new List<Tuple<int, int, int>>();
+            List<Tuple<int, int, double>> phVals = new List<Tuple<int, int, double>>();
 
             if (team == 1)
             {
@@ -115,7 +128,7 @@ namespace MOBAManager.MatchResolution
 
             while (phVals.Count > 0 && lineup.Count < 5)
             {
-                Tuple<int, int, int> topSelection = phVals.OrderByDescending(x => x.Item3).First();
+                Tuple<int, int, double> topSelection = phVals.OrderByDescending(x => x.Item3).First();
                 lineup.Add(Tuple.Create(curTeam[topSelection.Item1], allHeroes[topSelection.Item2]));
                 phVals = phVals.Where(x => x.Item1 != topSelection.Item1).Where(x => x.Item2 != topSelection.Item2).ToList();
             }
@@ -129,9 +142,9 @@ namespace MOBAManager.MatchResolution
         /// <param name="team">The team to calculate the skill level for.</param>
         /// <param name="lineup">That team's lineup.</param>
         /// <returns></returns>
-        private int calculateLineupSkill(int team, List<Tuple<Player, Hero>> lineup)
+        private double calculateLineupSkill(int team, List<Tuple<Player, Hero>> lineup)
         {
-            int finalValue = 0;
+            double finalValue = 0.0;
             List<int> oppPicks = team2Picks;
             if (team == 2)
             {
@@ -141,7 +154,7 @@ namespace MOBAManager.MatchResolution
             for (int i = 0; i < lineup.Count; i++)
             {
                 Tuple<Player, Hero> tp = lineup[i];
-                int curVal = tp.Item1.getHeroSkill(tp.Item2.ID);
+                double curVal = tp.Item1.getHeroSkill(tp.Item2.ID);
                 curVal += tp.Item2.calculatePerformance(
                     lineup.Skip(i + 1).Select(x => x.Item2.ID).ToList(),
                     oppPicks);
@@ -163,7 +176,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to calculate skill for.</param>
         /// <returns></returns>
-        private int totalTeamSkill(int team)
+        private double totalTeamSkill(int team)
         {
             if ((team1Bans.Count == 5) && (team1Picks.Count == 5) && (team2Bans.Count == 5) && (team2Picks.Count == 5))
             {

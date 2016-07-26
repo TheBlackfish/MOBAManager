@@ -47,8 +47,8 @@ namespace MOBAManager.UI
 
             match = m;
             winningTeamLabel.Text = m.getTeamName(m.winner);
-            team1Info.Text = m.getFormattedLineup(1);
-            team2Info.Text = m.getFormattedLineup(2);
+            team1Info.Text = m.getLineupDisplayInformation(1);
+            team2Info.Text = m.getLineupDisplayInformation(2);
         }
 
         /// <summary>

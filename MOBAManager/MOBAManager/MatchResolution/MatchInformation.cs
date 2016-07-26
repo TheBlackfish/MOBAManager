@@ -14,7 +14,7 @@ namespace MOBAManager.MatchResolution
         /// Returns a tuple of strings containing the formatted timers.
         /// </summary>
         /// <returns></returns>
-        public Tuple<string, string, string, string> getFormattedTimers()
+        public Tuple<string, string, string, string> getTimerDisplayInformation()
         {
             return ms.getFormattedTimers();
         }
@@ -24,7 +24,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to select. 1 or 2 are the only valid parameters.</param>
         /// <returns></returns>
-        public string getTeamInformation(int team)
+        public string getTeamDisplayInformation(int team)
         {
             Team t = team1;
             if (team == 2)
@@ -84,7 +84,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team"></param>
         /// <returns></returns>
-        public string getFormattedLineup(int team)
+        public string getLineupDisplayInformation(int team)
         {
             string ret = team1.teamName;
             if (team == 2)
@@ -99,11 +99,28 @@ namespace MOBAManager.MatchResolution
             return ret;
         }
 
+        public string getTeamPBDisplayInformation(int team, bool getPicks)
+        {
+            if (getPicks)
+            {
+                if (team == 1)
+                {
+                    return getFormattedTeam1Picks();
+                }
+                return getFormattedTeam2Picks();
+            }
+            if (team == 1)
+            {
+                return getFormattedTeam1Bans();
+            }
+            return getFormattedTeam2Bans();
+        }
+
         /// <summary>
         /// Returns a multiline string containing all of Team 1's bans.
         /// </summary>
         /// <returns></returns>
-        public string getFormattedTeam1Bans()
+        private string getFormattedTeam1Bans()
         {
             List<Hero> selections = ms.getTeamBans(1);
             return formatHeroNames(selections);
@@ -113,7 +130,7 @@ namespace MOBAManager.MatchResolution
         /// Returns a multiline string containing all of Team 2's bans.
         /// </summary>
         /// <returns></returns>
-        public string getFormattedTeam2Bans()
+        private string getFormattedTeam2Bans()
         {
             List<Hero> selections = ms.getTeamBans(2);
             return formatHeroNames(selections);
@@ -123,7 +140,7 @@ namespace MOBAManager.MatchResolution
         /// Returns a multiline string containing all of Team 1's picks.
         /// </summary>
         /// <returns></returns>
-        public string getFormattedTeam1Picks()
+        private string getFormattedTeam1Picks()
         {
             List<Hero> selections = ms.getTeamSelections(1);
             return formatHeroNames(selections);
@@ -133,7 +150,7 @@ namespace MOBAManager.MatchResolution
         /// Returns a multiline string containing all of Team 2's picks.
         /// </summary>
         /// <returns></returns>
-        public string getFormattedTeam2Picks()
+        private string getFormattedTeam2Picks()
         {
             List<Hero> selections = ms.getTeamSelections(2);
             return formatHeroNames(selections);
@@ -143,7 +160,7 @@ namespace MOBAManager.MatchResolution
         /// Gets a descriptive text describing the events of the game after it has been fully resolved.
         /// </summary>
         /// <returns></returns>
-        public string getSummary()
+        public string getMatchSummary()
         {
             string sum = "";
 
@@ -154,7 +171,7 @@ namespace MOBAManager.MatchResolution
                 return "The match is still being decided.";
             }
 
-            int diff = ms.getTeamLineupSkill(winningTeam) - ms.getTeamLineupSkill(3 - winningTeam);
+            double diff = ms.getTeamLineupSkill(winningTeam) - ms.getTeamLineupSkill(3 - winningTeam);
 
             sum += getTeamName(winningTeam);
 
