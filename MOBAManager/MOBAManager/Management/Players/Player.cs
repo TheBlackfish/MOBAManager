@@ -52,6 +52,10 @@ namespace MOBAManager.Management.Players
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Gives the chance for the player to gain experience relating to the parameters provided.
+        /// </summary>
+        /// <param name="heroID">The ID of any hero just played.</param>
         public void GainExperience(int heroID)
         {
             //Determine a random way to gain experience.
@@ -67,6 +71,9 @@ namespace MOBAManager.Management.Players
             }
         }
 
+        /// <summary>
+        /// Has a chance to increase this player's pure skill value.
+        /// </summary>
         public void GainPSExperience()
         {
             double RNGRoll = 10;
@@ -80,6 +87,10 @@ namespace MOBAManager.Management.Players
             }
         }
 
+        /// <summary>
+        /// Has a chance to increase this player's experience with the specified hero.
+        /// </summary>
+        /// <param name="heroID">The hero to increase skill with.</param>
         public void GainHeroExperience(int heroID)
         {
             double RNGRoll = 25;

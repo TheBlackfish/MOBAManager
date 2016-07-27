@@ -119,6 +119,8 @@ namespace MOBAManager.UI
                 interactionsList.Add(new Tuple<int, int>(t.Item2, t.Item3));
             }
 
+            userSelection.SelectedIndex = 0;
+
             m.StartMatch();
         }
 
