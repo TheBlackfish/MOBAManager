@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Heroes
 {
-    public partial class HeroManager
+    sealed public partial class HeroManager
     {
         #region Variables
         /// <summary>
@@ -21,7 +21,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         /// <param name="id">The ID of the hero to get the name for.</param>
         /// <returns></returns>
-        public string getHeroName(int id)
+        public string GetHeroName(int id)
         {
             return allHeroes[id].HeroName;
         }
@@ -30,7 +30,7 @@ namespace MOBAManager.Management.Heroes
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>
-        public List<Hero> getAllHeroes()
+        public List<Hero> GetAllHeroes()
         {
             return allHeroes.Select(kvp => kvp.Value).ToList();
         }
@@ -39,7 +39,7 @@ namespace MOBAManager.Management.Heroes
         /// Gets the dictionary of heroes with their IDs as the key.s
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, Hero> getHeroDictionary()
+        public Dictionary<int, Hero> GetHeroDictionary()
         {
             return allHeroes;
         }
@@ -52,7 +52,7 @@ namespace MOBAManager.Management.Heroes
         public HeroManager()
         {
             allHeroes = new Dictionary<int, Hero>();
-            createHeroes();
+            CreateHeroes();
         }
         #endregion
     }

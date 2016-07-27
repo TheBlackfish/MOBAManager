@@ -10,39 +10,39 @@ using System.Windows.Forms;
 
 namespace MOBAManager.Management.Statistics
 {
-    public class StatisticsManager
+    sealed public class StatisticsManager
     {
         #region Private classes
         /// <summary>
         /// The private class for holding data about heros in our fake-database.
         /// </summary>
-        private class heroStats
+        sealed private class HeroStats
         {
             #region Public variables
             /// <summary>
             /// The name of the hero.
             /// </summary>
-            public string name;
+            private string _name;
 
             /// <summary>
             /// The number of times this hero has been picked in official matches.
             /// </summary>
-            public int picks;
+            private int _picks;
 
             /// <summary>
             /// The number of times this hero has been banned in official matches.
             /// </summary>
-            public int bans;
+            private int _bans;
 
             /// <summary>
             /// The number of wins this hero has.
             /// </summary>
-            public int wins;
+            private int _wins;
 
             /// <summary>
             /// The number of losses this hero has.
             /// </summary>
-            public int losses;
+            private int _losses;
             #endregion
 
             #region Constructors
@@ -50,27 +50,66 @@ namespace MOBAManager.Management.Statistics
             /// Creates a new heroStats.
             /// </summary>
             /// <param name="s">The name of the hero.</param>
-            public heroStats(string s)
+            public HeroStats(string s)
             {
-                name = s;
-                picks = 0;
-                bans = 0;
-                wins = 0;
-                losses = 0;
+                _name = s;
+                _picks = 0;
+                _bans = 0;
+                _wins = 0;
+                _losses = 0;
             }
             #endregion
 
-            #region Public methods
+            #region Public properties
+            public string Name
+            {
+                get { return _name; }
+            }
+
+            public int Picks
+            {
+                get { return _picks; }
+            }
+
+            public int Bans
+            {
+                get { return _bans; }
+            }
+
+            public void AddPickBan(bool wasPicked)
+            {
+                if (wasPicked)
+                {
+                    _picks++;
+                }
+                else
+                {
+                    _bans++;
+                }
+            }
+
+            public void AddWinLoss(bool didWin)
+            {
+                if (didWin)
+                {
+                    _wins++;
+                }
+                else
+                {
+                    _losses++;
+                }
+            }
+
             /// <summary>
             /// Returns the winrate of the hero, or 0 if the hero has never been picked.
             /// </summary>
-            public string winrate
+            public string Winrate
             {
                 get
                 {
-                    if (wins + losses > 0)
+                    if (_wins + _losses > 0)
                     {
-                        double temp = (double)wins / (wins + losses);
+                        double temp = (double)_wins / (_wins + _losses);
                         temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
                         return temp.ToString("0.00");
                     }
@@ -86,23 +125,23 @@ namespace MOBAManager.Management.Statistics
         /// <summary>
         /// The class for holding player stats.
         /// </summary>
-        private class playerStats
+        sealed private class PlayerStats
         {
             #region Public variables
             /// <summary>
             /// The name of the player.
             /// </summary>
-            public string name;
+            private string _name;
 
             /// <summary>
             /// The number of wins the player has.
             /// </summary>
-            public int wins;
+            private int _wins;
 
             /// <summary>
             /// The number of losses the player has.
             /// </summary>
-            public int losses;
+            private int _losses;
             #endregion
 
             #region Constructors
@@ -110,25 +149,45 @@ namespace MOBAManager.Management.Statistics
             /// Creates a new playerStats.
             /// </summary>
             /// <param name="s">The name of the player.</param>
-            public playerStats(string s)
+            public PlayerStats(string s)
             {
-                name = s;
-                wins = 0;
-                losses = 0;
+                _name = s;
+                _wins = 0;
+                _losses = 0;
             }
             #endregion
 
-            #region Public methods
-            /// <summary>
-            /// Returns the winrate of the player, or 0 if they have played 0 games.
-            /// </summary>
-            public string winrate
+            #region Public properties
+            public void AddWinLoss(bool didWin)
+            {
+                if (didWin)
+                {
+                    _wins++;
+                }
+                else
+                {
+                    _losses++;
+                }
+            }
+
+            public string Name
             {
                 get
                 {
-                    if (wins + losses > 0)
+                    return _name;
+                }
+            }
+
+            /// <summary>
+            /// Returns the winrate of the player, or 0 if they have played 0 games.
+            /// </summary>
+            public string Winrate
+            {
+                get
+                {
+                    if (_wins + _losses > 0)
                     {
-                        double temp = (double)wins / (wins + losses);
+                        double temp = (double)_wins / (_wins + _losses);
                         temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
                         return temp.ToString("0.00");
                     }
@@ -138,29 +197,37 @@ namespace MOBAManager.Management.Statistics
                     }
                 }
             }
+
+            public int TotalGames
+            {
+                get
+                {
+                    return _wins + _losses;
+                }
+            }
             #endregion
         }
 
         /// <summary>
         /// The class that holds a team's stats.
         /// </summary>
-        private class teamStats
+        sealed private class TeamStats
         {
             #region Public variables
             /// <summary>
             /// The name of the team.
             /// </summary>
-            public string name;
+            private string _name;
 
             /// <summary>
             /// The number of wins the team has.
             /// </summary>
-            public int wins;
+            private int _wins;
 
             /// <summary>
             /// The number of losses the team has.
             /// </summary>
-            public int losses;
+            private int _losses;
             #endregion
 
             #region Constructors
@@ -168,25 +235,33 @@ namespace MOBAManager.Management.Statistics
             /// Creates a new teamStats.
             /// </summary>
             /// <param name="s">The name of the team.</param>
-            public teamStats(string s)
+            public TeamStats(string s)
             {
-                name = s;
-                wins = 0;
-                losses = 0;
+                _name = s;
+                _wins = 0;
+                _losses = 0;
             }
             #endregion
 
             #region Public methods
-            /// <summary>
-            /// Returns the winrate of the team, or 0 if they haven't played in any matches.
-            /// </summary>
-            public string winrate
+            public string Name
             {
                 get
                 {
-                    if (wins + losses > 0)
+                    return _name;
+                }
+            }
+
+            /// <summary>
+            /// Returns the winrate of the team, or 0 if they haven't played in any matches.
+            /// </summary>
+            public string Winrate
+            {
+                get
+                {
+                    if (_wins + _losses > 0)
                     {
-                        double temp = (double)wins / (wins + losses);
+                        double temp = (double)_wins / (_wins + _losses);
                         temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
                         return temp.ToString("0.00");
                     }
@@ -194,6 +269,26 @@ namespace MOBAManager.Management.Statistics
                     {
                         return "-";
                     }
+                }
+            }
+
+            public int TotalGames
+            {
+                get
+                {
+                    return _wins + _losses;
+                }
+            }
+
+            public void AddWinLoss(bool didWin)
+            {
+                if (didWin)
+                {
+                    _wins++;
+                }
+                else
+                {
+                    _losses++;
                 }
             }
             #endregion
@@ -204,17 +299,17 @@ namespace MOBAManager.Management.Statistics
         /// <summary>
         /// The dictionary holding herostats. Each herostat's key is that hero's ID.
         /// </summary>
-        private Dictionary<int, heroStats> heroDict;
+        private Dictionary<int, HeroStats> heroDict;
 
         /// <summary>
         /// The dictionary holding playerstats. Each playerstat's key is that player's ID.
         /// </summary>
-        private Dictionary<int, playerStats> playerDict;
+        private Dictionary<int, PlayerStats> playerDict;
 
         /// <summary>
         /// The dictionary holding teamstats. Each teamstat's key is that player's ID.
         /// </summary>
-        private Dictionary<int, teamStats> teamDict;
+        private Dictionary<int, TeamStats> teamDict;
         #endregion
 
         #region Public methods
@@ -225,11 +320,11 @@ namespace MOBAManager.Management.Statistics
         /// <param name="hm">The hero manager of the current game.</param>
         /// <param name="pm">The player manager of the current game.</param>
         /// <param name="tm">The team manager of the current game.</param>
-        public void processManyBundles(List<StatsBundle> bundles, HeroManager hm, PlayerManager pm, TeamManager tm)
+        public void ProcessManyBundles(List<StatsBundle> bundles, HeroManager hm, PlayerManager pm, TeamManager tm)
         {
             foreach(StatsBundle sb in bundles)
             {
-                processBundle(sb, hm, pm, tm);
+                ProcessBundle(sb, hm, pm, tm);
             }
         }
 
@@ -240,95 +335,55 @@ namespace MOBAManager.Management.Statistics
         /// <param name="hm">The hero manager of the current game.</param>
         /// <param name="pm">The player manager of the current game.</param>
         /// <param name="tm">The team manager of the current game.</param>
-        public void processBundle(StatsBundle bundle, HeroManager hm, PlayerManager pm, TeamManager tm)
+        public void ProcessBundle(StatsBundle bundle, HeroManager hm, PlayerManager pm, TeamManager tm)
         {
-            Dictionary<int, bool> pb = bundle.getHeroPickBans();
-            Dictionary<int, bool> hw = bundle.getHeroWins();
-            Dictionary<int, bool> pw = bundle.getPlayerWins();
-            Dictionary<int, bool> tw = bundle.getTeamWins();
+            Dictionary<int, bool> pb = bundle.GetHeroPickBans();
+            Dictionary<int, bool> hw = bundle.GetHeroWins();
+            Dictionary<int, bool> pw = bundle.GetPlayerWins();
+            Dictionary<int, bool> tw = bundle.GetTeamWins();
 
             foreach(KeyValuePair<int, bool> kvp in pb.Select(kvp => kvp).ToList())
             {
-                int id = kvp.Key;
-                bool pbStatus = kvp.Value;
-
-                if (!heroDict.ContainsKey(id))
+                if (!heroDict.ContainsKey(kvp.Key))
                 {
-                    heroStats newHero = new heroStats(hm.getHeroName(id));
-                    heroDict.Add(id, newHero);
+                    HeroStats newHero = new HeroStats(hm.GetHeroName(kvp.Key));
+                    heroDict.Add(kvp.Key, newHero);
                 }
 
-                if (pbStatus)
-                {
-                    heroDict[id].picks++;
-                }
-                else
-                {
-                    heroDict[id].bans++;
-                }
+                heroDict[kvp.Key].AddPickBan(kvp.Value);
             }
 
             foreach(KeyValuePair<int, bool> kvp in hw.Select(kvp => kvp).ToList())
             {
-                int id = kvp.Key;
-                bool hwStatus = kvp.Value;
-
-                if (!heroDict.ContainsKey(id))
+                if (!heroDict.ContainsKey(kvp.Key))
                 {
-                    heroStats newHero = new heroStats(hm.getHeroName(id));
-                    heroDict.Add(id, newHero);
+                    HeroStats newHero = new HeroStats(hm.GetHeroName(kvp.Key));
+                    heroDict.Add(kvp.Key, newHero);
                 }
 
-                if (hwStatus)
-                {
-                    heroDict[id].wins++;
-                }
-                else
-                {
-                    heroDict[id].losses++;
-                }
+                heroDict[kvp.Key].AddWinLoss(kvp.Value);
             }
 
             foreach (KeyValuePair<int, bool> kvp in pw.Select(kvp => kvp).ToList())
             {
-                int id = kvp.Key;
-                bool pwStatus = kvp.Value;
-
-                if (!playerDict.ContainsKey(id))
+                if (!playerDict.ContainsKey(kvp.Key))
                 {
-                    playerStats newPlayer = new playerStats(pm.getPlayerName(id));
-                    playerDict.Add(id, newPlayer);
+                    PlayerStats newPlayer = new PlayerStats(pm.GetPlayerName(kvp.Key));
+                    playerDict.Add(kvp.Key, newPlayer);
                 }
 
-                if (pwStatus)
-                {
-                    playerDict[id].wins++;
-                }
-                else
-                {
-                    playerDict[id].losses++;
-                }
+                playerDict[kvp.Key].AddWinLoss(kvp.Value);
             }
 
             foreach (KeyValuePair<int, bool> kvp in tw.Select(kvp => kvp).ToList())
             {
-                int id = kvp.Key;
-                bool twStatus = kvp.Value;
-
-                if (!teamDict.ContainsKey(id))
+                if (!teamDict.ContainsKey(kvp.Key))
                 {
-                    teamStats newTeam = new teamStats(tm.getTeamName(id));
-                    teamDict.Add(id, newTeam);
+                    TeamStats newTeam = new TeamStats(tm.GetTeamName(kvp.Key));
+                    teamDict.Add(kvp.Key, newTeam);
                 }
 
-                if (twStatus)
-                {
-                    teamDict[id].wins++;
-                }
-                else
-                {
-                    teamDict[id].losses++;
-                }
+                teamDict[kvp.Key].AddWinLoss(kvp.Value);
             }
         }
 
@@ -340,15 +395,15 @@ namespace MOBAManager.Management.Statistics
         /// <para>An int with the hero's pick rate</para>
         /// </summary>
         /// <returns></returns>
-        public BindingSource getHeroStats()
+        public BindingSource GetHeroStats()
         {
             BindingSource bs = new BindingSource();
 
-            List<heroStats> hStats = heroDict.Select(kvp => kvp.Value).OrderByDescending(hs => hs.winrate).ThenByDescending(hs => hs.picks + hs.bans).ToList();
+            List<HeroStats> hStats = heroDict.Select(kvp => kvp.Value).OrderByDescending(hs => hs.Winrate).ThenByDescending(hs => hs.Picks + hs.Bans).ToList();
 
-            foreach (heroStats hs in hStats)
+            foreach (HeroStats hs in hStats)
             {
-                Tuple<string, string, int, int> res = new Tuple<string, string, int, int>(hs.name, hs.winrate, hs.bans, hs.picks);
+                Tuple<string, string, int, int> res = new Tuple<string, string, int, int>(hs.Name, hs.Winrate, hs.Bans, hs.Picks);
                 bs.Add(res);
             }
 
@@ -362,15 +417,15 @@ namespace MOBAManager.Management.Statistics
         /// <para>An int with the player's total played matches</para>
         /// </summary>
         /// <returns></returns>
-        public BindingSource getPlayerStats()
+        public BindingSource GetPlayerStats()
         {
             BindingSource bs = new BindingSource();
 
-            List<playerStats> pStats = playerDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.winrate).ThenByDescending(ps => ps.wins + ps.losses).ToList();
+            List<PlayerStats> pStats = playerDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.Winrate).ThenByDescending(ps => ps.TotalGames).ToList();
 
-            foreach (playerStats ps in pStats)
+            foreach (PlayerStats ps in pStats)
             {
-                Tuple<string, string, int> res = new Tuple<string, string, int>(ps.name, ps.winrate, ps.wins + ps.losses);
+                Tuple<string, string, int> res = new Tuple<string, string, int>(ps.Name, ps.Winrate, ps.TotalGames);
                 bs.Add(res);
             }
 
@@ -384,15 +439,15 @@ namespace MOBAManager.Management.Statistics
         /// <para>An int with the team's total played matches</para>
         /// </summary>
         /// <returns></returns>
-        public BindingSource getTeamStats()
+        public BindingSource GetTeamStats()
         {
             BindingSource bs = new BindingSource();
 
-            List<teamStats> tStats = teamDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.winrate).ThenByDescending(ps => ps.wins + ps.losses).ToList();
+            List<TeamStats> tStats = teamDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.Winrate).ThenByDescending(ps => ps.TotalGames).ToList();
 
-            foreach (teamStats ts in tStats)
+            foreach (TeamStats ts in tStats)
             {
-                Tuple<string, string, int> res = new Tuple<string, string, int>(ts.name, ts.winrate, ts.wins + ts.losses);
+                Tuple<string, string, int> res = new Tuple<string, string, int>(ts.Name, ts.Winrate, ts.TotalGames);
                 bs.Add(res);
             }
 
@@ -409,22 +464,22 @@ namespace MOBAManager.Management.Statistics
         /// <param name="teamIDs">The dictionary of all teams in the game.</param>
         public StatisticsManager(Dictionary<int, Hero> heroIDs, Dictionary<int, Player> playerIDs, Dictionary<int, Team> teamIDs)
         {
-            heroDict = new Dictionary<int, heroStats>();
+            heroDict = new Dictionary<int, HeroStats>();
             foreach (KeyValuePair<int, Hero> kvp in heroIDs)
             {
-                heroDict.Add(kvp.Key, new heroStats(kvp.Value.HeroName));
+                heroDict.Add(kvp.Key, new HeroStats(kvp.Value.HeroName));
             }
 
-            playerDict = new Dictionary<int, playerStats>();
+            playerDict = new Dictionary<int, PlayerStats>();
             foreach (KeyValuePair<int, Player> kvp in playerIDs)
             {
-                playerDict.Add(kvp.Key, new playerStats(kvp.Value.playerName));
+                playerDict.Add(kvp.Key, new PlayerStats(kvp.Value.PlayerName));
             }
 
-            teamDict = new Dictionary<int, teamStats>();
+            teamDict = new Dictionary<int, TeamStats>();
             foreach (KeyValuePair<int, Team> kvp in teamIDs)
             {
-                teamDict.Add(kvp.Key, new teamStats(kvp.Value.teamName));
+                teamDict.Add(kvp.Key, new TeamStats(kvp.Value.TeamName));
             }
         }
         #endregion

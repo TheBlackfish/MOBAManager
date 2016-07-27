@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Heroes
 {
-    public class Hero
+    sealed public class Hero
     {
         #region Private Variables
         /// <summary>
@@ -62,7 +62,7 @@ namespace MOBAManager.Management.Heroes
         /// <param name="friendlies">The list of all other heroes on the current team selecting.</param>
         /// <param name="enemies">The list of all other heroes on the enemy team.</param>
         /// <returns>The skill level of the hero given the circumstances provided.</returns>
-        public int calculatePerformance(List<int> friendlies, List<int> enemies)
+        public int CalculatePerformance(List<int> friendlies, List<int> enemies)
         {
             int ret = this.powerLevel;
             foreach (int friendly in friendlies)
@@ -91,7 +91,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         /// <param name="hero">The hero to synergize with.</param>
         /// <param name="val">The value of the synergy.</param>
-        public void setSynergy(int hero, int val)
+        public void SetSynergy(int hero, int val)
         {
             this.synergies.Add(hero, val);
         }
@@ -101,7 +101,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         /// <param name="hero">The hero to counter.</param>
         /// <param name="val">The value of the counter.</param>
-        public void setCounter(int hero, int val)
+        public void SetCounter(int hero, int val)
         {
             this.counters.Add(hero, val);
         }

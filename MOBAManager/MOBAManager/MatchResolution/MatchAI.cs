@@ -8,55 +8,55 @@ using System.Linq;
 
 namespace MOBAManager.MatchResolution
 {
-    partial class MatchAI : IDisposable
+    sealed partial class MatchAI : IDisposable
     {
         #region General Variables
         /// <summary>
         /// The dictionary containing all heroes in the game.
         /// </summary>
-        private Dictionary<int, Hero> allHeroes;
+        private readonly Dictionary<int, Hero> allHeroes;
 
         /// <summary>
         /// The match that this AI is controlling.
         /// </summary>
-        private Match match;
+        private readonly Match match;
         #endregion
 
         #region Team-based Variables
         /// <summary>
         /// The players on Team 1.
         /// </summary>
-        private List<Player> team1Players;
+        private readonly List<Player> team1Players;
 
         /// <summary>
         /// The players on Team 2.
         /// </summary>
-        private List<Player> team2Players;
+        private readonly List<Player> team2Players;
 
         /// <summary>
         /// The heroes left to be picked or banned in the pool.
         /// </summary>
-        private List<int> remainingHeroes;
+        private readonly List<int> remainingHeroes;
 
         /// <summary>
         /// The list of hero picks by Team 1.
         /// </summary>
-        private List<int> team1Picks;
+        private readonly List<int> team1Picks;
 
         /// <summary>
         /// The list of hero picks by Team 2.
         /// </summary>
-        private List<int> team2Picks;
+        private readonly List<int> team2Picks;
 
         /// <summary>
         /// The list of banned heroes by Team 1.
         /// </summary>
-        private List<int> team1Bans;
+        private readonly List<int> team1Bans;
 
         /// <summary>
         /// The list of banned heroes by Team 2.
         /// </summary>
-        private List<int> team2Bans;
+        private readonly List<int> team2Bans;
 
         /// <summary>
         /// The combinations of players and heroes for Team 1.
@@ -110,7 +110,7 @@ namespace MOBAManager.MatchResolution
         /// Returns the player with the supplied ID, or null if the player does not exist in the current match-up.
         /// </summary>
         /// <returns>The Player object being looked for.</returns>
-        private Player getPlayerFromTeams(int player)
+        private Player GetPlayerFromTeams(int player)
         {
             foreach (Player p in team1Players)
             {
@@ -136,13 +136,8 @@ namespace MOBAManager.MatchResolution
         /// <param name="ignoreFriendlies"></param>
         /// <param name="ignoreEnemies"></param>
         /// <returns>A dictionary with hero IDs as the key and their skill levels as the value.</returns>
-        private Dictionary<int, int> baselineHeroSelection(int team, bool ignoreFriendlies, bool ignoreEnemies)
+        private Dictionary<int, int> BaselineHeroSelection(int team, bool ignoreFriendlies, bool ignoreEnemies)
         {
-            if (team > 2 || team < 1)
-            {
-                throw new System.Exception("MatchAI - Trying to calculate picks for a team that does not exist.");
-            }
-
             Dictionary<int, int> ret = new Dictionary<int, int>();
 
             List<int> friendlies = team1Picks;
@@ -165,7 +160,7 @@ namespace MOBAManager.MatchResolution
 
             foreach (int key in remainingHeroes)
             {
-                int value = allHeroes[key].calculatePerformance(friendlies, enemies);
+                int value = allHeroes[key].CalculatePerformance(friendlies, enemies);
                 ret.Add(key, value);
             }
 
@@ -177,9 +172,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">1 or 2, depending on which team should be picked for.</param>
         /// <returns></returns>
-        private Dictionary<int, int> baselineHeroSelection(int team)
+        private Dictionary<int, int> BaselineHeroSelection(int team)
         {
-            return baselineHeroSelection(team, false, false);
+            return BaselineHeroSelection(team, false, false);
         }
 
         /// <summary>
@@ -189,11 +184,11 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to choose for.</param>
         /// <returns></returns>
-        private int selectBestOverallChoice(int team)
+        private int SelectBestOverallChoice(int team)
         {
-            Dictionary<int, int> baseline = baselineHeroSelection(team);
+            Dictionary<int, int> baseline = BaselineHeroSelection(team);
             List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.roll(6);
+            int rando = RNG.Roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -216,14 +211,14 @@ namespace MOBAManager.MatchResolution
         /// <param name="team">The team to choose for.</param>
         /// <param name="player">The player to use as a comparison.</param>
         /// <returns></returns>
-        private int selectBestChoiceForPlayer(int team, int player)
+        private int SelectBestChoiceForPlayer(int team, int player)
         {
-            Player actualPlayer = getPlayerFromTeams(player);
+            Player actualPlayer = GetPlayerFromTeams(player);
             if (actualPlayer != null)
             {
-                Dictionary<int, int> baseline = baselineHeroSelection(team);
-                List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value + actualPlayer.getHeroSkill(kvp.Key)).Take(3).Select(kvp => kvp.Key).ToList();
-                int rando = RNG.roll(6);
+                Dictionary<int, int> baseline = BaselineHeroSelection(team);
+                List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value + actualPlayer.GetHeroSkill(kvp.Key)).Take(3).Select(kvp => kvp.Key).ToList();
+                int rando = RNG.Roll(6);
                 if (rando < 3)
                 {
                     return finalists[0];
@@ -239,7 +234,7 @@ namespace MOBAManager.MatchResolution
             }
             else
             {
-                return selectBestOverallChoice(team);
+                return SelectBestOverallChoice(team);
             }
 
         }
@@ -251,11 +246,11 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to select the hero for.</param>
         /// <returns></returns>
-        private int selectWorstOverallChoice(int team)
+        private int SelectWorstOverallChoice(int team)
         {
-            Dictionary<int, int> baseline = baselineHeroSelection(team);
+            Dictionary<int, int> baseline = BaselineHeroSelection(team);
             List<int> finalists = baseline.OrderBy(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.roll(6);
+            int rando = RNG.Roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -276,11 +271,11 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to find a counter for.</param>
         /// <returns></returns>
-        private int selectBestCounterToTeam(int team)
+        private int SelectBestCounterToTeam(int team)
         {
-            Dictionary<int, int> baseline = baselineHeroSelection(team, true, false);
+            Dictionary<int, int> baseline = BaselineHeroSelection(team, true, false);
             List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.roll(6);
+            int rando = RNG.Roll(6);
             if (rando < 3)
             {
                 return finalists[0];
@@ -302,13 +297,8 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to get bans for.</param>
         /// <returns></returns>
-        public List<Hero> getTeamBans(int team)
+        public List<Hero> GetTeamBans(int team)
         {
-            if (team > 2 || team < 1)
-            {
-                throw new System.Exception("MatchAI - Trying to get picks for a team that does not exist.");
-            }
-
             List<int> bans = team1Bans;
             if (team == 2)
             {
@@ -327,14 +317,8 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to get picks for.</param>
         /// <returns></returns>
-        public List<Hero> getTeamSelections(int team)
+        public List<Hero> GetTeamSelections(int team)
         {
-            
-            if (team > 2 || team < 1)
-            {
-                throw new System.Exception("MatchAI - Trying to get picks for a team that does not exist.");
-            }
-
             List<int> selections = team1Picks;
             if (team == 2)
             {
@@ -353,7 +337,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team"></param>
         /// <returns></returns>
-        public string getFormattedTeamLineup(int team)
+        public string GetFormattedTeamLineup(int team)
         {
             string ret = "";
             List<Tuple<Player, Hero>> lineup = team1Lineup;
@@ -364,7 +348,7 @@ namespace MOBAManager.MatchResolution
 
             foreach (Tuple<Player, Hero> tp in lineup)
             {
-                ret += tp.Item1.playerName + " - " + tp.Item2.HeroName + Environment.NewLine;
+                ret += tp.Item1.PlayerName + " - " + tp.Item2.HeroName + Environment.NewLine;
             }
 
             return ret;
@@ -375,9 +359,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team making the selection.</param>
         /// <param name="heroID">The ID of the hero being selected.</param>
-        public void setTeamSelection(int team, int heroID)
+        public void SetTeamSelection(int team, int heroID)
         {
-            setTeamSelection(team, heroID, true);
+            SetTeamSelection(team, heroID, true);
         }
 
         /// <summary>
@@ -386,13 +370,8 @@ namespace MOBAManager.MatchResolution
         /// <param name="team">The team making the selection.</param>
         /// <param name="heroID">The ID of the hero being selected.</param>
         /// <param name="isPick">If false, this means that this is a ban and not a pick. This defaults to true.</param>
-        public void setTeamSelection(int team, int heroID, bool isPick)
+        public void SetTeamSelection(int team, int heroID, bool isPick)
         {
-            if (team > 2 || team < 1 || !remainingHeroes.Contains(heroID))
-            {
-                throw new Exception("MatchAI - Attempted to set invalid hero selection with the following parameters: " + team + "," + isPick + "," + heroID);
-            }
-
             if (team == 1)
             {
                 if (isPick)
@@ -422,63 +401,63 @@ namespace MOBAManager.MatchResolution
         /// <summary>
         /// Resolves a picking selection for Team 1. Note that this does not actually select anything, but instead returns what the team thinks their best pick is.
         /// </summary>
-        public int team1Pick()
+        public int Team1Pick()
         {
-            Dictionary<int, int> start = baselineHeroSelection(1);
+            Dictionary<int, int> start = BaselineHeroSelection(1);
             int selectionID = -1;
             switch (team1SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
-                    selectionID = remainingHeroes[RNG.roll(remainingHeroes.Count)];
+                    selectionID = remainingHeroes[RNG.Roll(remainingHeroes.Count)];
                     break;
                 case 0:     //Random method of selection.
-                    if (RNG.roll(2) == 1)
+                    if (RNG.Roll(2) == 1)
                     {
-                        if (RNG.roll(2) == 1)
+                        if (RNG.Roll(2) == 1)
                         {
-                            if (RNG.roll(4) == 1)
+                            if (RNG.Roll(4) == 1)
                             {
-                                selectionID = selectWorstOverallChoice(1);
+                                selectionID = SelectWorstOverallChoice(1);
                             }
                             else
                             {
-                                selectionID = selectBestCounterToTeam(2);
+                                selectionID = SelectBestCounterToTeam(2);
                             }
                         }
                         else
                         {
-                            if (RNG.roll(2) == 1)
+                            if (RNG.Roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[RNG.roll(team1Players.Count)].ID;
-                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                                int randomPlayer = team1Players[RNG.Roll(team1Players.Count)].ID;
+                                selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[RNG.roll(team2Players.Count)].ID;
-                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                                int randomPlayer = team2Players[RNG.Roll(team2Players.Count)].ID;
+                                selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
                     }
                     else
                     {
-                        selectionID = selectBestOverallChoice(1);
+                        selectionID = SelectBestOverallChoice(1);
                     }
                     break;
                 case 1:     //Best overall hero
-                    selectionID = selectBestOverallChoice(1);
+                    selectionID = SelectBestOverallChoice(1);
                     break;
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team1SelectionPlayerTarget = team1Players[RNG.roll(team1Players.Count)].ID;
+                        team1SelectionPlayerTarget = team1Players[RNG.Roll(team1Players.Count)].ID;
                     }
-                    selectionID = selectBestChoiceForPlayer(1, team1SelectionPlayerTarget);
+                    selectionID = SelectBestChoiceForPlayer(1, team1SelectionPlayerTarget);
                     break;
                 case 3:     //Worst overall choice
-                    selectionID = selectWorstOverallChoice(1);
+                    selectionID = SelectWorstOverallChoice(1);
                     break;
                 case 4:     //Best counter to current team
-                    selectionID = selectBestCounterToTeam(2);
+                    selectionID = SelectBestCounterToTeam(2);
                     break;
             }
             return selectionID;
@@ -487,63 +466,63 @@ namespace MOBAManager.MatchResolution
         /// <summary>
         /// Resolves a picking selection for Team 2. Note that this does not actually select anything, but instead returns what the team thinks their best pick is.
         /// </summary>
-        public int team2Pick()
+        public int Team2Pick()
         {
-            Dictionary<int, int> start = baselineHeroSelection(2);
+            Dictionary<int, int> start = BaselineHeroSelection(2);
             int selectionID = -1;
             switch (team2SelectionMode)
             {
                 case -1:    //Random selection done due to time running out.
-                    selectionID = remainingHeroes[RNG.roll(remainingHeroes.Count)];
+                    selectionID = remainingHeroes[RNG.Roll(remainingHeroes.Count)];
                     break;
                 case 0:     //Random method of selection.
-                    if (RNG.roll(2) == 1)
+                    if (RNG.Roll(2) == 1)
                     {
-                        if (RNG.roll(2) == 1)
+                        if (RNG.Roll(2) == 1)
                         {
-                            if (RNG.roll(4) == 1)
+                            if (RNG.Roll(4) == 1)
                             {
-                                selectionID = selectWorstOverallChoice(2);
+                                selectionID = SelectWorstOverallChoice(2);
                             }
                             else
                             {
-                                selectionID = selectBestCounterToTeam(1);
+                                selectionID = SelectBestCounterToTeam(1);
                             }
                         }
                         else
                         {
-                            if (RNG.roll(2) == 1)
+                            if (RNG.Roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[RNG.roll(team1Players.Count)].ID;
-                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                                int randomPlayer = team1Players[RNG.Roll(team1Players.Count)].ID;
+                                selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[RNG.roll(team2Players.Count)].ID;
-                                selectionID = selectBestChoiceForPlayer(1, randomPlayer);
+                                int randomPlayer = team2Players[RNG.Roll(team2Players.Count)].ID;
+                                selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
                     }
                     else
                     {
-                        selectionID = selectBestOverallChoice(2);
+                        selectionID = SelectBestOverallChoice(2);
                     }
                     break;
                 case 1:     //Best overall hero
-                    selectionID = selectBestOverallChoice(2);
+                    selectionID = SelectBestOverallChoice(2);
                     break;
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team2SelectionPlayerTarget = team2Players[RNG.roll(team2Players.Count)].ID;
+                        team2SelectionPlayerTarget = team2Players[RNG.Roll(team2Players.Count)].ID;
                     }
-                    selectionID = selectBestChoiceForPlayer(2, team2SelectionPlayerTarget);
+                    selectionID = SelectBestChoiceForPlayer(2, team2SelectionPlayerTarget);
                     break;
                 case 3:     //Worst overall choice
-                    selectionID = selectWorstOverallChoice(2);
+                    selectionID = SelectWorstOverallChoice(2);
                     break;
                 case 4:     //Best counter to current team
-                    selectionID = selectBestCounterToTeam(1);
+                    selectionID = SelectBestCounterToTeam(1);
                     break;
             }
             return selectionID;
@@ -551,6 +530,7 @@ namespace MOBAManager.MatchResolution
         #endregion
 
         #region Constructors
+        
         /// <summary>
         /// Constructs a new MatchSelector.
         /// </summary>
@@ -582,7 +562,7 @@ namespace MOBAManager.MatchResolution
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {

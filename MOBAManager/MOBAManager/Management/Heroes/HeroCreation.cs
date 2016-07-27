@@ -11,7 +11,7 @@ namespace MOBAManager.Management.Heroes
         /// Creates all of the heros for the initial construction of the game.
         /// The heroes are immediately placed into the HeroManager's hero dictionary.
         /// </summary>
-        private void createHeroes()
+        private void CreateHeroes()
         {
             string[] heroNames = new string[]
             {
@@ -52,18 +52,16 @@ namespace MOBAManager.Management.Heroes
             //Create initial heroes
             while (heroNames.Length > 0 && initialSkill.Length > 0)
             {
-                string curHero = heroNames[RNG.roll(heroNames.Length)];
+                string curHero = heroNames[RNG.Roll(heroNames.Length)];
 
-                Hero newHero = new Hero(allHeroes.Count, curHero, initialSkill[0]);
-                allHeroes.Add(allHeroes.Count, newHero);
+                allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, curHero, initialSkill[0]));
 
                 heroNames = heroNames.Where(n => !n.Equals(curHero)).ToArray();
                 initialSkill = initialSkill.Skip(1).ToArray();
             }
             while (heroNames.Length > 0)
             {
-                Hero newHero = new Hero(allHeroes.Count, heroNames[0]);
-                allHeroes.Add(allHeroes.Count, newHero);
+                allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, heroNames[0]));
                 heroNames = heroNames.Skip(1).ToArray();
             }
 
@@ -104,11 +102,10 @@ namespace MOBAManager.Management.Heroes
 
             foreach (int[] p in synergyPairs)
             {
-                int index = RNG.roll(synergyValues.Count);
-                int val = synergyValues[index];
+                int index = RNG.Roll(synergyValues.Count);
 
-                allHeroes[p[0]].setSynergy(p[1], val);
-                allHeroes[p[1]].setSynergy(p[0], val);
+                allHeroes[p[0]].SetSynergy(p[1], synergyValues[index]);
+                allHeroes[p[1]].SetSynergy(p[0], synergyValues[index]);
 
                 synergyValues.RemoveAt(index);
             }
@@ -129,18 +126,17 @@ namespace MOBAManager.Management.Heroes
 
             foreach (int[] p in counterPairs)
             {
-                int index = RNG.roll(counterValues.Count);
-                int[] val = counterValues[index];
+                int index = RNG.Roll(counterValues.Count);
 
-                if (RNG.roll(2) == 0)
+                if (RNG.Roll(2) == 0)
                 {
-                    allHeroes[p[0]].setCounter(p[1], val[0]);
-                    allHeroes[p[1]].setCounter(p[0], val[1]);
+                    allHeroes[p[0]].SetCounter(p[1], counterValues[index][0]);
+                    allHeroes[p[1]].SetCounter(p[0], counterValues[index][1]);
                 }
                 else
                 {
-                    allHeroes[p[0]].setCounter(p[1], val[1]);
-                    allHeroes[p[1]].setCounter(p[0], val[0]);
+                    allHeroes[p[0]].SetCounter(p[1], counterValues[index][1]);
+                    allHeroes[p[1]].SetCounter(p[0], counterValues[index][0]);
                 }
 
                 counterValues.RemoveAt(index);

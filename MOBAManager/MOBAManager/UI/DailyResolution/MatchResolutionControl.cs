@@ -12,64 +12,64 @@ using System.Runtime.InteropServices;
 
 namespace MOBAManager.UI
 {
-    public partial class MatchResolutionControl : UserControl
+    sealed public partial class MatchResolutionControl : UserControl
     {
         #region Private variables
         /// <summary>
         /// The match this MRC controls.
         /// </summary>
-        private Match match;
+        private readonly Match match;
 
         /// <summary>
         /// The function to call when the results screen is closed.
         /// </summary>
-        private Action<object, EventArgs> onCloseResultsFunc;
+        private readonly Action<object, EventArgs> onCloseResultsFunc;
 
         /// <summary>
         /// The list of action combinations for selection recommendations.
         /// </summary>
-        private List<Tuple<int, int>> interactionsList;
+        private readonly List<Tuple<int, int>> interactionsList;
 
         /// <summary>
         /// The internal timer for updating the screen.
         /// </summary>
-        private System.Timers.Timer updateTimer;
+        private readonly System.Timers.Timer updateTimer;
         #endregion
 
         #region Private methods
         /// <summary>
         /// Updates the textboxes with the appropriate data from the match.
         /// </summary>
-        private void updateTimer_Tick(object sender, EventArgs e)
+        private void UpdateTimer_Tick(object sender, EventArgs e)
         {
-            Action update = () => updateControl();
+            Action update = () => UpdateControl();
             BeginInvoke(update);
         }
 
         /// <summary>
         /// Updates all text and timers.
         /// </summary>
-        private void updateControl()
+        private void UpdateControl()
         {
-            Tuple<string, string, string, string> times = match.getTimerDisplayInformation();
+            Tuple<string, string, string, string> times = match.GetTimerDisplayInformation();
             team1TimerA.Text = times.Item1;
             team1TimerB.Text = times.Item2;
             team2TimerA.Text = times.Item3;
             team2TimerB.Text = times.Item4;
 
-            if (match.hasChanged)
+            if (match.HasChanged())
             {
-                team1Bans.Text = match.getTeamPBDisplayInformation(1, false);
-                team1Picks.Text = match.getTeamPBDisplayInformation(1, true);
-                team2Bans.Text = match.getTeamPBDisplayInformation(2, false);
-                team2Picks.Text = match.getTeamPBDisplayInformation(2, true);
-                if (match.playerTeamActed)
+                team1Bans.Text = match.GetTeamPBDisplayInformation(1, false);
+                team1Picks.Text = match.GetTeamPBDisplayInformation(1, true);
+                team2Bans.Text = match.GetTeamPBDisplayInformation(2, false);
+                team2Picks.Text = match.GetTeamPBDisplayInformation(2, true);
+                if (match.PlayerTeamActed())
                 {
                     userSelection.SelectedIndex = 0;
                 }
             }
 
-            if (match.hasFinished)
+            if (match.HasFinished)
             {
                 updateTimer.Enabled = false;
 
@@ -88,7 +88,7 @@ namespace MOBAManager.UI
         /// Returns the match this control is handling.
         /// </summary>
         /// <returns></returns>
-        public Match getMatch()
+        public Match GetMatch()
         {
             return match;
         }
@@ -105,21 +105,21 @@ namespace MOBAManager.UI
             InitializeComponent();
 
             updateTimer = new System.Timers.Timer(250);
-            updateTimer.Elapsed += updateTimer_Tick;
+            updateTimer.Elapsed += UpdateTimer_Tick;
             updateTimer.Enabled = true;
 
-            team1Info.Text = m.getTeamDisplayInformation(1);
-            team2Info.Text = m.getTeamDisplayInformation(2);
+            team1Info.Text = m.GetTeamDisplayInformation(1);
+            team2Info.Text = m.GetTeamDisplayInformation(2);
 
             interactionsList = new List<Tuple<int, int>>();
 
-            foreach (Tuple<string, int, int> t in m.getPlayerInteractions())
+            foreach (Tuple<string, int, int> t in m.GetPlayerInteractions())
             {
                 userSelection.Items.Add(t.Item1);
                 interactionsList.Add(new Tuple<int, int>(t.Item2, t.Item3));
             }
 
-            m.startMatch();
+            m.StartMatch();
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace MOBAManager.UI
         private void userSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
             Tuple<int, int> selection = interactionsList[userSelection.SelectedIndex];
-            match.submitPlayerRecommendation(selection.Item1, selection.Item2);
+            match.SubmitPlayerRecommendation(selection.Item1, selection.Item2);
         }
 
         /// <summary>

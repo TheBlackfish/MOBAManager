@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Utility
 {
-    public class RNG
+    public static class RNG
     {
         /// <summary>
         /// The Random used for generating numbers.
         /// </summary>
-        private static Random dice;
+        private static Random DICE;
 
         /// <summary>
         /// Returns a random integer between 0 and max.
         /// </summary>
         /// <param name="max">The maximum number for the roll.</param>
         /// <returns></returns>
-        public static int roll(int max)
+        internal static int Roll(int max)
         {
-            return dice.Next(max);
+            return DICE.Next(max);
         }
 
         /// <summary>
@@ -28,26 +28,26 @@ namespace MOBAManager.Utility
         /// </summary>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static double rollDouble(double max)
+        internal static double RollDouble(double max)
         {
-            return dice.NextDouble() * max;
+            return DICE.NextDouble() * max;
         }
 
         /// <summary>
         /// Returns a random true/false value.
         /// </summary>
         /// <returns></returns>
-        public static bool coinflip()
+        internal static bool CoinFlip()
         {
-            return (dice.Next(2) == 0);
+            return (DICE.Next(2) == 0);
         }
 
         /// <summary>
         /// Initializes the RNG.
         /// </summary>
-        public static void initRNG()
+        internal static void InitRNG()
         {
-            RNG.dice = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
+            RNG.DICE = new Random((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
     }
 }

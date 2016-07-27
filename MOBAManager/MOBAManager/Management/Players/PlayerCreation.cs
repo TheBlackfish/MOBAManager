@@ -12,7 +12,7 @@ namespace MOBAManager.Management.Players
         /// Creates all of the players for the initial construction of the game.
         /// The players are immediately placed into the PlayerManager's player dictionary.
         /// </summary>
-        private void createPlayers()
+        private void CreatePlayers()
         {
             string[] playerNames = new string[]
             {
@@ -79,18 +79,16 @@ namespace MOBAManager.Management.Players
 
             while (playerNames.Length > 0 && initialSkill.Length > 0)
             {
-                string curPlayer = playerNames[RNG.roll(playerNames.Length)];
+                string curPlayer = playerNames[RNG.Roll(playerNames.Length)];
 
-                Player newPlayer = new Player(allPlayers.Count, curPlayer, initialSkill[0]);
-                allPlayers.Add(allPlayers.Count, newPlayer);
+                allPlayers.Add(allPlayers.Count, new Player(allPlayers.Count, curPlayer, initialSkill[0]));
 
                 playerNames = playerNames.Where(n => !n.Equals(curPlayer)).ToArray();
                 initialSkill = initialSkill.Skip(1).ToArray();
             }
             while (playerNames.Length > 0)
             {
-                Player newPlayer = new Player(allPlayers.Count, playerNames[0]);
-                allPlayers.Add(allPlayers.Count, newPlayer);
+                allPlayers.Add(allPlayers.Count, new Player(allPlayers.Count, playerNames[0]));
                 playerNames = playerNames.Skip(1).ToArray();
             }
 
@@ -106,8 +104,8 @@ namespace MOBAManager.Management.Players
                 }
 
                 List<int> allSkills = new List<int>();
-                int maxSkill = RNG.roll(3) + 2;
-                int minSkill = 0 - RNG.roll(5);
+                int maxSkill = RNG.Roll(3) + 2;
+                int minSkill = 0 - RNG.Roll(5);
 
                 for (int i = maxSkill; i >= 0; i--)
                 {
@@ -127,8 +125,9 @@ namespace MOBAManager.Management.Players
 
                 foreach (int val in allSkills)
                 {
-                    int id = allHeroIDs[RNG.roll(allHeroIDs.Count)];
-                    p.setHeroSkill(id, val);
+                    int id = allHeroIDs[RNG.Roll(allHeroIDs.Count)];
+                    p.SetHeroSkill(id, val);
+                    allHeroIDs.Remove(id);
                 }
             }
         }

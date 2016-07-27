@@ -12,26 +12,26 @@ using System.Threading;
 
 namespace MOBAManager.UI.Meta
 {
-    public partial class StatisticsControl : UserControl
+    sealed public partial class StatisticsControl : UserControl
     {
         #region Private variables
         /// <summary>
         /// The statistics manager this control displays data for.
         /// </summary>
-        private StatisticsManager sm;
+        private readonly StatisticsManager sm;
 
-        private Action onCloseFunc = null;
+        private readonly Action onCloseFunc = null;
         #endregion
 
         #region Private methods
         /// <summary>
         /// Displays the appropriate statistics in the hero data grid view.
         /// </summary>
-        private void displayHeroStats()
+        private void DisplayHeroStats()
         {
             Action addStats = () =>
             {
-                BindingSource src = sm.getHeroStats();
+                BindingSource src = sm.GetHeroStats();
                 heroDataGridView.AutoGenerateColumns = false;
                 heroDataGridView.AutoSize = true;
                 heroDataGridView.DataSource = src;
@@ -69,11 +69,11 @@ namespace MOBAManager.UI.Meta
         /// <summary>
         /// Displays the appropriate statistics in the player data grid view.
         /// </summary>
-        private void displayPlayerStats()
+        private void DisplayPlayerStats()
         {
             Action addStats = () =>
             {
-                BindingSource src = sm.getPlayerStats();
+                BindingSource src = sm.GetPlayerStats();
                 playerDataGridView.AutoGenerateColumns = false;
                 playerDataGridView.AutoSize = true;
                 playerDataGridView.DataSource = src;
@@ -104,11 +104,11 @@ namespace MOBAManager.UI.Meta
         /// <summary>
         /// Displays the appropriate statistics in the team data grid view.
         /// </summary>
-        private void displayTeamStats()
+        private void DisplayTeamStats()
         {
             Action addStats = () =>
             {
-                BindingSource src = sm.getTeamStats();
+                BindingSource src = sm.GetTeamStats();
                 teamDataGridView.AutoGenerateColumns = false;
                 teamDataGridView.AutoSize = true;
                 teamDataGridView.DataSource = src;
@@ -161,22 +161,19 @@ namespace MOBAManager.UI.Meta
                 case 0:
                     if (heroDataGridView.DataSource == null)
                     {
-                        Thread ht = new Thread(displayHeroStats);
-                        ht.Start();
+                        Task.Run(() => DisplayHeroStats());
                     }
                     break;
                 case 1:
                     if (playerDataGridView.DataSource == null)
                     {
-                        Thread pt = new Thread(displayPlayerStats);
-                        pt.Start();
+                        Task.Run(() => DisplayPlayerStats());
                     }
                     break;
                 case 2:
                     if (teamDataGridView.DataSource == null)
                     {
-                        Thread tt = new Thread(displayTeamStats);
-                        tt.Start();
+                        Task.Run(() => DisplayTeamStats());
                     }
                     break;
             }
@@ -200,10 +197,8 @@ namespace MOBAManager.UI.Meta
         /// <param name="e"></param>
         private void StatisticsControl_Load(object sender, EventArgs e)
         {
-            Thread ht = new Thread(displayHeroStats);
-            ht.Start();
+            Task.Run(() => DisplayHeroStats());
         }
-        #endregion
 
         /// <summary>
         /// Called when the Return button is clicked. Hides and removes the control from the daily menu control.
@@ -214,5 +209,6 @@ namespace MOBAManager.UI.Meta
         {
             onCloseFunc?.Invoke();
         }
+        #endregion
     }
 }

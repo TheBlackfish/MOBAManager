@@ -18,12 +18,5 @@ namespace MOBAManager
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
-
-        private static MainForm form1;
-
-        public static MainForm MainForm
-        {
-            get { return form1; }
-        }
     }
 }

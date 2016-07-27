@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management
 {
-    public class GameManager
+    sealed public class GameManager
     {
         #region Temporarily Public Variables
         /// <summary>
@@ -48,19 +48,19 @@ namespace MOBAManager.Management
         /// </summary>
         /// <param name="ce">The CalendarEvent to translate.</param>
         /// <returns></returns>
-        public Match translateEventToMatch(CalendarEvent ce)
+        public Match TranslateEventToMatch(CalendarEvent ce)
         {
             if (ce.team1ID == 0)
             {
-                return new Match(true, teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), 1, heroManager.getHeroDictionary());
+                return new Match(true, teamManager.GetTeamByID(ce.team1ID), teamManager.GetTeamByID(ce.team2ID), 1, heroManager.GetHeroDictionary());
             }
             else if (ce.team2ID == 0)
             {
-                return new Match(true, teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), 2, heroManager.getHeroDictionary());
+                return new Match(true, teamManager.GetTeamByID(ce.team1ID), teamManager.GetTeamByID(ce.team2ID), 2, heroManager.GetHeroDictionary());
             }
             else
             {
-                return new Match(teamManager.getTeamByID(ce.team1ID), teamManager.getTeamByID(ce.team2ID), heroManager.getHeroDictionary());
+                return new Match(teamManager.GetTeamByID(ce.team1ID), teamManager.GetTeamByID(ce.team2ID), heroManager.GetHeroDictionary());
             }
         }
         #endregion
@@ -79,9 +79,9 @@ namespace MOBAManager.Management
 
             calendarManager = new CalendarManager(teamManager);
 
-            statsManager = new StatisticsManager(heroManager.getHeroDictionary(), playerManager.getPlayerDictionary(), teamManager.getTeamDictionary());
+            statsManager = new StatisticsManager(heroManager.GetHeroDictionary(), playerManager.GetPlayerDictionary(), teamManager.GetTeamDictionary());
 
-            teamManager.populateTeams(playerManager.getAllPlayers());
+            teamManager.PopulateTeams(playerManager.GetAllPlayers());
         }
         #endregion
     }

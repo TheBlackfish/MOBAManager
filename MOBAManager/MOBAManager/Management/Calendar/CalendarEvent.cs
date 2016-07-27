@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Calendar
 {
-    public class CalendarEvent
-    {
-        #region Enums
-        /// <summary>
-        /// The enum for controlling what type of CalendarEvent this is.
-        /// </summary>
-        public enum EventType { PUG };
-        #endregion
+    #region Enums
+    /// <summary>
+    /// The enum for controlling what type of CalendarEvent this is.
+    /// </summary>
+    public enum EventType { PUG };
+    #endregion
 
+    sealed public class CalendarEvent
+    {
         #region Public variables
         /// <summary>
         /// The type of event this CalendarEvent is.
@@ -35,6 +35,13 @@ namespace MOBAManager.Management.Calendar
         /// The second team ID to affect, if any.
         /// </summary>
         public int team2ID = -1;
+        #endregion
+
+        #region Public methods
+        internal void decrementDaysLeft()
+        {
+            daysToResolution--;
+        }
         #endregion
 
         #region Constructors

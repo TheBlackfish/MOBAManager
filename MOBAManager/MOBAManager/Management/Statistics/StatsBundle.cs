@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Statistics
 {
-    public class StatsBundle
+    sealed public class StatsBundle
     {
         #region Private variables
         /// <summary>
@@ -35,7 +35,7 @@ namespace MOBAManager.Management.Statistics
         /// Returns the hero picks/bans dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, bool> getHeroPickBans()
+        public Dictionary<int, bool> GetHeroPickBans()
         {
             return heroPicks;
         }
@@ -44,7 +44,7 @@ namespace MOBAManager.Management.Statistics
         /// Returns the hero win/loss dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, bool> getHeroWins()
+        public Dictionary<int, bool> GetHeroWins()
         {
             return heroWins;
         }
@@ -53,7 +53,7 @@ namespace MOBAManager.Management.Statistics
         /// Returns the player win/loss dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, bool> getPlayerWins()
+        public Dictionary<int, bool> GetPlayerWins()
         {
             return playerWins;
         }
@@ -62,7 +62,7 @@ namespace MOBAManager.Management.Statistics
         /// Returns the team win/loss dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, bool> getTeamWins()
+        public Dictionary<int, bool> GetTeamWins()
         {
             return teamWins;
         }
@@ -72,7 +72,7 @@ namespace MOBAManager.Management.Statistics
         /// </summary>
         /// <param name="ID">The ID of the hero.</param>
         /// <param name="wasPicked">If true, the hero was picked. If false, the hero was banned.</param>
-        public void addHeroPickBan(int ID, bool wasPicked)
+        public void AddHeroPickBan(int ID, bool wasPicked)
         {
             heroPicks.Add(ID, wasPicked);
         }
@@ -82,7 +82,7 @@ namespace MOBAManager.Management.Statistics
         /// </summary>
         /// <param name="ID">The ID of the hero.</param>
         /// <param name="won">If true, the hero won. If false, the hero lost.</param>
-        public void addHeroWin(int ID, bool won)
+        public void AddHeroWin(int ID, bool won)
         {
             heroWins.Add(ID, won);
         }
@@ -92,7 +92,7 @@ namespace MOBAManager.Management.Statistics
         /// </summary>
         /// <param name="ID">The ID of the player.</param>
         /// <param name="won">If true, the player won. If false, the player lost.</param>
-        public void addPlayerWin(int ID, bool won)
+        public void AddPlayerWin(int ID, bool won)
         {
             playerWins.Add(ID, won);
         }
@@ -102,7 +102,7 @@ namespace MOBAManager.Management.Statistics
         /// </summary>
         /// <param name="ID">The ID of the team.</param>
         /// <param name="won">If true, the team won. If false, the team lost.</param>
-        public void addTeamWin(int ID, bool won)
+        public void AddTeamWin(int ID, bool won)
         {
             teamWins.Add(ID, won);
         }

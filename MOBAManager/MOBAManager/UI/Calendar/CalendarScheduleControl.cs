@@ -13,55 +13,55 @@ using MOBAManager.Utility;
 
 namespace MOBAManager.UI.Calendar
 {
-    public partial class CalendarScheduleControl : UserControl
+    sealed public partial class CalendarScheduleControl : UserControl
     {
         #region Private Variables
         /// <summary>
         /// The calendar manager of the schedule control
         /// </summary>
-        private CalendarManager cm;
+        private readonly CalendarManager cm;
 
         /// <summary>
         /// The team manager of the team control
         /// </summary>
-        private TeamManager tm;
+        private readonly TeamManager tm;
 
         /// <summary>
         /// The offset that the schedule control represents
         /// </summary>
-        private int dayOffset;
+        private readonly int dayOffset;
 
         /// <summary>
         /// The list of all possible events possible on the offset that this schedule control represents.
         /// </summary>
-        private List<CalendarEvent> possibleEvents;
+        private readonly List<CalendarEvent> possibleEvents;
 
         /// <summary>
         /// The function called to pass any chosen event onto the calender manager.
         /// </summary>
-        private Action<CalendarEvent> submissionFunction;
+        private readonly Action<CalendarEvent> submissionFunction;
         #endregion
 
         #region Private methods
         /// <summary>
         /// Creates a list of all possible events that the player can schedule on the date represented by this schedule control.
         /// </summary>
-        private void createAllPossibleEvents()
+        private void CreateAllPossibleEvents()
         {
             //Get all possible PUGs from cm and create events for them.
-            foreach (Team t in tm.getAllTeams())
+            foreach (Team t in tm.GetAllTeams())
             {
                 if (t.ID != 0)
                 {
-                    if (!cm.teamHasEventsOnDate(t.ID, dayOffset))
+                    if (!cm.TeamHasEventsOnDate(t.ID, dayOffset))
                     {
-                        if (RNG.coinflip())
+                        if (RNG.CoinFlip())
                         {
-                            possibleEvents.Add(new CalendarEvent(CalendarEvent.EventType.PUG, dayOffset, 0, t.ID));
+                            possibleEvents.Add(new CalendarEvent(EventType.PUG, dayOffset, 0, t.ID));
                         }
                         else
                         {
-                            possibleEvents.Add(new CalendarEvent(CalendarEvent.EventType.PUG, dayOffset, t.ID, 0));
+                            possibleEvents.Add(new CalendarEvent(EventType.PUG, dayOffset, t.ID, 0));
                         }
                     }
                 }
@@ -71,7 +71,7 @@ namespace MOBAManager.UI.Calendar
         /// <summary>
         /// Creates clickable buttons for each possible event found by this schedule control.
         /// </summary>
-        private void createAllButtons()
+        private void CreateAllButtons()
         {
             int curButtonOffset = 0;
 
@@ -80,15 +80,15 @@ namespace MOBAManager.UI.Calendar
                 CalendarEvent cur = possibleEvents[i];
 
                 string desc = "?";
-                if (cur.type == CalendarEvent.EventType.PUG)
+                if (cur.type == EventType.PUG)
                 {
                     if (cur.team1ID == 0)
                     {
-                        desc = "Schedule a pick-up game with " + tm.getTeamName(cur.team2ID);
+                        desc = "Schedule a pick-up game with " + tm.GetTeamName(cur.team2ID);
                     }
                     else
                     {
-                        desc = "Schedule a pick-up game with " + tm.getTeamName(cur.team1ID);
+                        desc = "Schedule a pick-up game with " + tm.GetTeamName(cur.team1ID);
                     }
                 }
 
@@ -140,8 +140,8 @@ namespace MOBAManager.UI.Calendar
             if (Parent != null)
             {
                 Location = new Point((Parent.ClientSize.Width - Size.Width) / 2, (Parent.ClientSize.Height - Size.Height) / 2);
-                createAllPossibleEvents();
-                createAllButtons();
+                CreateAllPossibleEvents();
+                CreateAllButtons();
             }
         }
 

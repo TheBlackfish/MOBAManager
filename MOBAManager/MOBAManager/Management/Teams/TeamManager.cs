@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Teams
 {
-    public partial class TeamManager
+    sealed public partial class TeamManager
     {
         #region Variables
         /// <summary>
@@ -23,7 +23,7 @@ namespace MOBAManager.Management.Teams
         /// </summary>
         /// <param name="id">The ID of the team being sought.</param>
         /// <returns></returns>
-        public Team getTeamByID(int id)
+        public Team GetTeamByID(int id)
         {
             List<Team> results = teams.Where(kvp => kvp.Key == id).Select(kvp => kvp.Value).ToList();
             if (results.Count == 1)
@@ -32,7 +32,7 @@ namespace MOBAManager.Management.Teams
             }
             else
             {
-                throw new Exception("TeamManager.getTeamByID - Failed to find team with specified ID.");
+                return null;
             }
         }
 
@@ -41,16 +41,16 @@ namespace MOBAManager.Management.Teams
         /// </summary>
         /// <param name="id">The ID of the team.</param>
         /// <returns></returns>
-        public string getTeamName(int id)
+        public string GetTeamName(int id)
         {
-            return teams[id].teamName;
+            return teams[id].TeamName;
         }
 
         /// <summary>
         /// Gets all of the teams in a list.
         /// </summary>
         /// <returns>The list containing all teams.</returns>
-        public List<Team> getAllTeams()
+        public List<Team> GetAllTeams()
         {
             return teams.Select(kvp => kvp.Value).ToList();
         }
@@ -59,7 +59,7 @@ namespace MOBAManager.Management.Teams
         /// Returns all of the teams in a ID-aligned dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, Team> getTeamDictionary()
+        public Dictionary<int, Team> GetTeamDictionary()
         {
             return teams;
         }
@@ -68,16 +68,16 @@ namespace MOBAManager.Management.Teams
         /// Seeds all of the teams currently not legal with the players provided.
         /// </summary>
         /// <param name="population">The list of players eligible to </param>
-        public void populateTeams(List<Player> population)
+        public void PopulateTeams(List<Player> population)
         {
-            List<Team> tl = getAllTeams();
+            List<Team> tl = GetAllTeams();
 
             foreach (Team t in tl)
             {
-                while (!t.isLegalTeam())
+                while (!t.IsLegalTeam())
                 {
-                    Player curPlayer = population[RNG.roll(population.Count)];
-                    t.addMember(curPlayer);
+                    Player curPlayer = population[RNG.Roll(population.Count)];
+                    t.AddMember(curPlayer);
                     population = population.Where(n => n.ID != curPlayer.ID).ToList();
                 }
             }
@@ -91,7 +91,7 @@ namespace MOBAManager.Management.Teams
         public TeamManager()
         {
             teams = new Dictionary<int, Team>();
-            createTeams();   
+            CreateTeams();   
         }
         #endregion
     }

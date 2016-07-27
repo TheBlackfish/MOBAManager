@@ -14,13 +14,13 @@ namespace MOBAManager.MatchResolution
         /// Decides the winner of the match and returns either 1 or 2 depending on if it was Team 1 or Team 2.
         /// </summary>
         /// <returns></returns>
-        public int decideWinner()
+        public int DecideWinner()
         {
             //Get Team 1's optimal skill
-            double team1 = totalTeamSkill(1);
+            double team1 = TotalTeamSkill(1);
 
             //Get Team 2's optimal skill
-            double team2 = totalTeamSkill(2);
+            double team2 = TotalTeamSkill(2);
 
             if (team1 < 0 && team2 < 0)
             {
@@ -41,7 +41,7 @@ namespace MOBAManager.MatchResolution
                 team2 = 100;
             }
 
-            double dieRoll = RNG.rollDouble(team1 + team2);
+            double dieRoll = RNG.RollDouble(team1 + team2);
 
             Console.WriteLine("T1:" + team1 + " vs T2:" + team2 + " -- Die roll:" + dieRoll);
 
@@ -60,15 +60,15 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The slot of the team to get the total skill for. 1 or 2.</param>
         /// <returns></returns>
-        public double getTeamLineupSkill(int team)
+        public double GetTeamLineupSkill(int team)
         {
             if (team == 1)
             {
-                return calculateLineupSkill(1, team1Lineup);
+                return CalculateLineupSkill(1, team1Lineup);
             }
             else if (team == 2)
             {
-                return calculateLineupSkill(2, team2Lineup);
+                return CalculateLineupSkill(2, team2Lineup);
             }
             else
             {
@@ -76,16 +76,16 @@ namespace MOBAManager.MatchResolution
             }
         }
 
-        public void resolveMatchEffects()
+        public void ResolveMatchEffects()
         {
             foreach (Tuple<Player, Hero> tph in team1Lineup)
             {
-                tph.Item1.gainExperience(tph.Item2.ID);
+                tph.Item1.GainExperience(tph.Item2.ID);
             }
 
             foreach (Tuple<Player, Hero> tph in team2Lineup)
             {
-                tph.Item1.gainExperience(tph.Item2.ID);
+                tph.Item1.GainExperience(tph.Item2.ID);
             }
         }
         #endregion
@@ -96,7 +96,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to calculate this before.</param>
         /// <returns></returns>
-        private List<Tuple<Player, Hero>> finalizeLineup(int team)
+        private List<Tuple<Player, Hero>> FinalizeLineup(int team)
         {
             List<Tuple<Player, Hero>> lineup = new List<Tuple<Player, Hero>>();
             List<Player> curTeam = null;
@@ -108,21 +108,17 @@ namespace MOBAManager.MatchResolution
                 curTeam = team1Players;
                 curPicks = team1Picks;
             }
-            else if (team == 2)
+            else
             {
                 curTeam = team2Players;
                 curPicks = team2Picks;
-            }
-            else
-            {
-                throw new Exception("Team number is not valid!");
             }
 
             for (int i = 0; i < curTeam.Count; i++)
             {
                 foreach (int heroID in curPicks)
                 {
-                    phVals.Add(Tuple.Create(i, heroID, curTeam[i].getHeroSkill(heroID)));
+                    phVals.Add(Tuple.Create(i, heroID, curTeam[i].GetHeroSkill(heroID)));
                 }
             }
 
@@ -142,7 +138,7 @@ namespace MOBAManager.MatchResolution
         /// <param name="team">The team to calculate the skill level for.</param>
         /// <param name="lineup">That team's lineup.</param>
         /// <returns></returns>
-        private double calculateLineupSkill(int team, List<Tuple<Player, Hero>> lineup)
+        private double CalculateLineupSkill(int team, List<Tuple<Player, Hero>> lineup)
         {
             double finalValue = 0.0;
             List<int> oppPicks = team2Picks;
@@ -154,8 +150,8 @@ namespace MOBAManager.MatchResolution
             for (int i = 0; i < lineup.Count; i++)
             {
                 Tuple<Player, Hero> tp = lineup[i];
-                double curVal = tp.Item1.getHeroSkill(tp.Item2.ID);
-                curVal += tp.Item2.calculatePerformance(
+                double curVal = tp.Item1.GetHeroSkill(tp.Item2.ID);
+                curVal += tp.Item2.CalculatePerformance(
                     lineup.Skip(i + 1).Select(x => x.Item2.ID).ToList(),
                     oppPicks);
                 finalValue += curVal;
@@ -176,7 +172,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to calculate skill for.</param>
         /// <returns></returns>
-        private double totalTeamSkill(int team)
+        private double TotalTeamSkill(int team)
         {
             if ((team1Bans.Count == 5) && (team1Picks.Count == 5) && (team2Bans.Count == 5) && (team2Picks.Count == 5))
             {
@@ -187,7 +183,7 @@ namespace MOBAManager.MatchResolution
                 }
                 if (lineup.Count < 5)
                 {
-                    lineup = finalizeLineup(team);
+                    lineup = FinalizeLineup(team);
                     if (team == 1)
                     {
                         team1Lineup = lineup;
@@ -198,7 +194,7 @@ namespace MOBAManager.MatchResolution
                     }
                 }
 
-                return calculateLineupSkill(team, lineup);
+                return CalculateLineupSkill(team, lineup);
             }
             return int.MinValue;
         }

@@ -14,26 +14,21 @@ using System.Windows.Forms;
 
 namespace MOBAManager
 {
-    public partial class MainForm : Form
+    sealed public partial class MainForm : Form
     {
-        private GameManager gm;      
+        private readonly GameManager gm;      
 
         public MainForm()
         {
             InitializeComponent();
 
-            RNG.initRNG();
+            RNG.InitRNG();
             
             gm = new GameManager();
 
             DailyMenu dm = new DailyMenu(gm);
 
             Controls.Add(dm);
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            //Add fullscreen eventually.
         }
     }
 }

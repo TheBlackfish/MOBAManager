@@ -14,9 +14,9 @@ namespace MOBAManager.MatchResolution
         /// Returns a tuple of strings containing the formatted timers.
         /// </summary>
         /// <returns></returns>
-        public Tuple<string, string, string, string> getTimerDisplayInformation()
+        public Tuple<string, string, string, string> GetTimerDisplayInformation()
         {
-            return ms.getFormattedTimers();
+            return ms.GetFormattedTimers();
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The team to select. 1 or 2 are the only valid parameters.</param>
         /// <returns></returns>
-        public string getTeamDisplayInformation(int team)
+        public string GetTeamDisplayInformation(int team)
         {
             Team t = team1;
             if (team == 2)
@@ -32,10 +32,10 @@ namespace MOBAManager.MatchResolution
                 t = team2;
             }
 
-            string ret = t.teamName + Environment.NewLine + "-----";
-            foreach (Player p in t.getTeammates())
+            string ret = t.TeamName + Environment.NewLine + "-----";
+            foreach (Player p in t.GetTeammates())
             {
-                ret += Environment.NewLine + p.playerName;
+                ret += Environment.NewLine + p.PlayerName;
             }
             return ret;
         }
@@ -45,15 +45,15 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">The slot to pick from. 1 or 2.</param>
         /// <returns></returns>
-        public string getTeamName(int team)
+        public string GetTeamName(int team)
         {
             if (team == 1)
             {
-                return team1.teamName;
+                return team1.TeamName;
             }
             else if (team == 2)
             {
-                return team2.teamName;
+                return team2.TeamName;
             }
             return "";
         }
@@ -62,17 +62,17 @@ namespace MOBAManager.MatchResolution
         /// Gets the name of the team that is currently not player-controlled.
         /// </summary>
         /// <returns></returns>
-        public string getAITeamName()
+        public string GetAITeamName()
         {
-            if (isThreaded)
+            if (IsThreaded)
             {
                 if (playerTeam == 1)
                 {
-                    return team2.teamName;
+                    return team2.TeamName;
                 }
                 else
                 {
-                    return team1.teamName;
+                    return team1.TeamName;
                 }
             }
 
@@ -84,96 +84,95 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team"></param>
         /// <returns></returns>
-        public string getLineupDisplayInformation(int team)
+        public string GetLineupDisplayInformation(int team)
         {
-            string ret = team1.teamName;
+            string ret = team1.TeamName;
             if (team == 2)
             {
-                ret = team2.teamName;
+                ret = team2.TeamName;
             }
 
             ret += Environment.NewLine + "-----" + Environment.NewLine;
 
-            ret += ms.getFormattedTeamLineup(team);
+            ret += ms.GetFormattedTeamLineup(team);
 
             return ret;
         }
 
-        public string getTeamPBDisplayInformation(int team, bool getPicks)
+        public string GetTeamPBDisplayInformation(int team, bool getPicks)
         {
             if (getPicks)
             {
                 if (team == 1)
                 {
-                    return getFormattedTeam1Picks();
+                    return GetFormattedTeam1Picks();
                 }
-                return getFormattedTeam2Picks();
+                return GetFormattedTeam2Picks();
             }
             if (team == 1)
             {
-                return getFormattedTeam1Bans();
+                return GetFormattedTeam1Bans();
             }
-            return getFormattedTeam2Bans();
+            return GetFormattedTeam2Bans();
         }
 
         /// <summary>
         /// Returns a multiline string containing all of Team 1's bans.
         /// </summary>
         /// <returns></returns>
-        private string getFormattedTeam1Bans()
+        private string GetFormattedTeam1Bans()
         {
-            List<Hero> selections = ms.getTeamBans(1);
-            return formatHeroNames(selections);
+            List<Hero> selections = ms.GetTeamBans(1);
+            return FormatHeroNames(selections);
         }
 
         /// <summary>
         /// Returns a multiline string containing all of Team 2's bans.
         /// </summary>
         /// <returns></returns>
-        private string getFormattedTeam2Bans()
+        private string GetFormattedTeam2Bans()
         {
-            List<Hero> selections = ms.getTeamBans(2);
-            return formatHeroNames(selections);
+            List<Hero> selections = ms.GetTeamBans(2);
+            return FormatHeroNames(selections);
         }
 
         /// <summary>
         /// Returns a multiline string containing all of Team 1's picks.
         /// </summary>
         /// <returns></returns>
-        private string getFormattedTeam1Picks()
+        private string GetFormattedTeam1Picks()
         {
-            List<Hero> selections = ms.getTeamSelections(1);
-            return formatHeroNames(selections);
+            List<Hero> selections = ms.GetTeamSelections(1);
+            return FormatHeroNames(selections);
         }
 
         /// <summary>
         /// Returns a multiline string containing all of Team 2's picks.
         /// </summary>
         /// <returns></returns>
-        private string getFormattedTeam2Picks()
+        private string GetFormattedTeam2Picks()
         {
-            List<Hero> selections = ms.getTeamSelections(2);
-            return formatHeroNames(selections);
+            List<Hero> selections = ms.GetTeamSelections(2);
+            return FormatHeroNames(selections);
         }
 
         /// <summary>
         /// Gets a descriptive text describing the events of the game after it has been fully resolved.
+        /// The descriptive text changes verbage based on how far apart the skill levels were between teams.
         /// </summary>
         /// <returns></returns>
-        public string getMatchSummary()
+        public string GetMatchSummary()
         {
-            string sum = "";
-
-            int winningTeam = winner;
+            int winningTeam = Winner;
             int losingTeam = 3 - winningTeam;
-            if (winner == -1)
+            if (Winner == -1)
             {
                 return "The match is still being decided.";
             }
 
-            double diff = ms.getTeamLineupSkill(winningTeam) - ms.getTeamLineupSkill(3 - winningTeam);
+            double diff = ms.GetTeamLineupSkill(winningTeam) - ms.GetTeamLineupSkill(3 - winningTeam);
 
-            sum += getTeamName(winningTeam);
+            string sum = GetTeamName(winningTeam);
 
             if (diff >= 2000)
             {
@@ -204,52 +203,92 @@ namespace MOBAManager.MatchResolution
                 sum += " utterly humiliated ";
             }
 
-            return sum + getTeamName(3 - winningTeam) + ".";
+            return sum + GetTeamName(3 - winningTeam) + ".";
         }
 
         /// <summary>
         /// Generates and returns a stats bundle with information pertaining to this match.
         /// </summary>
         /// <returns></returns>
-        public StatsBundle getStats()
+        public StatsBundle GetStats()
         {
             StatsBundle bundle = new StatsBundle();
 
-            if (winner != -1)
+            bundle = UpdateBundleWithTeamStats(bundle);
+            bundle = UpdateBundleWithPlayerStats(bundle);
+            bundle = UpdateBundleWithHeroStats(bundle);
+
+            return bundle;
+        }
+
+        /// <summary>
+        /// Updates and returns the stats bundle provided with the correct team statistics for this match.
+        /// </summary>
+        /// <param name="bundle">The bundle to update.</param>
+        /// <returns></returns>
+        private StatsBundle UpdateBundleWithTeamStats(StatsBundle bundle)
+        {
+            if (Winner != -1)
             {
-                bundle.addTeamWin(team1.ID, winner == 1);
-                bundle.addTeamWin(team2.ID, winner == 2);
+                bundle.AddTeamWin(team1.ID, Winner == 1);
+                bundle.AddTeamWin(team2.ID, Winner == 2);
+            }
 
-                foreach(Player p in team1.getTeammates())
+            return bundle;
+        }
+
+        /// <summary>
+        /// Updates and returns the stats bundle provided with the correct player statistics for this match.
+        /// </summary>
+        /// <param name="bundle">The bundle to update.</param>
+        /// <returns></returns>
+        private StatsBundle UpdateBundleWithPlayerStats(StatsBundle bundle)
+        {
+            if (Winner != -1)
+            {
+                foreach (Player p in team1.GetTeammates())
                 {
-                    bundle.addPlayerWin(p.ID, winner == 1);
+                    bundle.AddPlayerWin(p.ID, Winner == 1);
                 }
 
-                foreach (Player p in team2.getTeammates())
+                foreach (Player p in team2.GetTeammates())
                 {
-                    bundle.addPlayerWin(p.ID, winner == 2);
+                    bundle.AddPlayerWin(p.ID, Winner == 2);
+                }
+            }
+
+            return bundle;
+        }
+
+        /// <summary>
+        /// Updates and returns the stats bundle provided with the correct hero statistics for this match.
+        /// </summary>
+        /// <param name="bundle">The bundle to update.</param>
+        /// <returns></returns>
+        private StatsBundle UpdateBundleWithHeroStats(StatsBundle bundle)
+        {
+            if (Winner != -1)
+            {
+                foreach (Hero h in ms.GetTeamSelections(1))
+                {
+                    bundle.AddHeroWin(h.ID, Winner == 1);
+                    bundle.AddHeroPickBan(h.ID, true);
                 }
 
-                foreach (Hero h in ms.getTeamSelections(1))
+                foreach (Hero h in ms.GetTeamSelections(2))
                 {
-                    bundle.addHeroWin(h.ID, winner == 1);
-                    bundle.addHeroPickBan(h.ID, true);
+                    bundle.AddHeroWin(h.ID, Winner == 2);
+                    bundle.AddHeroPickBan(h.ID, true);
                 }
 
-                foreach (Hero h in ms.getTeamSelections(2))
+                foreach (Hero h in ms.GetTeamBans(1))
                 {
-                    bundle.addHeroWin(h.ID, winner == 2);
-                    bundle.addHeroPickBan(h.ID, true);
+                    bundle.AddHeroPickBan(h.ID, false);
                 }
 
-                foreach (Hero h in ms.getTeamBans(1))
+                foreach (Hero h in ms.GetTeamBans(2))
                 {
-                    bundle.addHeroPickBan(h.ID, false);
-                }
-
-                foreach (Hero h in ms.getTeamBans(2))
-                {
-                    bundle.addHeroPickBan(h.ID, false);
+                    bundle.AddHeroPickBan(h.ID, false);
                 }
             }
 
@@ -263,7 +302,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="lh">The list of heroes to get a formatted string for.</param>
         /// <returns></returns>
-        private string formatHeroNames(List<Hero> lh)
+        private static string FormatHeroNames(List<Hero> lh)
         {
             if (lh.Count > 0)
             {
@@ -279,58 +318,6 @@ namespace MOBAManager.MatchResolution
                 return ret;
             }
             return "";
-        }
-        #endregion
-    }
-
-    partial class MatchAI
-    {
-        #region Public methods
-        /// <summary>
-        /// Gets a Tuple of strings containing the times left in each category formatted correctly.
-        /// </summary>
-        /// <returns></returns>
-        public Tuple<string, string, string, string> getFormattedTimers()
-        {
-            string[] placeholder = new string[4];
-            double min = 0;
-
-            double seconds = Math.Truncate(bonusTimeMaximum / 1000) - Math.Truncate(team1BonusTimeCounter / 1000);
-            while (seconds > 60)
-            {
-                min++;
-                seconds -= 60;
-            }
-            placeholder[0] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
-
-            seconds = Math.Truncate(regularTimeMaximum / 1000) - Math.Truncate(team1RegularTimeCounter / 1000);
-            min = 0;
-            while (seconds > 60)
-            {
-                min++;
-                seconds -= 60;
-            }
-            placeholder[1] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
-
-            seconds = Math.Truncate(bonusTimeMaximum / 1000) - Math.Truncate(team2BonusTimeCounter / 1000);
-            min = 0;
-            while (seconds > 60)
-            {
-                min++;
-                seconds -= 60;
-            }
-            placeholder[2] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
-
-            seconds = Math.Truncate(regularTimeMaximum / 1000) - Math.Truncate(team2RegularTimeCounter / 1000);
-            min = 0;
-            while (seconds > 60)
-            {
-                min++;
-                seconds -= 60;
-            }
-            placeholder[3] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
-
-            return new Tuple<string, string, string, string>(placeholder[0], placeholder[1], placeholder[2], placeholder[3]);
         }
         #endregion
     }

@@ -9,37 +9,37 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.MatchResolution
 {
-    public partial class Match : IDisposable
+    sealed public partial class Match : IDisposable
     {
         #region Private variables
         /// <summary>
         /// The match selection AI for this match.
         /// </summary>
-        private MatchAI ms;
+        private readonly MatchAI ms;
 
         /// <summary>
         /// The first team in this match.
         /// </summary>
-        private Team team1;
+        private readonly Team team1;
 
         /// <summary>
         /// The second team in this match.
         /// </summary>
-        private Team team2;
+        private readonly Team team2;
 
         /// <summary>
         /// The control variable for who the winner is.
         /// </summary>
         private int _winner = -1;
 
-        private Dictionary<int, Hero> allHeroes;
+        private readonly Dictionary<int, Hero> allHeroes;
         #endregion
 
         #region Public methods
         /// <summary>
         /// Returns the number of the winning team, or -1 if none has been decided yet.
         /// </summary>
-        public int winner
+        internal int Winner
         {
             get
             {
@@ -62,46 +62,46 @@ namespace MOBAManager.MatchResolution
         /// <summary>
         /// Has both teams go through the ban/pick phase instantly and then decides a winner.
         /// </summary>
-        public void instantlyResolve()
+        internal void InstantlyResolve()
         {
             //First Ban Phase
-            ms.setTeamSelection(1, ms.team2Pick(), false);
-            ms.setTeamSelection(2, ms.team1Pick(), false);
-            ms.setTeamSelection(1, ms.team2Pick(), false);
-            ms.setTeamSelection(2, ms.team1Pick(), false);
+            ms.SetTeamSelection(1, ms.Team2Pick(), false);
+            ms.SetTeamSelection(2, ms.Team1Pick(), false);
+            ms.SetTeamSelection(1, ms.Team2Pick(), false);
+            ms.SetTeamSelection(2, ms.Team1Pick(), false);
 
             //First Pick Phase
-            ms.setTeamSelection(1, ms.team1Pick());
-            ms.setTeamSelection(2, ms.team2Pick());
-            ms.setTeamSelection(2, ms.team2Pick());
-            ms.setTeamSelection(1, ms.team1Pick());
+            ms.SetTeamSelection(1, ms.Team1Pick());
+            ms.SetTeamSelection(2, ms.Team2Pick());
+            ms.SetTeamSelection(2, ms.Team2Pick());
+            ms.SetTeamSelection(1, ms.Team1Pick());
 
             //Second Ban Phase
-            ms.setTeamSelection(2, ms.team1Pick(), false);
-            ms.setTeamSelection(1, ms.team2Pick(), false);
-            ms.setTeamSelection(2, ms.team1Pick(), false);
-            ms.setTeamSelection(1, ms.team2Pick(), false);
+            ms.SetTeamSelection(2, ms.Team1Pick(), false);
+            ms.SetTeamSelection(1, ms.Team2Pick(), false);
+            ms.SetTeamSelection(2, ms.Team1Pick(), false);
+            ms.SetTeamSelection(1, ms.Team2Pick(), false);
 
             //Second Pick Phase
-            ms.setTeamSelection(2, ms.team2Pick());
-            ms.setTeamSelection(1, ms.team1Pick());
-            ms.setTeamSelection(2, ms.team2Pick());
-            ms.setTeamSelection(1, ms.team1Pick());
+            ms.SetTeamSelection(2, ms.Team2Pick());
+            ms.SetTeamSelection(1, ms.Team1Pick());
+            ms.SetTeamSelection(2, ms.Team2Pick());
+            ms.SetTeamSelection(1, ms.Team1Pick());
 
             //Third Ban Phase
-            ms.setTeamSelection(2, ms.team1Pick(), false);
-            ms.setTeamSelection(1, ms.team2Pick(), false);
+            ms.SetTeamSelection(2, ms.Team1Pick(), false);
+            ms.SetTeamSelection(1, ms.Team2Pick(), false);
 
             //Third Pick Phase
-            ms.setTeamSelection(1, ms.team1Pick());
-            ms.setTeamSelection(2, ms.team2Pick());
+            ms.SetTeamSelection(1, ms.Team1Pick());
+            ms.SetTeamSelection(2, ms.Team2Pick());
 
-            _winner = ms.decideWinner();
+            _winner = ms.DecideWinner();
         }
 
-        public void resolveMatchEffects()
+        public void ResolveMatchEffects()
         {
-            ms.resolveMatchEffects();
+            ms.ResolveMatchEffects();
         }
         #endregion
 
@@ -117,7 +117,7 @@ namespace MOBAManager.MatchResolution
             team1 = one;
             team2 = two;
             this.allHeroes = allHeroes;
-            ms = new MatchAI(this, this.allHeroes, one.getTeammates(), two.getTeammates());
+            ms = new MatchAI(this, this.allHeroes, one.GetTeammates(), two.GetTeammates());
         }
 
         /// <summary>
@@ -136,16 +136,16 @@ namespace MOBAManager.MatchResolution
         /// <returns></returns>
         public Match Clone(bool switchTeams)
         {
-            Match m = new Match(isThreaded, team1, team2, playerTeam, allHeroes);
+            Match m = new Match(IsThreaded, team1, team2, playerTeam, allHeroes);
             if (switchTeams)
             {
                 if (playerTeam == -1)
                 {
-                    m = new Match(isThreaded, team2, team1, playerTeam, allHeroes);
+                    m = new Match(IsThreaded, team2, team1, playerTeam, allHeroes);
                 }
                 else
                 {
-                    m = new Match(isThreaded, team2, team1, 3 - playerTeam, allHeroes);
+                    m = new Match(IsThreaded, team2, team1, 3 - playerTeam, allHeroes);
                 }
             }
             return m;
@@ -166,7 +166,7 @@ namespace MOBAManager.MatchResolution
         /// Deallocates resources depending on what type of disposing to perform.
         /// </summary>
         /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {

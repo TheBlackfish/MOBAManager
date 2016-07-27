@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Players
 {
-    public partial class PlayerManager
+    sealed public partial class PlayerManager
     {
         #region Variables
         /// <summary>
@@ -21,16 +21,16 @@ namespace MOBAManager.Management.Players
         /// </summary>
         /// <param name="id">The ID of the player to get the name of.</param>
         /// <returns></returns>
-        public string getPlayerName(int id)
+        public string GetPlayerName(int id)
         {
-            return allPlayers[id].playerName;
+            return allPlayers[id].PlayerName;
         }
 
         /// <summary>
         /// Gets a list of all of the heroes in the game.
         /// </summary>
         /// <returns>The list of all heroes.</returns>
-        public List<Player> getAllPlayers()
+        public List<Player> GetAllPlayers()
         {
             return allPlayers.Select(kvp => kvp.Value).ToList();
         }
@@ -39,7 +39,7 @@ namespace MOBAManager.Management.Players
         /// Returns a list of all the players in an ID-aligned dictionary.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, Player> getPlayerDictionary()
+        public Dictionary<int, Player> GetPlayerDictionary()
         {
             return allPlayers;
         }
@@ -52,7 +52,7 @@ namespace MOBAManager.Management.Players
         public PlayerManager()
         {
             allPlayers = new Dictionary<int, Player>();
-            createPlayers();
+            CreatePlayers();
         }
         #endregion
     }

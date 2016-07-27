@@ -10,23 +10,23 @@ namespace MOBAManager.Management.Calendar
         /// <summary>
         /// Schedules a random event for each AI team.
         /// </summary>
-        public void scheduleRandomEventsForEachAITeam()
+        public void ScheduleRandomEventsForEachAITeam()
         {
-            scheduleRandomEventsForEachAITeam(1);
+            ScheduleRandomEventsForEachAITeam(1);
         }
 
         /// <summary>
         /// Schedules any number of random events for each AI team.
         /// </summary>
         /// <param name="iterations">The number of events each AI team should schedule.</param>
-        public void scheduleRandomEventsForEachAITeam(int iterations)
+        public void ScheduleRandomEventsForEachAITeam(int iterations)
         {
             if (iterations < 1)
             {
                 return;
             }
 
-            List<Team> allTeams = tm.getAllTeams();
+            List<Team> allTeams = tm.GetAllTeams();
 
             for (int iteration = 0; iteration < iterations; iteration++)
             {
@@ -41,8 +41,8 @@ namespace MOBAManager.Management.Calendar
                         //We want to roll an integer between 0 - 20 and keep it in x1.
                         //Then we roll an integer between 0 - x2, where x2 = 20 - x1.
                         //This creates a sort of bell curve where higher values are rolled less often.
-                        int randOffset = RNG.roll(15 - RNG.roll(15));
-                        while (teamHasEventsOnDate(t.ID, randOffset))
+                        int randOffset = RNG.Roll(15 - RNG.Roll(15));
+                        while (TeamHasEventsOnDate(t.ID, randOffset))
                         {
                             randOffset++;
                         }
@@ -52,22 +52,22 @@ namespace MOBAManager.Management.Calendar
                         List<Team> possibleOpponents = new List<Team>();
                         while (possibleOpponents.Count == 0)
                         {
-                            possibleOpponents = allTeams.Where(team => team.ID != 0 && team.ID != t.ID).Where(team => !teamHasEventsOnDate(team.ID, randOffset)).ToList();
+                            possibleOpponents = allTeams.Where(team => team.ID != 0 && team.ID != t.ID).Where(team => !TeamHasEventsOnDate(team.ID, randOffset)).ToList();
                             if (possibleOpponents.Count == 0)
                             {
                                 randOffset++;
                             }
                         }
 
-                        int oppID = possibleOpponents[RNG.roll(possibleOpponents.Count)].ID;
+                        int oppID = possibleOpponents[RNG.Roll(possibleOpponents.Count)].ID;
 
-                        if (RNG.roll(2) == 0)
+                        if (RNG.Roll(2) == 0)
                         {
-                            addPickupGame(t.ID, oppID, randOffset);
+                            AddPickupGame(t.ID, oppID, randOffset);
                         }
                         else
                         {
-                            addPickupGame(oppID, t.ID, randOffset);
+                            AddPickupGame(oppID, t.ID, randOffset);
                         }
                     }           
                 }

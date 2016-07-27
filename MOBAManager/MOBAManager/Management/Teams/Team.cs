@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Teams
 {
-    public class Team
+    sealed public class Team
     {
         #region Static Variables
         /// <summary>
@@ -46,7 +46,7 @@ namespace MOBAManager.Management.Teams
         /// <summary>
         /// The name of the team.
         /// </summary>
-        public string teamName
+        public string TeamName
         {
             get { return _name; }
             set { _name = value; }
@@ -60,7 +60,7 @@ namespace MOBAManager.Management.Teams
         /// </summary>
         /// <param name="p">The player to add to the team.</param>
         /// <returns>Whether or not the addition operation was successful.</returns>
-        public bool addMember(Player p)
+        public bool AddMember(Player p)
         {
             if (teammates.Count < MAX_CAPACITY)
             {
@@ -76,7 +76,7 @@ namespace MOBAManager.Management.Teams
         /// </summary>
         /// <param name="p">The player to remove from the team.</param>
         /// <returns>Whether or not the removal operation was successful.</returns>
-        public bool removeMember(Player p)
+        public bool RemoveMember(Player p)
         {
             if (teammates.Contains(p))
             {
@@ -90,7 +90,7 @@ namespace MOBAManager.Management.Teams
         /// The team is legal if it has members equal to the maximum capacity.
         /// </summary>
         /// <returns>If the team is legal or not.</returns>
-        public bool isLegalTeam()
+        public bool IsLegalTeam()
         {
             return (teammates.Count == MAX_CAPACITY);
         }
@@ -99,7 +99,7 @@ namespace MOBAManager.Management.Teams
         /// Gets the team members of this team.
         /// </summary>
         /// <returns>The list of players on this team.</returns>
-        public List<Player> getTeammates()
+        public List<Player> GetTeammates()
         {
             return teammates;
         }

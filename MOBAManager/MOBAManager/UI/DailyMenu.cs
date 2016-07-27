@@ -16,13 +16,13 @@ using MOBAManager.UI.Calendar;
 
 namespace MOBAManager.UI
 {
-    public partial class DailyMenu : UserControl
+    sealed public partial class DailyMenu : UserControl
     {
         #region Private variables
         /// <summary>
         /// The game manager this menu corresponds to.
         /// </summary>
-        private GameManager gameManager;
+        private readonly GameManager gameManager;
         #endregion
 
         #region Private methods
@@ -30,7 +30,7 @@ namespace MOBAManager.UI
         /// Enables or disables all buttons with interactivity.
         /// </summary>
         /// <param name="enabled"></param>
-        private void setButtonStates(bool enabled)
+        private void SetButtonStates(bool enabled)
         {
             metaButton.Enabled = enabled;
             resolutionButton.Enabled = enabled;
@@ -39,21 +39,21 @@ namespace MOBAManager.UI
         /// <summary>
         /// Finishes the daily resolution by providing data to the appropriate managers.
         /// </summary>
-        private void resolveDailyResolution()
+        private void ResolveDailyResolution()
         {
             foreach (Control c in Controls)
             {
                 if (c is EventResolutionControl)
                 {
-                    gameManager.statsManager.processManyBundles(((EventResolutionControl)c).getStatistics(), gameManager.heroManager, gameManager.playerManager, gameManager.teamManager);
+                    gameManager.statsManager.ProcessManyBundles(((EventResolutionControl)c).GetStatistics(), gameManager.heroManager, gameManager.playerManager, gameManager.teamManager);
                     c.Hide();
                     Controls.Remove(c);
-                    setButtonStates(true);
+                    SetButtonStates(true);
                 }
             }
-            gameManager.calendarManager.incrementCalender();
-            gameManager.calendarManager.scheduleRandomEventsForEachAITeam();
-            label1.Text = gameManager.calendarManager.getFormattedDate();
+            gameManager.calendarManager.IncrementCalender();
+            gameManager.calendarManager.ScheduleRandomEventsForEachAITeam();
+            label1.Text = gameManager.calendarManager.GetFormattedDate();
         }
         #endregion
 
@@ -81,7 +81,7 @@ namespace MOBAManager.UI
             {
                 Size = Parent.ClientSize;
             }
-            label1.Text = gameManager.calendarManager.getFormattedDate();
+            label1.Text = gameManager.calendarManager.GetFormattedDate();
         }
 
         /// <summary>
@@ -99,14 +99,14 @@ namespace MOBAManager.UI
                     {
                         c.Hide();
                         Controls.Remove(c);
-                        setButtonStates(true);
+                        SetButtonStates(true);
                     }
                 }
             };
             StatisticsControl sc = new StatisticsControl(gameManager.statsManager, closeStats);
 
             //Display statistics
-            setButtonStates(false);
+            SetButtonStates(false);
             Controls.Add(sc);
             sc.BringToFront();
         }
@@ -120,20 +120,20 @@ namespace MOBAManager.UI
         {
             List<Match> pickupgames = new List<Match>();
 
-            foreach (CalendarEvent ce in gameManager.calendarManager.getTodaysEvents())
+            foreach (CalendarEvent ce in gameManager.calendarManager.GetTodaysEvents())
             {
                 switch (ce.type)
                 {
-                    case CalendarEvent.EventType.PUG:
-                        pickupgames.Add(gameManager.translateEventToMatch(ce));
+                    case EventType.PUG:
+                        pickupgames.Add(gameManager.TranslateEventToMatch(ce));
                         break;
                 }
             }
 
-            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.getFormattedDate(), pickupgames, resolveDailyResolution);
+            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, ResolveDailyResolution);
 
             //Display event manager
-            setButtonStates(false);
+            SetButtonStates(false);
             Controls.Add(erc);
             erc.BringToFront();
         }
@@ -153,18 +153,16 @@ namespace MOBAManager.UI
                     {
                         c.Hide();
                         Controls.Remove(c);
-                        setButtonStates(true);
+                        SetButtonStates(true);
                     }
                 }
             };
             CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager, closeStats);
 
-            setButtonStates(false);
+            SetButtonStates(false);
             Controls.Add(cvc);
             cvc.BringToFront();
         }
         #endregion
-
-
     }
 }

@@ -6,7 +6,7 @@
         /// Creates several default teams.
         /// Afterwards, they are inserted into the manager's dictionary.
         /// </summary>
-        private void createTeams()
+        private void CreateTeams()
         {
             string[] names = new string[]
             {

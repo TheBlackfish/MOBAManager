@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Players
 {
-    public class Player
+    sealed public class Player
     {
         #region Variables
         /// <summary>
@@ -44,7 +44,7 @@ namespace MOBAManager.Management.Players
         /// <summary>
         /// The public accessor for the player's name.
         /// </summary>
-        public string playerName
+        public string PlayerName
         {
             get { return _name; }
             set { _name = value; }
@@ -52,45 +52,45 @@ namespace MOBAManager.Management.Players
         #endregion
 
         #region Public Methods
-        public void gainExperience(int heroID)
+        public void GainExperience(int heroID)
         {
             //Determine a random way to gain experience.
-            int type = RNG.roll(2);
+            int type = RNG.Roll(2);
             switch (type)
             {
                 case 0:
-                    gainHeroExperience(heroID);
+                    GainHeroExperience(heroID);
                     break;
                 case 1:
-                    gainPSExperience();
+                    GainPSExperience();
                     break;
             }
         }
 
-        public void gainPSExperience()
+        public void GainPSExperience()
         {
             double RNGRoll = 10;
             if (pureSkill + 1 > RNGRoll)
             {
                 RNGRoll = pureSkill + 1;
             }
-            if (RNG.rollDouble(RNGRoll) > pureSkill)
+            if (RNG.RollDouble(RNGRoll) > pureSkill)
             {
                 pureSkill += 0.1;
             }
         }
 
-        public void gainHeroExperience(int heroID)
+        public void GainHeroExperience(int heroID)
         {
             double RNGRoll = 10;
-            double hs = getHeroSkill(heroID);
+            double hs = GetHeroSkill(heroID);
             if (hs + 1 > RNGRoll)
             {
                 RNGRoll = hs + 1;
             }
-            if (RNG.rollDouble(RNGRoll) > hs)
+            if (RNG.RollDouble(RNGRoll) > hs)
             {
-                setHeroSkill(heroID, hs + 0.1);
+                SetHeroSkill(heroID, hs + 0.1);
             }
         }
 
@@ -100,7 +100,7 @@ namespace MOBAManager.Management.Players
         /// </summary>
         /// <param name="heroID">The ID of the hero to get the skill for.</param>
         /// <returns>The player's skill level with the hero.</returns>
-        public double getHeroSkill(int heroID)
+        public double GetHeroSkill(int heroID)
         {
             if (!heroSkills.ContainsKey(heroID))
             {
@@ -117,7 +117,7 @@ namespace MOBAManager.Management.Players
         /// </summary>
         /// <param name="heroID">The hero to provide a skill level for.</param>
         /// <param name="heroSkill">The skill level to set.</param>
-        public void setHeroSkill(int heroID, double heroSkill)
+        public void SetHeroSkill(int heroID, double heroSkill)
         {
             heroSkills[heroID] = heroSkill;
         }

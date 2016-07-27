@@ -51,8 +51,14 @@
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
+    <Compile Include="MatchResolution\Match.cs" />
+    <Compile Include="MatchResolution\MatchAI.cs" />
+    <Compile Include="MatchResolution\MatchAIInformation.cs" />
+    <Compile Include="MatchResolution\MatchAIPlayerInteraction.cs" />
+    <Compile Include="MatchResolution\MatchAIThreading.cs" />
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
+    <Compile Include="MatchResolution\MatchResolver.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
     <Compile Include="UI\Calendar\CalendarScheduleControl.cs">
       <SubType>UserControl</SubType>
@@ -95,9 +101,6 @@
     <Compile Include="Management\Teams\Team.cs" />
     <Compile Include="Management\Teams\TeamCreation.cs" />
     <Compile Include="Management\Teams\TeamManager.cs" />
-    <Compile Include="MatchResolution\Match.cs" />
-    <Compile Include="MatchResolution\MatchAI.cs" />
-    <Compile Include="MatchResolution\MatchResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\DailyResolution\MatchResolutionControl.cs">
       <SubType>UserControl</SubType>
