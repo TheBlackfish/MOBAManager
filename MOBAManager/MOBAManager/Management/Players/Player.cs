@@ -29,6 +29,8 @@ namespace MOBAManager.Management.Players
         /// The dictionary of skill using different heroes for this player.
         /// </summary>
         private Dictionary<int, double> heroSkills;
+
+        private Dictionary<int, double> teamworkSkills;
         #endregion
 
         #region Accessors
@@ -131,6 +133,31 @@ namespace MOBAManager.Management.Players
         public void SetHeroSkill(int heroID, double heroSkill)
         {
             heroSkills[heroID] = heroSkill;
+        }
+
+        public double GetTeamworkSkill(int playerID)
+        {
+            if (!teamworkSkills.ContainsKey(playerID))
+            {
+                //Determine if positive or negative starting value.
+                int determiner = RNG.Roll(10);
+                if (determiner == 0)
+                {
+                    teamworkSkills.Add(playerID, 1);
+                }
+                else if (determiner == 1 || determiner == 2)
+                {
+                    teamworkSkills.Add(playerID, 0);
+                }
+                else
+                {
+                    teamworkSkills.Add(playerID, -10 + RNG.Roll(10));
+                }
+            }
+
+            double skill = 0.0;
+            teamworkSkills.TryGetValue(playerID, out skill);
+            return skill;
         }
         #endregion
 

@@ -86,6 +86,22 @@ namespace MOBAManager.Management.Teams
             return false;
         }
 
+        public double getTeamworkSkill()
+        {
+            double total = 0;
+            for (int i = 0; i < teammates.Count; i++)
+            {
+                for (int j = i + 1; j < teammates.Count; j++)
+                {
+                    double valOne = teammates[i].GetTeamworkSkill(teammates[j].ID);
+                    double valTwo = teammates[j].GetTeamworkSkill(teammates[i].ID);
+
+                    total += (valOne <= valTwo ? valOne : valTwo);
+                }
+            }
+            return total;
+        }
+
         /// <summary>
         /// The team is legal if it has members equal to the maximum capacity.
         /// </summary>
