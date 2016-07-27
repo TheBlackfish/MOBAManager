@@ -82,7 +82,7 @@ namespace MOBAManager.Management.Players
 
         public void GainHeroExperience(int heroID)
         {
-            double RNGRoll = 10;
+            double RNGRoll = 25;
             double hs = GetHeroSkill(heroID);
             if (hs + 1 > RNGRoll)
             {

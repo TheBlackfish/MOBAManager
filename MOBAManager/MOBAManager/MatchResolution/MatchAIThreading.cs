@@ -263,7 +263,6 @@ namespace MOBAManager.MatchResolution
             {
                 currentChoiceDelayMaximum = currentChoiceDelayCounter + time;
             }
-            Console.WriteLine("Current delay is " + currentChoiceDelayMaximum);
         }
 
         /// <summary>

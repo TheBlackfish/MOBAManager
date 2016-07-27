@@ -94,6 +94,7 @@ namespace MOBAManager.UI
                 {
                     cur.InstantlyResolve();
                     statistics.Add(cur.GetStats());
+                    cur.ResolveMatchEffects();
                     AddEventNotification(cur);
                     resolutionTimer.Enabled = true;
                 }
@@ -131,6 +132,7 @@ namespace MOBAManager.UI
             if (completed != null)
             {
                 AddEventNotification(completed);
+                completed.ResolveMatchEffects();
                 statistics.Add(completed.GetStats());
             }
             resolutionTimer.Enabled = true;

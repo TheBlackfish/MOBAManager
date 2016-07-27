@@ -126,6 +126,13 @@ namespace MOBAManager.Management.Calendar
             return true;
         }
 
+        /// <summary>
+        /// Creates a new pickup game event on the specified offset..
+        /// </summary>
+        /// <param name="team1ID">The left team's ID.</param>
+        /// <param name="team2ID">The right team's ID</param>
+        /// <param name="offset">The offset to put the event at.</param>
+        /// <returns></returns>
         public bool AddPickupGame(int team1ID, int team2ID, int offset)
         {
             RemoveAllEventsForTeamsOnOffset(team1ID, team2ID, offset);
