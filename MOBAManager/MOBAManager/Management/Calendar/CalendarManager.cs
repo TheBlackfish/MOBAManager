@@ -62,7 +62,41 @@ namespace MOBAManager.Management.Calendar
         /// <returns></returns>
         public bool AddCalendarEvent(CalendarEvent ce)
         {
+            if (ce.team1ID != -1)
+            {
+                RemoveAllEventsForTeamOnOffset(ce.team1ID, ce.daysToResolution);
+            }
+            if (ce.team2ID != -1)
+            {
+                RemoveAllEventsForTeamOnOffset(ce.team2ID, ce.daysToResolution);
+            }
             allEvents.Add(ce);
+            return true;
+        }
+
+        /// <summary>
+        /// Removes all events for the specified team on the specified offset.
+        /// </summary>
+        /// <param name="teamID">The team to remove events for.</param>
+        /// <param name="offset">The offset for which events will be removed.</param>
+        /// <returns></returns>
+        public bool RemoveAllEventsForTeamOnOffset(int teamID, int offset)
+        {
+            allEvents = allEvents.Where(ev => !((ev.team1ID == teamID || ev.team2ID == teamID) && ev.daysToResolution == offset)).ToList();
+            return true;
+        }
+
+        /// <summary>
+        /// Removes all events for the specified teams on the specified offset.
+        /// </summary>
+        /// <param name="team1ID">The first team to remove events for.</param>
+        /// <param name="team2ID">The second team to remove events for.</param>
+        /// <param name="offset">The offset for which events will be removed.</param>
+        /// <returns></returns>
+        public bool RemoveAllEventsForTeamsOnOffset(int team1ID, int team2ID, int offset)
+        {
+            RemoveAllEventsForTeamOnOffset(team1ID, offset);
+            RemoveAllEventsForTeamOnOffset(team2ID, offset);
             return true;
         }
 
@@ -87,12 +121,14 @@ namespace MOBAManager.Management.Calendar
         public bool AddPickupGame(int team1ID, int team2ID, DateTime date)
         {
             TimeSpan timeRemaining = date - currentDate;
+            RemoveAllEventsForTeamsOnOffset(team1ID, team2ID, (int)Math.Round(timeRemaining.TotalDays));
             allEvents.Add(new CalendarEvent(EventType.PUG, (int)Math.Round(timeRemaining.TotalDays), team1ID, team2ID));
             return true;
         }
 
         public bool AddPickupGame(int team1ID, int team2ID, int offset)
         {
+            RemoveAllEventsForTeamsOnOffset(team1ID, team2ID, offset);
             allEvents.Add(new CalendarEvent(EventType.PUG, offset, team1ID, team2ID));
             return true;
         }
