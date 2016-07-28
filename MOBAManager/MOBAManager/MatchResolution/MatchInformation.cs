@@ -99,6 +99,11 @@ namespace MOBAManager.MatchResolution
             return ret;
         }
 
+        /// <summary>
+        /// Control method that gets formatted information about a team's bans or picks.
+        /// </summary>
+        /// <param name="team">1 or 2, the team to get information for.</param>
+        /// <param name="getPicks">If set to true, this will return the specified team's picks. Otherwise this will return the team's bans.</param>
         public string GetTeamPBDisplayInformation(int team, bool getPicks)
         {
             if (getPicks)

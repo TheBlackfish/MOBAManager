@@ -30,6 +30,9 @@ namespace MOBAManager.Management.Players
         /// </summary>
         private Dictionary<int, double> heroSkills;
 
+        /// <summary>
+        /// The dictionary of teamwork amounts with different players.
+        /// </summary>
         private Dictionary<int, double> teamworkSkills;
         #endregion
 
@@ -108,6 +111,28 @@ namespace MOBAManager.Management.Players
         }
 
         /// <summary>
+        /// Has a chance to increase this player's teamwork with the specified player.
+        /// </summary>
+        /// <param name="playerID">The player to increase teamwork with</param>
+        public void GainTeamworkExperience(int playerID)
+        {
+            if (RNG.Roll(10) == 0)
+            {
+                teamworkSkills[playerID] = GetTeamworkSkill(playerID) + 0.1;
+            }
+        }
+
+        /// <summary>
+        /// Increases this player's teamwork with the specified player by a fixed amount.
+        /// </summary>
+        /// <param name="playerID">The player to increase teamwork with</param>
+        /// <param name="amount">The amount to alter the teamwork value by</param>
+        public void GainFixedTeamworkExperience(int playerID, double amount)
+        {
+            teamworkSkills[playerID] = GetTeamworkSkill(playerID) + amount;
+        }
+
+        /// <summary>
         /// Returns the amount of skill the player has with the provided hero.
         /// If the player does not have a set skill with a hero, this method will set it to STARTING_HEROSKILL first, then return it.
         /// </summary>
@@ -135,6 +160,12 @@ namespace MOBAManager.Management.Players
             heroSkills[heroID] = heroSkill;
         }
 
+        /// <summary>
+        /// Returns the teamwork value this player has with the specified player.
+        /// If the player has not played with them before, a random amount between -9.0 and 1.0 is inserted into the value.
+        /// </summary>
+        /// <param name="playerID">The player to get the teamwork value for</param>
+        /// <returns></returns>
         public double GetTeamworkSkill(int playerID)
         {
             if (!teamworkSkills.ContainsKey(playerID))
@@ -151,7 +182,7 @@ namespace MOBAManager.Management.Players
                 }
                 else
                 {
-                    teamworkSkills.Add(playerID, -10 + RNG.Roll(10));
+                    teamworkSkills.Add(playerID, 0 - RNG.Roll(10));
                 }
             }
 
@@ -184,6 +215,7 @@ namespace MOBAManager.Management.Players
             _name = name;
             pureSkill = skill;
             heroSkills = new Dictionary<int, double>();
+            teamworkSkills = new Dictionary<int, double>();
         }
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using MOBAManager.Management;
 using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Management.Teams;
 using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,14 @@ namespace MOBAManager.MatchResolution
 
         #region Team-based Variables
         /// <summary>
-        /// The players on Team 1.
+        /// Team 1.
         /// </summary>
-        private readonly List<Player> team1Players;
+        private readonly Team team1;
 
         /// <summary>
-        /// The players on Team 2.
+        /// Team 2.
         /// </summary>
-        private readonly List<Player> team2Players;
+        private readonly Team team2;
 
         /// <summary>
         /// The heroes left to be picked or banned in the pool.
@@ -112,14 +113,14 @@ namespace MOBAManager.MatchResolution
         /// <returns>The Player object being looked for.</returns>
         private Player GetPlayerFromTeams(int player)
         {
-            foreach (Player p in team1Players)
+            foreach (Player p in team1.GetTeammates())
             {
                 if (p.ID == player)
                 {
                     return p;
                 }
             }
-            foreach (Player p in team2Players)
+            foreach (Player p in team2.GetTeammates())
             {
                 if (p.ID == player)
                 {
@@ -428,12 +429,12 @@ namespace MOBAManager.MatchResolution
                         {
                             if (RNG.Roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[RNG.Roll(team1Players.Count)].ID;
+                                int randomPlayer = team1.GetTeammates()[RNG.Roll(team1.GetTeammates().Count)].ID;
                                 selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[RNG.Roll(team2Players.Count)].ID;
+                                int randomPlayer = team2.GetTeammates()[RNG.Roll(team2.GetTeammates().Count)].ID;
                                 selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
@@ -449,7 +450,7 @@ namespace MOBAManager.MatchResolution
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team1SelectionPlayerTarget = team1Players[RNG.Roll(team1Players.Count)].ID;
+                        team1SelectionPlayerTarget = team1.GetTeammates()[RNG.Roll(team1.GetTeammates().Count)].ID;
                     }
                     selectionID = SelectBestChoiceForPlayer(1, team1SelectionPlayerTarget);
                     break;
@@ -493,12 +494,12 @@ namespace MOBAManager.MatchResolution
                         {
                             if (RNG.Roll(2) == 1)
                             {
-                                int randomPlayer = team1Players[RNG.Roll(team1Players.Count)].ID;
+                                int randomPlayer = team1.GetTeammates()[RNG.Roll(team1.GetTeammates().Count)].ID;
                                 selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                             else
                             {
-                                int randomPlayer = team2Players[RNG.Roll(team2Players.Count)].ID;
+                                int randomPlayer = team2.GetTeammates()[RNG.Roll(team2.GetTeammates().Count)].ID;
                                 selectionID = SelectBestChoiceForPlayer(1, randomPlayer);
                             }
                         }
@@ -514,7 +515,7 @@ namespace MOBAManager.MatchResolution
                 case 2:     //Best hero for a player
                     if (team1SelectionPlayerTarget == -1)
                     {
-                        team2SelectionPlayerTarget = team2Players[RNG.Roll(team2Players.Count)].ID;
+                        team2SelectionPlayerTarget = team2.GetTeammates()[RNG.Roll(team2.GetTeammates().Count)].ID;
                     }
                     selectionID = SelectBestChoiceForPlayer(2, team2SelectionPlayerTarget);
                     break;
@@ -537,13 +538,13 @@ namespace MOBAManager.MatchResolution
         /// <param name="heroes">The list of all heroes.</param>
         /// <param name="teamA">The first team participating.</param>
         /// <param name="teamB">The second team participating.</param>
-        public MatchAI(Match m, Dictionary<int, Hero> heroes, List<Player> teamA, List<Player> teamB)
+        public MatchAI(Match m, Dictionary<int, Hero> heroes, Team teamA, Team teamB)
         {
             match = m;
 
             allHeroes = heroes;
-            team1Players = teamA;
-            team2Players = teamB;
+            team1 = teamA;
+            team2 = teamB;
 
             remainingHeroes = allHeroes.Select(kvp => kvp.Key).ToList();
             team1Picks = new List<int>();

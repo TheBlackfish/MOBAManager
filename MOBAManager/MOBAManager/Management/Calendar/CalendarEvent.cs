@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Calendar
 {
-    #region Enums
-    /// <summary>
-    /// The enum for controlling what type of CalendarEvent this is.
-    /// </summary>
-    public enum EventType { PUG };
-    #endregion
-
     sealed public class CalendarEvent
     {
         #region Public variables
@@ -38,7 +31,10 @@ namespace MOBAManager.Management.Calendar
         #endregion
 
         #region Public methods
-        internal void decrementDaysLeft()
+        /// <summary>
+        /// Decreases the number of days left until this event resolves.
+        /// </summary>
+        internal void DecrementDaysLeft()
         {
             daysToResolution--;
         }

@@ -265,7 +265,7 @@ namespace MOBAManager.MatchResolution
             if (threading)
             {
                 playerTeam = whichTeamIsPlayer;
-                ms = new MatchAI(true, this, allHeroes, teamA.GetTeammates(), teamB.GetTeammates());
+                ms = new MatchAI(true, this, allHeroes, teamA, teamB);
             }
         }
         #endregion

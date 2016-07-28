@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
+using MOBAManager.Management.Teams;
 using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
@@ -326,7 +327,7 @@ namespace MOBAManager.MatchResolution
         /// <param name="dict">The dictionary of all heroes.</param>
         /// <param name="team1">The list of players from Team 1.</param>
         /// <param name="team2">The list of players from Team 2.</param>
-        public MatchAI(bool threading, Match match, Dictionary<int, Hero> dict, List<Player> team1, List<Player> team2)
+        public MatchAI(bool threading, Match match, Dictionary<int, Hero> dict, Team team1, Team team2)
             : this(match, dict, team1, team2)
         {
             if (threading)

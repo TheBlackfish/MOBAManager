@@ -58,7 +58,7 @@
     <Compile Include="MatchResolution\MatchAIThreading.cs" />
     <Compile Include="MatchResolution\MatchInformation.cs" />
     <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
-    <Compile Include="MatchResolution\MatchResolver.cs" />
+    <Compile Include="MatchResolution\MatchAIResolver.cs" />
     <Compile Include="MatchResolution\MatchThreading.cs" />
     <Compile Include="UI\Calendar\CalendarScheduleControl.cs">
       <SubType>UserControl</SubType>

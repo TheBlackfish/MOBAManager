@@ -32,6 +32,9 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private int _winner = -1;
 
+        /// <summary>
+        /// The dictionary of all heros to be used in this match.
+        /// </summary>
         private readonly Dictionary<int, Hero> allHeroes;
         #endregion
 
@@ -99,9 +102,14 @@ namespace MOBAManager.MatchResolution
             _winner = ms.DecideWinner();
         }
 
+        /// <summary>
+        /// Resolves any after-match effects, such as experience gains.
+        /// </summary>
         public void ResolveMatchEffects()
         {
             ms.ResolveMatchEffects();
+            team1.AlterTeamworkSkill(Winner == 1);
+            team2.AlterTeamworkSkill(Winner == 2);
         }
         #endregion
 
@@ -117,7 +125,7 @@ namespace MOBAManager.MatchResolution
             team1 = one;
             team2 = two;
             this.allHeroes = allHeroes;
-            ms = new MatchAI(this, this.allHeroes, one.GetTeammates(), two.GetTeammates());
+            ms = new MatchAI(this, this.allHeroes, one, two);
         }
 
         /// <summary>

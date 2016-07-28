@@ -1,4 +1,5 @@
 ﻿using MOBAManager.Management.Players;
+using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,7 +87,11 @@ namespace MOBAManager.Management.Teams
             return false;
         }
 
-        public double getTeamworkSkill()
+        /// <summary>
+        /// Returns the total teamwork of the team.
+        /// For each combination of players, the teamwork value is the lower value of the two's teamwork values for each other.
+        /// </summary>
+        public double GetTeamworkSkill()
         {
             double total = 0;
             for (int i = 0; i < teammates.Count; i++)
@@ -100,6 +105,47 @@ namespace MOBAManager.Management.Teams
                 }
             }
             return total;
+        }
+
+        /// <summary>
+        /// First, 5 random player combinations are altered by the value in shouldIncrease.
+        /// Then, each combination of players has a chance to increase their teamwork values if they differ by more than the tolerance value.
+        /// </summary>
+        /// <param name="shouldIncrease">Whether or not the random combinations should increase or decrease in value.</param>
+        public void AlterTeamworkSkill(bool shouldIncrease)
+        {
+            double change = shouldIncrease ? 0.1 : -0.1;
+            for (int i = 0; i < 5; i++)
+            {
+                Player one = teammates[RNG.Roll(teammates.Count)];
+                Player two = one;
+                while (two.ID == one.ID)
+                {
+                    two = teammates[RNG.Roll(teammates.Count)];
+                }
+                one.GainFixedTeamworkExperience(two.ID, change);
+            }
+
+            for (int i = 0; i < teammates.Count; i++)
+            {
+                for (int j = i + 1; j < teammates.Count; j++)
+                {
+                    Player one = teammates[i];
+                    Player two = teammates[j];
+
+                    if (Math.Abs(one.GetTeamworkSkill(two.ID) - two.GetTeamworkSkill(one.ID)) < 0.2)
+                    {
+                        if (RNG.CoinFlip())
+                        {
+                            one.GainTeamworkExperience(two.ID);
+                        }
+                        else
+                        {
+                            two.GainTeamworkExperience(one.ID);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

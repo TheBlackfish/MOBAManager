@@ -156,7 +156,7 @@ namespace MOBAManager.Management.Calendar
         {
             foreach (CalendarEvent ce in allEvents)
             {
-                ce.decrementDaysLeft();
+                ce.DecrementDaysLeft();
             }
             allEvents = allEvents.Where(ce => ce.daysToResolution >= 0).ToList();
             currentDate = currentDate.AddDays(1);
