@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using MOBAManager.MatchResolution;
 using MOBAManager.Management.Statistics;
 using MOBAManager.Utility;
+using MOBAManager.Resolution.BootcampResolution;
+using MOBAManager.Management.Calendar;
 
 namespace MOBAManager.UI
 {
@@ -35,6 +37,11 @@ namespace MOBAManager.UI
         /// The list of all games that can be played in any order.
         /// </summary>
         private readonly List<Match> pugs;
+
+        /// <summary>
+        /// The list of all bootcamps that can be resolved in any order.
+        /// </summary>
+        private readonly List<BootcampSession> bootcamps;
 
         /// <summary>
         /// The list of stat bundles being gathered up for all of the day's matches.
@@ -69,78 +76,6 @@ namespace MOBAManager.UI
 
         #region Public methods
         /// <summary>
-        /// Resolves a random event from all of the lists of available events.
-        /// </summary>
-        public void ResolveRandomEvent(object sender, EventArgs e)
-        {
-            if (!resolvingPlayerMatch && pugs.Count > 0)
-            {
-                resolutionTimer.Enabled = false;
-
-                //Choose a PUG to resolve.
-                int curIndex = RNG.Roll(pugs.Count);
-                Match cur = pugs[curIndex];
-                pugs.RemoveAt(curIndex);
-
-                //Either create a new Match resolution control for the player match, or instantly resolve it.
-                if (cur.IsThreaded)
-                {
-                    currentPlayerMatch = cur;
-                    waitingToStartPlayerMatch = true;
-                    resolutionTimer.Enabled = false;
-                    AddEventNotification("Click to begin the match against " + cur.GetAITeamName());
-                }
-                else
-                {
-                    cur.InstantlyResolve();
-                    statistics.Add(cur.GetStats());
-                    cur.ResolveMatchEffects();
-                    AddEventNotification(cur);
-                    resolutionTimer.Enabled = true;
-                }
-            }
-            else
-            {
-                //Display "Click anywhere..." message.
-                AddEventNotification("Click anywhere to continue...");
-                resolutionTimer.Enabled = false;
-                allEventsResolved = true;
-            }
-        }
-        
-        /// <summary>
-        /// Removes all player interactions and records the results from any matches the player just finished.
-        /// </summary>
-        public void OnPlayerMatchResolved(object sender, EventArgs e)
-        {
-            Match completed = null;
-            foreach(Control o in Controls)
-            {
-                if (o is MatchResolutionControl || o is MatchResultsControl)
-                {
-                    Controls.Remove(o);
-                    if (o is MatchResultsControl)
-                    {
-                        completed = (o as MatchResultsControl).GetMatch();
-                    }
-                    else if (o is MatchResolutionControl)
-                    {
-                        completed = (o as MatchResolutionControl).GetMatch();
-                    }
-                }
-            }
-            if (completed != null)
-            {
-                AddEventNotification(completed);
-                completed.ResolveMatchEffects();
-                statistics.Add(completed.GetStats());
-            }
-            resolutionTimer.Enabled = true;
-            currentPlayerMatch = null;
-            waitingToStartPlayerMatch = false;
-        }
-
-        /// <summary>
         /// Returns the day's statistics.
         /// </summary>
         /// <returns></returns>
@@ -151,6 +86,56 @@ namespace MOBAManager.UI
         #endregion
 
         #region Private methods
+        /// <summary>
+        /// Resolves a random event from all of the lists of available events.
+        /// </summary>
+        private void ResolveRandomEvent(object sender, EventArgs e)
+        {
+            if (!resolvingPlayerMatch && (pugs.Count > 0 || bootcamps.Count > 0))
+            {
+                resolutionTimer.Enabled = false;
+
+                List<EventType> possibleTypes = new List<EventType>();
+
+                if (bootcamps.Count > 0)
+                {
+                    possibleTypes.Add(EventType.Bootcamp);
+                }
+
+                if (pugs.Count > 0)
+                {
+                    possibleTypes.Add(EventType.PUG);
+                }
+
+                EventType chosen = EventType.Null;
+                if (possibleTypes.Count == 1)
+                {
+                    chosen = possibleTypes[0];
+                }
+                else
+                {
+                    chosen = possibleTypes[RNG.Roll(possibleTypes.Count)];
+                }
+
+                switch (chosen)
+                {
+                    case EventType.PUG:
+                        resolvePickupGame();
+                        break;
+                    case EventType.Bootcamp:
+                        resolveBootcamp();
+                        break;
+                }
+            }
+            else
+            {
+                //Display "Click anywhere..." message.
+                AddEventNotification("Click anywhere to continue...");
+                resolutionTimer.Enabled = false;
+                allEventsResolved = true;
+            }
+        }
+
         /// <summary>
         /// Adds a text-only label to the event panel.
         /// </summary>
@@ -167,18 +152,45 @@ namespace MOBAManager.UI
         }
 
         /// <summary>
-        /// Adds a label to the event container with details about the match provided.
+        /// Resolves a random bootcamp.
         /// </summary>
-        /// <param name="m">The match to report on.</param>
-        private void AddEventNotification(Match m)
+        private void resolveBootcamp()
         {
-            Label l = new Label();
-            l.Text = m.GetMatchSummary();
-            l.Location = new Point(newLabelPosition.X, newLabelPosition.Y + eventContainer.AutoScrollPosition.Y);
-            l.Size = labelSize;
-            newLabelPosition.Y += l.Height + 4;
-            Action action = () => eventContainer.Controls.Add(l);
-            BeginInvoke(action);
+            int curIndex = RNG.Roll(bootcamps.Count);
+            BootcampSession cur = bootcamps[curIndex];
+            bootcamps.RemoveAt(curIndex);
+
+            cur.InstantlyResolve();
+            AddEventNotification(cur.GetSummary());
+            resolutionTimer.Enabled = true;
+        }
+
+        /// <summary>
+        /// Resolves a random pick-up game.
+        /// </summary>
+        private void resolvePickupGame()
+        {
+            //Choose a PUG to resolve.
+            int curIndex = RNG.Roll(pugs.Count);
+            Match cur = pugs[curIndex];
+            pugs.RemoveAt(curIndex);
+
+            //Either create a new Match resolution control for the player match, or instantly resolve it.
+            if (cur.IsThreaded)
+            {
+                currentPlayerMatch = cur;
+                waitingToStartPlayerMatch = true;
+                resolutionTimer.Enabled = false;
+                AddEventNotification("Click to begin the match against " + cur.GetAITeamName());
+            }
+            else
+            {
+                cur.InstantlyResolve();
+                statistics.Add(cur.GetStats());
+                cur.ResolveMatchEffects();
+                AddEventNotification(cur.GetMatchSummary());
+                resolutionTimer.Enabled = true;
+            }
         }
         
         /// <summary>
@@ -193,6 +205,38 @@ namespace MOBAManager.UI
                 pm.BringToFront();
             };
             BeginInvoke(addition);
+        }
+
+        /// <summary>
+        /// Removes all player interactions and records the results from any matches the player just finished.
+        /// </summary>
+        private void OnPlayerMatchResolved(object sender, EventArgs e)
+        {
+            Match completed = null;
+            foreach (Control o in Controls)
+            {
+                if (o is MatchResolutionControl || o is MatchResultsControl)
+                {
+                    Controls.Remove(o);
+                    if (o is MatchResultsControl)
+                    {
+                        completed = (o as MatchResultsControl).GetMatch();
+                    }
+                    else if (o is MatchResolutionControl)
+                    {
+                        completed = (o as MatchResolutionControl).GetMatch();
+                    }
+                }
+            }
+            if (completed != null)
+            {
+                AddEventNotification(completed.GetMatchSummary());
+                completed.ResolveMatchEffects();
+                statistics.Add(completed.GetStats());
+            }
+            resolutionTimer.Enabled = true;
+            currentPlayerMatch = null;
+            waitingToStartPlayerMatch = false;
         }
 
         /// <summary>
@@ -221,7 +265,7 @@ namespace MOBAManager.UI
         /// Creates a new EventResolutionControl.
         /// </summary>
         /// <param name="pickupGames">The list of all games in which order of resolution does not matter.</param>
-        public EventResolutionControl(string title, List<Match> pickupGames, Action onClose)
+        public EventResolutionControl(string title, List<Match> pickupGames, List<BootcampSession> bootcamps, Action onClose)
         {
             InitializeComponent();
 
@@ -230,6 +274,7 @@ namespace MOBAManager.UI
             labelSize = new Size(eventContainer.Width - 16, 16);
             onCloseFunc = onClose;
             pugs = RandomizePickupGames(pickupGames);
+            this.bootcamps = bootcamps;
             resolutionTimer = new System.Timers.Timer(4000);
             resolutionTimer.Enabled = true;
             resolutionTimer.Elapsed += ResolveRandomEvent;

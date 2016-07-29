@@ -4,6 +4,6 @@
     /// <summary>
     /// The enum for controlling what type of CalendarEvent this is.
     /// </summary>
-    public enum EventType { PUG };
+    public enum EventType { Null, PUG, Bootcamp };
     #endregion
 }

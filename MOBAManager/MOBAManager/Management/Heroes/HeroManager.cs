@@ -36,6 +36,22 @@ namespace MOBAManager.Management.Heroes
         }
 
         /// <summary>
+        /// Gets a list of tuples containing pairs of hero IDs and the corresponding names of the heroes matching those IDs.
+        /// </summary>
+        /// <returns></returns>
+        public List<Tuple<int, string>> GetIDSortedNames()
+        {
+            List<Tuple<int, string>> ret = new List<Tuple<int, string>>();
+
+            foreach(Hero h in allHeroes.Select(kvp => kvp.Value).ToList())
+            {
+                ret.Add(new Tuple<int, string>(h.ID, h.HeroName));
+            }
+
+            return ret;
+        }
+
+        /// <summary>
         /// Gets the dictionary of heroes with their IDs as the key.s
         /// </summary>
         /// <returns></returns>

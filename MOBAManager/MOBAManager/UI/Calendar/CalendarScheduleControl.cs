@@ -66,6 +66,8 @@ namespace MOBAManager.UI.Calendar
                     }
                 }
             }
+
+            possibleEvents.Add(new CalendarEvent(EventType.Bootcamp, dayOffset, 0, -1));
         }
 
         /// <summary>
@@ -90,6 +92,10 @@ namespace MOBAManager.UI.Calendar
                     {
                         desc = "Schedule a pick-up game with " + tm.GetTeamName(cur.team1ID);
                     }
+                }
+                else if (cur.type == EventType.Bootcamp)
+                {
+                    desc = "Schedule a bootcamp.";
                 }
 
                 Button btn = new Button();

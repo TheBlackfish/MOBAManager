@@ -44,6 +44,8 @@ namespace MOBAManager.UI.Calendar
         /// The function to call when the calender control should be closed.
         /// </summary>
         private readonly Action closeFunc = null;
+
+        private Size currentClientSize = new Size(0, 0);
         #endregion
 
         #region Public methods
@@ -96,6 +98,10 @@ namespace MOBAManager.UI.Calendar
             newMonth.BringToFront();
         }
 
+        /// <summary>
+        /// Forces the calendar container to fully update a month's grid.
+        /// </summary>
+        /// <param name="fullUpdate"></param>
         private void UpdateCalendarContainer(bool fullUpdate)
         {
             if (fullUpdate)
@@ -196,6 +202,10 @@ namespace MOBAManager.UI.Calendar
             }
         }
 
+        /// <summary>
+        /// Creates and shows a scheduling window for the specified offset.
+        /// </summary>
+        /// <param name="offset"></param>
         private void ShowScheduleControl(int offset)
         {
             CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset, SubmitCalenderEvent);
@@ -241,15 +251,19 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         private void calendarContainer_Resize(object sender, EventArgs e)
         {
-            foreach(TableLayoutPanel tlp in monthGrids.Values)
+            if (Size.Width != currentClientSize.Width && Size.Height != currentClientSize.Height)
             {
-                tlp.Size = new Size(calendarContainer.ClientSize.Width - 20, tlp.Size.Height);
-                tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Width - 96);
-                for (int i = 0; i < tlp.RowCount; i++)
+                foreach (TableLayoutPanel tlp in monthGrids.Values)
                 {
-                    tlp.GetControlFromPosition(1, i).MaximumSize = new Size(tlp.Size.Width - 96, 0);
-                    tlp.GetControlFromPosition(1, i).MinimumSize = new Size(tlp.Size.Width - 96, 48);
+                    tlp.Size = new Size(calendarContainer.ClientSize.Width - 20, tlp.Size.Height);
+                    tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Width - 96);
+                    for (int i = 0; i < tlp.RowCount; i++)
+                    {
+                        tlp.GetControlFromPosition(1, i).MaximumSize = new Size(tlp.Size.Width - 96, 0);
+                        tlp.GetControlFromPosition(1, i).MinimumSize = new Size(tlp.Size.Width - 96, 48);
+                    }
                 }
+                currentClientSize = Size;
             }
         }
 
@@ -285,6 +299,11 @@ namespace MOBAManager.UI.Calendar
             }
         }
         
+        /// <summary>
+        /// Calls the close function of the calender view.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void returnButton_Click(object sender, EventArgs e)
         {
             if (closeFunc != null)

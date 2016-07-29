@@ -4,6 +4,7 @@ using MOBAManager.Management.Players;
 using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
 using MOBAManager.MatchResolution;
+using MOBAManager.Resolution.BootcampResolution;
 using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,16 @@ namespace MOBAManager.Management
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Turns a calendar event into a bootcamp session.
+        /// </summary>
+        /// <param name="ce">The CalendarEvent to translate.</param>
+        /// <returns></returns>
+        public BootcampSession TranslateEventToBootcamp(CalendarEvent ce)
+        {
+            return new BootcampSession(teamManager.GetTeamByID(ce.team1ID), heroManager.GetIDSortedNames());
+        }
+
         /// <summary>
         /// Turns a calendar event into a match.
         /// </summary>

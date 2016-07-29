@@ -46,20 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\Calendar\CalendarEnums.cs" />
     <Compile Include="Management\Calendar\CalendarEvent.cs" />
     <Compile Include="Management\Calendar\CalendarManager.cs" />
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
-    <Compile Include="MatchResolution\Match.cs" />
-    <Compile Include="MatchResolution\MatchAI.cs" />
-    <Compile Include="MatchResolution\MatchAIInformation.cs" />
-    <Compile Include="MatchResolution\MatchAIPlayerInteraction.cs" />
-    <Compile Include="MatchResolution\MatchAIThreading.cs" />
-    <Compile Include="MatchResolution\MatchInformation.cs" />
-    <Compile Include="MatchResolution\MatchPlayerInteraction.cs" />
-    <Compile Include="MatchResolution\MatchAIResolver.cs" />
-    <Compile Include="MatchResolution\MatchThreading.cs" />
+    <Compile Include="Resolution\MatchResolution\Match.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchAI.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchAIInformation.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchAIPlayerInteraction.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchAIThreading.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchInformation.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchPlayerInteraction.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchAIResolver.cs" />
+    <Compile Include="Resolution\MatchResolution\MatchThreading.cs" />
+    <Compile Include="Resolution\BootcampResolution\BootcampSession.cs" />
     <Compile Include="UI\Calendar\CalendarScheduleControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

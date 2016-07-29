@@ -13,6 +13,7 @@ using MOBAManager.UI.Meta;
 using MOBAManager.Management.Calendar;
 using System.Threading;
 using MOBAManager.UI.Calendar;
+using MOBAManager.Resolution.BootcampResolution;
 
 namespace MOBAManager.UI
 {
@@ -119,6 +120,7 @@ namespace MOBAManager.UI
         private void resolutionButton_Click(object sender, EventArgs e)
         {
             List<Match> pickupgames = new List<Match>();
+            List<BootcampSession> bootcamps = new List<BootcampSession>();
 
             foreach (CalendarEvent ce in gameManager.calendarManager.GetTodaysEvents())
             {
@@ -127,10 +129,13 @@ namespace MOBAManager.UI
                     case EventType.PUG:
                         pickupgames.Add(gameManager.TranslateEventToMatch(ce));
                         break;
+                    case EventType.Bootcamp:
+                        bootcamps.Add(gameManager.TranslateEventToBootcamp(ce));
+                        break;
                 }
             }
 
-            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, ResolveDailyResolution);
+            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, bootcamps, ResolveDailyResolution);
 
             //Display event manager
             SetButtonStates(false);
@@ -145,7 +150,7 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void calendarButton_Click(object sender, EventArgs e)
         {
-            Action closeStats = () =>
+            Action closeCalendar = () =>
             {
                 foreach (Control c in Controls)
                 {
@@ -157,7 +162,7 @@ namespace MOBAManager.UI
                     }
                 }
             };
-            CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager, closeStats);
+            CalendarViewControl cvc = new CalendarViewControl(gameManager.calendarManager, gameManager.teamManager, closeCalendar);
 
             SetButtonStates(false);
             Controls.Add(cvc);

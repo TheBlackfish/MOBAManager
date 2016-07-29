@@ -43,6 +43,8 @@ namespace MOBAManager.Management.Calendar
         #region Constructors
         /// <summary>
         /// Creates a new calendar event.
+        /// <para>If the specified type is PUG, then id1 and id2 are supposed to be the IDs of the two teams playing in the PUG.</para>
+        /// <para>If the specified type is Bootcamp, then id1 is the ID of the team performing the bootcamp. id2 is ignored.</para>
         /// </summary>
         /// <param name="eventType">The enum that determines which type of event this is.</param>
         /// <param name="daysLeft">How many days until this event resolves. (0 is the same day)</param>
@@ -58,6 +60,10 @@ namespace MOBAManager.Management.Calendar
                 case EventType.PUG:
                     team1ID = id1;
                     team2ID = id2;
+                    break;
+                case EventType.Bootcamp:
+                    team1ID = id1;
+                    team2ID = -1;
                     break;
             }
         }

@@ -101,6 +101,43 @@ namespace MOBAManager.Management.Calendar
         }
 
         /// <summary>
+        /// Creates a new bootcamp event on the current date for the specified team.
+        /// </summary>
+        /// <param name="teamID">The team to schedule a bootcamp for.</param>
+        /// <returns></returns>
+        public bool AddBootcamp(int teamID)
+        {
+            return AddBootcamp(teamID, 0);
+        }
+
+        /// <summary>
+        /// Creates a new bootcamp event on the current date for the specified team on the specified date time.
+        /// </summary>
+        /// <param name="teamID">The team to schedule a bootcamp for.</param>
+        /// <param name="date">The DateTime to schedule the event on.</param>
+        /// <returns></returns>
+        public bool AddBootcamp(int teamID, DateTime date)
+        {
+            TimeSpan timeRemaining = date - currentDate;
+            RemoveAllEventsForTeamOnOffset(teamID, (int)Math.Round(timeRemaining.TotalDays));
+            allEvents.Add(new CalendarEvent(EventType.Bootcamp, (int)Math.Round(timeRemaining.TotalDays), teamID, -1));
+            return true;
+        }
+
+        /// <summary>
+        /// Creates a new bootcamp event on the current date for the specified team on the specified offset.
+        /// </summary>
+        /// <param name="teamID">The team to schedule a bootcamp for.</param>
+        /// <param name="offset">The offset to schedule the event on.</param>
+        /// <returns></returns>
+        public bool AddBootcamp(int teamID, int offset)
+        {
+            RemoveAllEventsForTeamOnOffset(teamID, offset);
+            allEvents.Add(new CalendarEvent(EventType.Bootcamp, offset, teamID, -1));
+            return true;
+        }
+
+        /// <summary>
         /// Creates a new pickup game event for the same day.
         /// </summary>
         /// <param name="team1ID">The left team's ID.</param>
@@ -108,7 +145,7 @@ namespace MOBAManager.Management.Calendar
         /// <returns></returns>
         public bool AddPickupGame(int team1ID, int team2ID)
         {
-            return AddPickupGame(team1ID, team2ID, currentDate);
+            return AddPickupGame(team1ID, team2ID, 0);
         }
 
         /// <summary>
@@ -142,11 +179,24 @@ namespace MOBAManager.Management.Calendar
 
         /// <summary>
         /// Returns a list containing all events that should happen on the current in-game date.
+        /// <para>Additionally, each team that does not have an event for the day schedules a bootcamp to occupy their time.</para>
         /// </summary>
         /// <returns></returns>
         public List<CalendarEvent> GetTodaysEvents()
         {
-            return allEvents.Where(ce => ce.daysToResolution == 0).ToList();
+            List<CalendarEvent> todaysEvents = allEvents.Where(ce => ce.daysToResolution == 0).ToList();
+
+            foreach (Team t in tm.GetAllTeams())
+            {
+                if (!todaysEvents.Any(ce => ce.team1ID == t.ID || ce.team2ID == t.ID) && t.ID != 0)
+                {
+                    CalendarEvent placeholder = new CalendarEvent(EventType.Bootcamp, 0, t.ID, -1);
+                    todaysEvents.Add(placeholder);
+                    allEvents.Add(placeholder);
+                }
+            }
+
+            return todaysEvents;
         }
 
         /// <summary>
@@ -234,6 +284,10 @@ namespace MOBAManager.Management.Calendar
                                 {
                                     evtdesc += "Pick-up game against " + tm.GetTeamName(ce.team1ID);
                                 }
+                            }
+                            else if (ce.type == EventType.Bootcamp)
+                            {
+                                evtdesc += "Bootcamp";
                             }
                         }
                         if (evtdesc.Length > 0)

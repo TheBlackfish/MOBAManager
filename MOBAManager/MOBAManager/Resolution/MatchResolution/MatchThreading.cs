@@ -113,7 +113,13 @@ namespace MOBAManager.MatchResolution
             deferredPhase++;
             if (deferredPhase == 20)
             {
-                Task.Run(() => ThreadedResolveWinner());
+                //Task.Run(() => ThreadedResolveWinner());
+                Task.Run(async delegate
+                {
+                    await Task.Delay(5000, new CancellationToken());
+                    ThreadedResolveWinner();
+                    return 0;
+                });
             }
             _changed = true;
         }
@@ -225,8 +231,8 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         public void ThreadedResolveWinner()
         {
-            _winner = ms.DecideWinner();
             Thread.Sleep(5000);
+            _winner = ms.DecideWinner();
             _finished = true;
         }
 
