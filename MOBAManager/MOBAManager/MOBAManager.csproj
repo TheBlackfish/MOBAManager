@@ -80,6 +80,12 @@
     <Compile Include="UI\DailyMenu.Designer.cs">
       <DependentUpon>DailyMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\DailyResolution\BootcampResolutionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DailyResolution\BootcampResolutionControl.Designer.cs">
+      <DependentUpon>BootcampResolutionControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DailyResolution\EventResolutionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     <EmbeddedResource Include="UI\DailyMenu.resx">
       <DependentUpon>DailyMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\DailyResolution\BootcampResolutionControl.resx">
+      <DependentUpon>BootcampResolutionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DailyResolution\EventResolutionControl.resx">
       <DependentUpon>EventResolutionControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -146,6 +155,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="UI\DailyResolution\MatchResolutionControl.resx">
       <DependentUpon>MatchResolutionControl.cs</DependentUpon>
@@ -171,6 +181,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Art\Icons\confirmation.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

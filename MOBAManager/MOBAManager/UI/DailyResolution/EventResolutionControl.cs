@@ -12,6 +12,7 @@ using MOBAManager.Management.Statistics;
 using MOBAManager.Utility;
 using MOBAManager.Resolution.BootcampResolution;
 using MOBAManager.Management.Calendar;
+using MOBAManager.UI.DailyResolution;
 
 namespace MOBAManager.UI
 {
@@ -59,14 +60,19 @@ namespace MOBAManager.UI
         private bool allEventsResolved = false;
 
         /// <summary>
-        /// The current player match to be resolved
+        /// The current player match to be resolved.
         /// </summary>
         private Match currentPlayerMatch = null;
 
         /// <summary>
+        /// The current player bootcamp to be resolved.
+        /// </summary>
+        private BootcampSession currentPlayerBootcamp = null;
+
+        /// <summary>
         /// The control variable for if the player has a match to resolve.
         /// </summary>
-        private bool waitingToStartPlayerMatch = false;
+        private bool waitingToStartPlayerEvent = false;
 
         /// <summary>
         /// The function that is called when the user clicks to close this control.
@@ -160,9 +166,54 @@ namespace MOBAManager.UI
             BootcampSession cur = bootcamps[curIndex];
             bootcamps.RemoveAt(curIndex);
 
-            cur.InstantlyResolve();
-            AddEventNotification(cur.GetSummary());
+            if (cur.isPlayerControlled)
+            {
+                currentPlayerBootcamp = cur;
+                waitingToStartPlayerEvent = true;
+                resolutionTimer.Enabled = false;
+                AddEventNotification("Click to begin bootcamp.");
+            }
+            else
+            {
+                cur.InstantlyResolve();
+                AddEventNotification(cur.GetSummary());
+                resolutionTimer.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new bootcamp resolution control and displays it.
+        /// </summary>
+        private void StartCurrentPlayerBootcamp()
+        {
+            BootcampResolutionControl brc = new BootcampResolutionControl(currentPlayerBootcamp, onPlayerBootcampResolved);
+            Action addition = () =>
+            {
+                Controls.Add(brc);
+                brc.BringToFront();
+            };
+            BeginInvoke(addition);
+        }
+
+        /// <summary>
+        /// Closes the bootcamp resolution control and continues with the normal resolution process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onPlayerBootcampResolved(object sender, EventArgs e)
+        {
+            foreach (Control o in Controls)
+            {
+                if (o is BootcampResolutionControl)
+                {
+                    Controls.Remove(o);
+                }
+            }
+
+            AddEventNotification(currentPlayerBootcamp.GetSummary());
             resolutionTimer.Enabled = true;
+            currentPlayerBootcamp = null;
+            waitingToStartPlayerEvent = false;
         }
 
         /// <summary>
@@ -179,7 +230,7 @@ namespace MOBAManager.UI
             if (cur.IsThreaded)
             {
                 currentPlayerMatch = cur;
-                waitingToStartPlayerMatch = true;
+                waitingToStartPlayerEvent = true;
                 resolutionTimer.Enabled = false;
                 AddEventNotification("Click to begin the match against " + cur.GetAITeamName());
             }
@@ -236,7 +287,7 @@ namespace MOBAManager.UI
             }
             resolutionTimer.Enabled = true;
             currentPlayerMatch = null;
-            waitingToStartPlayerMatch = false;
+            waitingToStartPlayerEvent = false;
         }
 
         /// <summary>
@@ -303,9 +354,16 @@ namespace MOBAManager.UI
             {
                 onCloseFunc?.Invoke();
             }
-            else if (waitingToStartPlayerMatch && currentPlayerMatch != null)
+            else if (waitingToStartPlayerEvent)
             {
-                StartCurrentPlayerMatch();
+                if (currentPlayerBootcamp != null)
+                {
+                    StartCurrentPlayerBootcamp();
+                }
+                else if (currentPlayerMatch != null)
+                {
+                    StartCurrentPlayerMatch();
+                }
             }
         }
         #endregion

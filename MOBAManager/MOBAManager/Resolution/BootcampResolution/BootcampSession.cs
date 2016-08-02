@@ -18,7 +18,12 @@ namespace MOBAManager.Resolution.BootcampResolution
         /// <summary>
         /// The name of the team involved with this bootcamp.
         /// </summary>
-        private string teamName;
+        public string teamName;
+
+        /// <summary>
+        /// Control variable for if the bootcamp session is player-controlled or not.
+        /// </summary>
+        public bool isPlayerControlled;
 
         /// <summary>
         /// The list of 'training modes' for each player in this bootcamp.
@@ -81,6 +86,54 @@ namespace MOBAManager.Resolution.BootcampResolution
 
         #region Public methods
         /// <summary>
+        /// Returns a list of all of the names of all players participating in this bootcamp.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetPlayerNames()
+        {
+            return (trainingModes.Select(t => t.Item1.PlayerName).ToList());
+        }
+
+        /// <summary>
+        /// Returns a list of all of the names of all heroes.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetHeroNames()
+        {
+            return (heroNames.OrderBy(t => t.Item1).Select(t => t.Item2).ToList());
+        }
+
+        /// <summary>
+        /// Inserts a training mode for a player at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the player to submit the training for.</param>
+        /// <param name="mode">The type of training for this player. If 0, will return false as the 0 training mode requires a specification.</param>
+        /// <returns></returns>
+        public bool SubmitTrainingMode(int index, int mode)
+        {
+            if (mode == 0)
+            {
+                return false;
+            }
+            return SubmitTrainingMode(index, mode, -1);
+        }
+
+        /// <summary>
+        /// Inserts a training mode for a player at the specified index.
+        /// </summary>
+        /// <param name="index">The index of the player to submit the training for.</param>
+        /// <param name="mode">The type of training for this player.</param>
+        /// <param name="specific">The specific parameter for training. Only needed if the training mode is 0.</param>
+        /// <returns></returns>
+        public bool SubmitTrainingMode(int index, int mode, int specific)
+        {
+            Tuple<Player, int, int> prevTM = trainingModes[index];
+            Tuple<Player, int, int> tm = new Tuple<Player, int, int>(prevTM.Item1, mode, specific);
+            trainingModes[index] = tm;
+            return true;
+        }
+
+        /// <summary>
         /// Gets a brief description of the bootcamp for the event resolution screen.
         /// </summary>
         /// <returns></returns>
@@ -125,6 +178,18 @@ namespace MOBAManager.Resolution.BootcampResolution
                 trainingModes.Add(new Tuple<Player, int, int>(p, -1, -1));
             }
             this.heroNames = heroNames;
+        }
+
+        /// <summary>
+        /// Creates a player-controlled bootcamp.
+        /// </summary>
+        /// <param name="team">The team that is holding the bootcamp.</param>
+        /// <param name="heroNames">The list of ordered hero names with IDs for reference.</param>
+        /// <param name="isPlayerControlled">If true, this bootcamp will require player </param>
+        public BootcampSession(Team team, List<Tuple<int, string>> heroNames, bool isPlayerControlled)
+            : this(team, heroNames)
+        {
+            this.isPlayerControlled = isPlayerControlled;
         }
         #endregion
     }

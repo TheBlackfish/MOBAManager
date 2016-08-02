@@ -51,6 +51,10 @@ namespace MOBAManager.Management
         /// <returns></returns>
         public BootcampSession TranslateEventToBootcamp(CalendarEvent ce)
         {
+            if (ce.team1ID == 0)
+            {
+                return new BootcampSession(teamManager.GetTeamByID(ce.team1ID), heroManager.GetIDSortedNames(), true);
+            }
             return new BootcampSession(teamManager.GetTeamByID(ce.team1ID), heroManager.GetIDSortedNames());
         }
 
