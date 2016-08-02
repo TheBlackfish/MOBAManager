@@ -47,25 +47,23 @@ namespace MOBAManager.Management.Heroes
                 "Zo-Kalar"
             };
 
-            int[] initialSkill = new int[] { 7, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 1, -1, -1, -1, -1 };
+            //Create initial skills
+            List<int> initialSkill = new List<int>();
+            initialSkill.AddRange(new int[] { 7, 6, 5, 5, 4, 4, 3, 3, 2, 2, 2, 1, 1, 1, -1, -1, -1, -1, -2, -2 });
+            while (initialSkill.Count != heroNames.Length)
+            {
+                initialSkill.Add(0);
+            }
 
             //Create initial heroes
-            while (heroNames.Length > 0 && initialSkill.Length > 0)
+            foreach (string curHero in heroNames)
             {
-                string curHero = heroNames[RNG.Roll(heroNames.Length)];
-
-                allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, curHero, initialSkill[0]));
-
-                heroNames = heroNames.Where(n => !n.Equals(curHero)).ToArray();
-                initialSkill = initialSkill.Skip(1).ToArray();
-            }
-            while (heroNames.Length > 0)
-            {
-                allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, heroNames[0]));
-                heroNames = heroNames.Skip(1).ToArray();
+                int randSkillIndex = initialSkill[RNG.Roll(initialSkill.Count)];
+                allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, curHero, initialSkill[randSkillIndex]));
+                initialSkill.RemoveAt(randSkillIndex);
             }
 
-            List<int[]> synergyPairs = new List<int[]>();
+            List <int[]> synergyPairs = new List<int[]>();
             List<int[]> counterPairs = new List<int[]>();
 
             for (int i = 0; i < allHeroes.Count; i++)
