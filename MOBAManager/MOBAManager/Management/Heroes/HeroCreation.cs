@@ -58,7 +58,7 @@ namespace MOBAManager.Management.Heroes
             //Create initial heroes
             foreach (string curHero in heroNames)
             {
-                int randSkillIndex = initialSkill[RNG.Roll(initialSkill.Count)];
+                int randSkillIndex = RNG.Roll(initialSkill.Count);
                 allHeroes.Add(allHeroes.Count, new Hero(allHeroes.Count, curHero, initialSkill[randSkillIndex]));
                 initialSkill.RemoveAt(randSkillIndex);
             }
