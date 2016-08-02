@@ -45,7 +45,7 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         private readonly Action closeFunc = null;
 
-        private Size currentClientSize = new Size(0, 0);
+        private Size currentSize = new Size(0, 0);
         #endregion
 
         #region Public methods
@@ -71,6 +71,16 @@ namespace MOBAManager.UI.Calendar
         #endregion
 
         #region Private methods
+        private void prepareCalendarContainer(int offset)
+        {
+            if (offset <= 12)
+            {
+                DateTime toShow = baseline.AddMonths(offset);
+                GetMonthlyPanel(toShow.Month, toShow.Year);
+                prepareCalendarContainer(offset+1);
+            }
+        }
+
         /// <summary>
         /// Figures out which month to show and then either a) retrieves its grid from the dictionary of grids, or b) constructs a new grid for that month. Either way,
         /// the grid is then shown on-screen.
@@ -81,21 +91,25 @@ namespace MOBAManager.UI.Calendar
             monthLabel.Text = toShow.ToString("MMMM yyyy");
 
             TableLayoutPanel newMonth = GetMonthlyPanel(toShow.Month, toShow.Year);
-            if (!calendarContainer.Controls.Contains(newMonth))
+            Action update = () =>
             {
-                calendarContainer.Controls.Add(newMonth);
-            }
-
-            foreach (Control c in calendarContainer.Controls)
-            {
-                if (c is TableLayoutPanel)
+                if (!calendarContainer.Controls.Contains(newMonth))
                 {
-                    c.Hide();
+                    calendarContainer.Controls.Add(newMonth);
                 }
-            }
-            newMonth.Show();
-            newMonth.Location = new Point(0, 0 - calendarContainer.AutoScrollPosition.Y);
-            newMonth.BringToFront();
+
+                foreach (Control c in calendarContainer.Controls)
+                {
+                    if (c is TableLayoutPanel)
+                    {
+                        c.Hide();
+                    }
+                }
+                newMonth.Show();
+                newMonth.Location = new Point(0, 0 - calendarContainer.AutoScrollPosition.Y);
+                newMonth.BringToFront();
+            };
+            BeginInvoke(update);
         }
 
         /// <summary>
@@ -140,8 +154,9 @@ namespace MOBAManager.UI.Calendar
                 TableLayoutPanel monthGrid = new TableLayoutPanel();
                 monthGrid.Location = new Point(3, 3);
                 monthGrid.Name = month + "-" + year + "Grid";
-                monthGrid.Size = new Size(calendarContainer.ClientSize.Width - 20, calendarContainer.Size.Height - 6);
+                monthGrid.Size = new Size(calendarContainer.Size.Width - 20 - SystemInformation.VerticalScrollBarWidth, calendarContainer.Size.Height - 6);
                 monthGrid.RowCount = DateTime.DaysInMonth(year, month);
+                monthGrid.SuspendLayout();
 
                 int totalHeight = 0;
                 for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++)
@@ -196,8 +211,12 @@ namespace MOBAManager.UI.Calendar
                 monthGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48));
                 monthGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, monthGrid.Size.Width - 96));
                 monthGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 48));
+                monthGrid.ResumeLayout(false);
 
-                monthGrids.Add(key, monthGrid);
+                if (!monthGrids.ContainsKey(key))
+                {
+                    monthGrids.Add(key, monthGrid);
+                }
                 return monthGrid;
             }
         }
@@ -230,7 +249,15 @@ namespace MOBAManager.UI.Calendar
 
             monthGrids = new Dictionary<string, TableLayoutPanel>();
 
-            UpdateCalendarContainer();
+            Task.Run(() =>
+            {
+                UpdateCalendarContainer();
+            });
+
+            Task.Run(() =>
+            {
+                prepareCalendarContainer(1);
+            });
         }
         #endregion
 
@@ -242,7 +269,7 @@ namespace MOBAManager.UI.Calendar
         {
             if (Parent != null)
             {
-                Size = Parent.ClientSize;
+                Size = Parent.Size;
             }
         }
 
@@ -251,19 +278,19 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         private void calendarContainer_Resize(object sender, EventArgs e)
         {
-            if (Size.Width != currentClientSize.Width && Size.Height != currentClientSize.Height)
+            if (Size.Width != currentSize.Width && Size.Height != currentSize.Height)
             {
                 foreach (TableLayoutPanel tlp in monthGrids.Values)
                 {
-                    tlp.Size = new Size(calendarContainer.ClientSize.Width - 20, tlp.Size.Height);
-                    tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Width - 96);
+                    tlp.Size = new Size(calendarContainer.Size.Width - 20 - System.Windows.Forms.SystemInformation.VerticalScrollBarWidth, tlp.Size.Height);
+                    tlp.ColumnStyles[1] = new ColumnStyle(SizeType.Absolute, tlp.Size.Width - 96);
                     for (int i = 0; i < tlp.RowCount; i++)
                     {
                         tlp.GetControlFromPosition(1, i).MaximumSize = new Size(tlp.Size.Width - 96, 0);
                         tlp.GetControlFromPosition(1, i).MinimumSize = new Size(tlp.Size.Width - 96, 48);
                     }
                 }
-                currentClientSize = Size;
+                currentSize = Size;
             }
         }
 
