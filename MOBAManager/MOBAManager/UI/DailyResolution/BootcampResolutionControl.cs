@@ -186,6 +186,12 @@ namespace MOBAManager.UI.DailyResolution
                 };
                 playerSelection.SelectedIndexChanged += new EventHandler(requireClarifiction);
 
+                Action<object, EventArgs> check = (object sender, EventArgs e) =>
+                {
+                    acceptButton.Enabled = checkButtonState();
+                };
+                clarificationSelection.SelectedIndexChanged += new EventHandler(check);
+
                 //Init containing panel
                 Panel selectionContainer = new Panel();
                 selectionContainer.Size = new Size(300, 60);
@@ -226,6 +232,7 @@ namespace MOBAManager.UI.DailyResolution
             this.onEndFunc = onEndFunc;
             heroNames = bm.GetHeroNames();
             acceptButton.Enabled = false;
+            titleText.Text = bm.teamName + " Bootcamp";
             initBootcampTable();
             checkButtonState();
         }

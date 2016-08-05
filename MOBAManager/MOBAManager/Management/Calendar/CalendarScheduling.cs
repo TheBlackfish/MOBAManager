@@ -26,7 +26,7 @@ namespace MOBAManager.Management.Calendar
                 return;
             }
 
-            List<Team> allTeams = tm.GetAllTeams();
+            List<Team> allTeams = teamManager.GetAllTeams();
 
             for (int iteration = 0; iteration < iterations; iteration++)
             {
@@ -91,7 +91,7 @@ namespace MOBAManager.Management.Calendar
             List<Team> possibleOpponents = new List<Team>();
             while (possibleOpponents.Count == 0)
             {
-                possibleOpponents = tm.GetAllTeams().Where(team => team.ID != 0 && team.ID != t.ID).Where(team => !TeamHasEventsOnDate(team.ID, randOffset)).ToList();
+                possibleOpponents = teamManager.GetAllTeams().Where(team => team.ID != 0 && team.ID != t.ID).Where(team => !TeamHasEventsOnDate(team.ID, randOffset)).ToList();
                 if (possibleOpponents.Count == 0)
                 {
                     randOffset++;

@@ -14,6 +14,7 @@ using MOBAManager.Management.Calendar;
 using System.Threading;
 using MOBAManager.UI.Calendar;
 using MOBAManager.Resolution.BootcampResolution;
+using MOBAManager.Management.Tournaments;
 
 namespace MOBAManager.UI
 {
@@ -53,6 +54,7 @@ namespace MOBAManager.UI
                 }
             }
             gameManager.calendarManager.IncrementCalender();
+            gameManager.tournamentManager.advanceDay();
             gameManager.calendarManager.ScheduleRandomEventsForEachAITeam();
             label1.Text = gameManager.calendarManager.GetFormattedDate();
         }
@@ -132,10 +134,15 @@ namespace MOBAManager.UI
                     case EventType.Bootcamp:
                         bootcamps.Add(gameManager.TranslateEventToBootcamp(ce));
                         break;
+                    case EventType.TournamentPlaceholder:
+                        gameManager.tournamentManager.ActivateTournament(ce.tournamentID);
+                        break;
                 }
             }
 
-            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, bootcamps, ResolveDailyResolution);
+            List<Tournament> tournaments = gameManager.tournamentManager.GetActiveTournaments();
+
+            EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, bootcamps, tournaments, ResolveDailyResolution);
 
             //Display event manager
             SetButtonStates(false);

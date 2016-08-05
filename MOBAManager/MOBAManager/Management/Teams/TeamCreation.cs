@@ -15,7 +15,9 @@
                 "China One",
                 "Living Legends",
                 "MaSci",
-                "Unicorns"
+                "Screaming Eagles",
+                "Unicorns",
+                "XG Pro"
             };
 
             foreach (string n in names)

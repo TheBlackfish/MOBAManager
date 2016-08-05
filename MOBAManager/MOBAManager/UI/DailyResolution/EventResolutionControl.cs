@@ -13,6 +13,7 @@ using MOBAManager.Utility;
 using MOBAManager.Resolution.BootcampResolution;
 using MOBAManager.Management.Calendar;
 using MOBAManager.UI.DailyResolution;
+using MOBAManager.Management.Tournaments;
 
 namespace MOBAManager.UI
 {
@@ -43,6 +44,11 @@ namespace MOBAManager.UI
         /// The list of all bootcamps that can be resolved in any order.
         /// </summary>
         private readonly List<BootcampSession> bootcamps;
+
+        /// <summary>
+        /// The list of tournaments to resolve today.
+        /// </summary>
+        private readonly List<Tournament> tournaments;
 
         /// <summary>
         /// The list of stat bundles being gathered up for all of the day's matches.
@@ -97,7 +103,7 @@ namespace MOBAManager.UI
         /// </summary>
         private void ResolveRandomEvent(object sender, EventArgs e)
         {
-            if (!resolvingPlayerMatch && (pugs.Count > 0 || bootcamps.Count > 0))
+            if (!resolvingPlayerMatch && (pugs.Count > 0 || bootcamps.Count > 0 || tournaments.Count > 0))
             {
                 resolutionTimer.Enabled = false;
 
@@ -111,6 +117,11 @@ namespace MOBAManager.UI
                 if (pugs.Count > 0)
                 {
                     possibleTypes.Add(EventType.PUG);
+                }
+
+                if (tournaments.Count > 0)
+                {
+                    possibleTypes.Add(EventType.TournamentMatch);
                 }
 
                 EventType chosen = EventType.Null;
@@ -130,6 +141,9 @@ namespace MOBAManager.UI
                         break;
                     case EventType.Bootcamp:
                         resolveBootcamp();
+                        break;
+                    case EventType.TournamentMatch:
+                        resolveTournamentMatch();
                         break;
                 }
             }
@@ -157,6 +171,7 @@ namespace MOBAManager.UI
             BeginInvoke(action);
         }
 
+        #region Bootcamp
         /// <summary>
         /// Resolves a random bootcamp.
         /// </summary>
@@ -215,7 +230,9 @@ namespace MOBAManager.UI
             currentPlayerBootcamp = null;
             waitingToStartPlayerEvent = false;
         }
+        #endregion
 
+        #region PUGs
         /// <summary>
         /// Resolves a random pick-up game.
         /// </summary>
@@ -311,12 +328,50 @@ namespace MOBAManager.UI
         }
         #endregion
 
+        #region Tournament Matches
+        /// <summary>
+        /// Resolves a tournament match. If the match is player controlled it is queued to resolve upon player click, otherwise it is resolved immediately.
+        /// </summary>
+        private void resolveTournamentMatch()
+        {
+            Match m = tournaments[0].getMatch();
+            if (m != null)
+            {
+                if (m.IsThreaded)
+                {
+                    currentPlayerMatch = m;
+                    waitingToStartPlayerEvent = true;
+                    resolutionTimer.Enabled = false;
+                    AddEventNotification("Click to begin the tournament match against " + m.GetAITeamName());
+                }
+                else
+                {
+                    m.InstantlyResolve();
+                    statistics.Add(m.GetStats());
+                    m.ResolveMatchEffects();
+                    AddEventNotification(m.GetMatchSummary());
+                    resolutionTimer.Enabled = true;
+                }
+            }
+            else
+            {
+                AddEventNotification(tournaments[0].GetSummary());
+                tournaments.RemoveAt(0);
+                if (tournaments.Count > 0)
+                {
+                    resolveTournamentMatch();
+                }
+                resolutionTimer.Enabled = true;
+            }
+        }
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Creates a new EventResolutionControl.
         /// </summary>
         /// <param name="pickupGames">The list of all games in which order of resolution does not matter.</param>
-        public EventResolutionControl(string title, List<Match> pickupGames, List<BootcampSession> bootcamps, Action onClose)
+        public EventResolutionControl(string title, List<Match> pickupGames, List<BootcampSession> bootcamps, List<Tournament> tournaments, Action onClose)
         {
             InitializeComponent();
 
@@ -326,6 +381,7 @@ namespace MOBAManager.UI
             onCloseFunc = onClose;
             pugs = RandomizePickupGames(pickupGames);
             this.bootcamps = bootcamps;
+            this.tournaments = tournaments;
             resolutionTimer = new System.Timers.Timer(4000);
             resolutionTimer.Enabled = true;
             resolutionTimer.Elapsed += ResolveRandomEvent;

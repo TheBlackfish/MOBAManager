@@ -28,6 +28,11 @@ namespace MOBAManager.Management.Calendar
         /// The second team ID to affect, if any.
         /// </summary>
         public int team2ID = -1;
+
+        /// <summary>
+        /// The ID of the tournament this event is associated with, if any.
+        /// </summary>
+        public int tournamentID = -1;
         #endregion
 
         #region Public methods
@@ -63,7 +68,9 @@ namespace MOBAManager.Management.Calendar
                     break;
                 case EventType.Bootcamp:
                     team1ID = id1;
-                    team2ID = -1;
+                    break;
+                case EventType.TournamentPlaceholder:
+                    tournamentID = id1;
                     break;
             }
         }

@@ -3,6 +3,7 @@ using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Players;
 using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
+using MOBAManager.Management.Tournaments;
 using MOBAManager.MatchResolution;
 using MOBAManager.Resolution.BootcampResolution;
 using MOBAManager.Utility;
@@ -41,6 +42,11 @@ namespace MOBAManager.Management
         /// The team manager of the current game.
         /// </summary>
         public TeamManager teamManager;
+
+        /// <summary>
+        /// The tournament manager of the current game.
+        /// </summary>
+        public TournamentManager tournamentManager;
         #endregion
 
         #region Public Methods
@@ -92,11 +98,15 @@ namespace MOBAManager.Management
 
             teamManager = new TeamManager();
 
-            calendarManager = new CalendarManager(teamManager);
+            tournamentManager = new TournamentManager();
+
+            calendarManager = new CalendarManager(teamManager, tournamentManager);
 
             statsManager = new StatisticsManager(heroManager.GetHeroDictionary(), playerManager.GetPlayerDictionary(), teamManager.GetTeamDictionary());
 
             teamManager.PopulateTeams(playerManager.GetAllPlayers());
+
+            tournamentManager.CreateTournaments(calendarManager, teamManager, heroManager);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using MOBAManager.Management.Teams;
+using MOBAManager.Management.Tournaments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,12 @@ namespace MOBAManager.Management.Calendar
         /// <summary>
         /// The team manager that corresponds to the same game as this calendar manager.
         /// </summary>
-        private TeamManager tm;
+        private TeamManager teamManager;
+
+        /// <summary>
+        /// The tournament manager that corresponds to the same game as this calendar manager.
+        /// </summary>
+        private TournamentManager tournamentManager;
         #endregion
 
         #region Public methods
@@ -69,6 +75,14 @@ namespace MOBAManager.Management.Calendar
             if (ce.team2ID != -1)
             {
                 RemoveAllEventsForTeamOnOffset(ce.team2ID, ce.daysToResolution);
+            }
+            if (ce.tournamentID != -1)
+            {
+                List<int> ids = tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList();
+                foreach (int i in ids)
+                {
+                    RemoveAllEventsForTeamOnOffset(i, ce.daysToResolution);
+                }
             }
             allEvents.Add(ce);
             return true;
@@ -119,8 +133,7 @@ namespace MOBAManager.Management.Calendar
         public bool AddBootcamp(int teamID, DateTime date)
         {
             TimeSpan timeRemaining = date - currentDate;
-            RemoveAllEventsForTeamOnOffset(teamID, (int)Math.Round(timeRemaining.TotalDays));
-            allEvents.Add(new CalendarEvent(EventType.Bootcamp, (int)Math.Round(timeRemaining.TotalDays), teamID, -1));
+            AddCalendarEvent(new CalendarEvent(EventType.Bootcamp, (int)Math.Round(timeRemaining.TotalDays), teamID, -1));
             return true;
         }
 
@@ -132,8 +145,7 @@ namespace MOBAManager.Management.Calendar
         /// <returns></returns>
         public bool AddBootcamp(int teamID, int offset)
         {
-            RemoveAllEventsForTeamOnOffset(teamID, offset);
-            allEvents.Add(new CalendarEvent(EventType.Bootcamp, offset, teamID, -1));
+            AddCalendarEvent(new CalendarEvent(EventType.Bootcamp, offset, teamID, -1));
             return true;
         }
 
@@ -158,8 +170,7 @@ namespace MOBAManager.Management.Calendar
         public bool AddPickupGame(int team1ID, int team2ID, DateTime date)
         {
             TimeSpan timeRemaining = date - currentDate;
-            RemoveAllEventsForTeamsOnOffset(team1ID, team2ID, (int)Math.Round(timeRemaining.TotalDays));
-            allEvents.Add(new CalendarEvent(EventType.PUG, (int)Math.Round(timeRemaining.TotalDays), team1ID, team2ID));
+            AddCalendarEvent(new CalendarEvent(EventType.PUG, (int)Math.Round(timeRemaining.TotalDays), team1ID, team2ID));
             return true;
         }
 
@@ -172,8 +183,64 @@ namespace MOBAManager.Management.Calendar
         /// <returns></returns>
         public bool AddPickupGame(int team1ID, int team2ID, int offset)
         {
-            RemoveAllEventsForTeamsOnOffset(team1ID, team2ID, offset);
-            allEvents.Add(new CalendarEvent(EventType.PUG, offset, team1ID, team2ID));
+            AddCalendarEvent(new CalendarEvent(EventType.PUG, offset, team1ID, team2ID));
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a tournament placeholder event to the calendar.
+        /// </summary>
+        /// <param name="tournamentID">ID of the tournament.</param>
+        /// <param name="date">Date of the tournament</param>
+        /// <returns></returns>
+        public bool AddTournamentDate(int tournamentID, DateTime date)
+        {
+            TimeSpan timeRemaining = date - currentDate;
+            AddCalendarEvent(new CalendarEvent(EventType.TournamentPlaceholder, (int)Math.Round(timeRemaining.TotalDays), tournamentID, -1));
+            return true;
+        }
+
+        /// <summary>
+        /// Adds a tournament placeholder event to the calendar.
+        /// </summary>
+        /// <param name="tournamentID">ID of the tournament.</param>
+        /// <param name="offset">Offset when the offset would occur</param>
+        /// <returns></returns>
+        public bool AddTournamentDate(int tournamentID, int offset)
+        {
+            AddCalendarEvent(new CalendarEvent(EventType.TournamentPlaceholder, offset, tournamentID, -1));
+            return true;
+        }
+
+        /// <summary>
+        /// Adds multiple tournament placeholder events to the calender, starting with the starting date and continuing for the number of days specified.
+        /// </summary>
+        /// <param name="tournamentID">ID of the tournament.</param>
+        /// <param name="date">Date of when the tournament starts</param>
+        /// <param name="daysOfTournament">How long the tournament lasts for.</param>
+        /// <returns></returns>
+        public bool AddTournamentDates(int tournamentID, DateTime date, int daysOfTournament)
+        {
+            for (int i = 0; i < daysOfTournament; i++)
+            {
+                AddTournamentDate(tournamentID, date.AddDays(i));
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Adds multiple tournament placeholder events to the calender, starting with the starting date and continuing for the number of days specified.
+        /// </summary>
+        /// <param name="tournamentID">ID of the tournament.</param>
+        /// <param name="date">Offset for the first day of the tournament</param>
+        /// <param name="daysOfTournament">How long the tournament lasts for.</param>
+        /// <returns></returns>
+        public bool AddTournamentDates(int tournamentID, int offset, int daysOfTournament)
+        {
+            for (int i = 0; i < daysOfTournament; i++)
+            {
+                AddTournamentDate(tournamentID, offset + i);
+            }
             return true;
         }
 
@@ -186,13 +253,26 @@ namespace MOBAManager.Management.Calendar
         {
             List<CalendarEvent> todaysEvents = allEvents.Where(ce => ce.daysToResolution == 0).ToList();
 
-            foreach (Team t in tm.GetAllTeams())
+            foreach (Team t in teamManager.GetAllTeams())
             {
                 if (!todaysEvents.Any(ce => ce.team1ID == t.ID || ce.team2ID == t.ID) && t.ID != 0)
                 {
-                    CalendarEvent placeholder = new CalendarEvent(EventType.Bootcamp, 0, t.ID, -1);
-                    todaysEvents.Add(placeholder);
-                    allEvents.Add(placeholder);
+                    bool shouldAddBootcamp = true;
+                    if (todaysEvents.Any(ce => ce.type == EventType.TournamentPlaceholder))
+                    {
+                        foreach(int tid in todaysEvents.Where(ce => ce.type == EventType.TournamentPlaceholder).Select(ce => ce.tournamentID).ToList())
+                        {
+                            if (tournamentManager.GetTournamentByID(tid).GetAllTeams().Contains(t)) {
+                                shouldAddBootcamp = false;
+                            }
+                        }
+                    }
+                    if (shouldAddBootcamp)
+                    {
+                        CalendarEvent placeholder = new CalendarEvent(EventType.Bootcamp, 0, t.ID, -1);
+                        todaysEvents.Add(placeholder);
+                        allEvents.Add(placeholder);
+                    }
                 }
             }
 
@@ -220,6 +300,17 @@ namespace MOBAManager.Management.Calendar
         /// <returns></returns>
         public bool TeamHasEventsOnDate(int teamID, int dayOffset)
         {
+            if (allEvents.Any(ce => ce.type == EventType.TournamentPlaceholder && ce.daysToResolution == dayOffset))
+            {
+                foreach (CalendarEvent ce in allEvents.Where(ce => ce.type == EventType.TournamentPlaceholder && ce.daysToResolution == dayOffset).ToList())
+                {
+                    if (tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList().Contains(teamID))
+                    {
+                        return true;
+                    }
+                }
+            }
+            
             return (allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).Count() > 0);
         }
 
@@ -232,6 +323,16 @@ namespace MOBAManager.Management.Calendar
         public List<CalendarEvent> GetEventsForTeamOnDate(int teamID, int dayOffset)
         {
             return allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).ToList();
+        }
+
+        /// <summary>
+        /// Returns a list of all events on the specified date.
+        /// </summary>
+        /// <param name="dayOffset">The day to search events for.</param>
+        /// <returns></returns>
+        public List<CalendarEvent> GetEventsOnDate(int dayOffset)
+        {
+            return allEvents.Where(ce => ce.daysToResolution == dayOffset).ToList();
         }
 
         /// <summary>
@@ -255,10 +356,10 @@ namespace MOBAManager.Management.Calendar
 
             for (int i = minOffset; i < maxOffset; i++)
             {
-                Tuple<int, string> val = new Tuple<int, string>(0, "---");
+                Tuple<int, string> val = new Tuple<int, string>(0, "");
                 if (i < 0)
                 {
-                    val = new Tuple<int, string>(-1, "---");
+                    val = new Tuple<int, string>(-1, "");
                 }
                 else
                 {
@@ -278,11 +379,11 @@ namespace MOBAManager.Management.Calendar
                             {
                                 if (ce.team1ID == teamID)
                                 {
-                                    evtdesc += "Pick-up game against " + tm.GetTeamName(ce.team2ID);
+                                    evtdesc += "Pick-up game against " + teamManager.GetTeamName(ce.team2ID);
                                 }
                                 else
                                 {
-                                    evtdesc += "Pick-up game against " + tm.GetTeamName(ce.team1ID);
+                                    evtdesc += "Pick-up game against " + teamManager.GetTeamName(ce.team1ID);
                                 }
                             }
                             else if (ce.type == EventType.Bootcamp)
@@ -301,15 +402,65 @@ namespace MOBAManager.Management.Calendar
 
             return ret;
         }
+
+        /// <summary>
+        /// Returns a list of tuples that describe all tournaments over the course of a month. The tuples are stored in the list in order of the days they occur.
+        /// The statuses themselves consist of an integer and a string description. If the integer is -1, the day has a tournament occurring and will block calendar input.
+        /// If the integer is 0, the day has no events and a generic placeholder will be presented as the day's summary. If 1, the day has one or more events summarised in the
+        /// event description string.
+        /// </summary>
+        /// <param name="month">The month, 1-12</param>
+        /// <param name="year">The year</param>
+        /// <returns></returns>
+        public List<Tuple<int, string>> GetTournamentsInMonth(int month, int year)
+        {
+            DateTime targetDate = new DateTime(year, month, 1);
+            int minOffset = (targetDate - currentDate).Days;
+            int maxOffset = minOffset + DateTime.DaysInMonth(year, month);
+
+            List<Tuple<int, string>> ret = new List<Tuple<int, string>>();
+
+            for (int i = minOffset; i < maxOffset; i++)
+            {
+                List<CalendarEvent> allEventsOnDate = GetEventsOnDate(i);
+                if (allEventsOnDate.Count > 0)
+                {
+                    //Find out what tournament is running and add its name to the return value.
+                    string evtdesc = "";
+                    foreach (CalendarEvent ce in allEventsOnDate)
+                    {
+                        if (ce.type == EventType.TournamentPlaceholder)
+                        {
+                            evtdesc += tournamentManager.GetTournamentByID(ce.tournamentID).name;
+                        }
+                    }
+                    if (evtdesc.Length > 0)
+                    {
+                        ret.Add(new Tuple<int, string>(-1, evtdesc));
+                    }
+                    else
+                    {
+                        ret.Add(new Tuple<int, string>(0, ""));
+                    }
+                }
+                else
+                {
+                    ret.Add(new Tuple<int, string>(0, ""));
+                }
+            }
+
+            return ret;
+        }
         #endregion
 
         #region Constructors
         /// <summary>
         /// Creates a new calendar manager.
         /// </summary>
-        public CalendarManager(TeamManager tm)
+        public CalendarManager(TeamManager teamManager, TournamentManager tournamentManager)
         {
-            this.tm = tm;
+            this.teamManager = teamManager;
+            this.tournamentManager = tournamentManager;
             currentDate = DateTime.Now;
             allEvents = new List<CalendarEvent>();
             ScheduleRandomEventsForEachAITeam(4);

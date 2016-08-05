@@ -63,6 +63,29 @@ namespace MOBAManager.MatchResolution
         }
 
         /// <summary>
+        /// Returns the ID of the winning team, or -1 if none has been decided yet.
+        /// </summary>
+        internal int WinnerID
+        {
+            get
+            {
+                if (_winner == -1)
+                {
+                    return -1;
+                }
+                else if (_winner == 1)
+                {
+                    return team1.ID;
+                }
+                else if (_winner == 2)
+                {
+                    return team2.ID;
+                }
+                return -1;
+            }
+        }
+
+        /// <summary>
         /// Has both teams go through the ban/pick phase instantly and then decides a winner.
         /// </summary>
         internal void InstantlyResolve()

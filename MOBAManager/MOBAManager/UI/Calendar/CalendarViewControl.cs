@@ -45,6 +45,9 @@ namespace MOBAManager.UI.Calendar
         /// </summary>
         private readonly Action closeFunc = null;
 
+        /// <summary>
+        /// The size control to prevent unnecessary recalculations.
+        /// </summary>
         private Size currentSize = new Size(0, 0);
         #endregion
 
@@ -71,6 +74,10 @@ namespace MOBAManager.UI.Calendar
         #endregion
 
         #region Private methods
+        /// <summary>
+        /// Prepares monthly grids for each month in the upcoming year.
+        /// </summary>
+        /// <param name="offset">Recursive monthly offset.</param>
         private void prepareCalendarContainer(int offset)
         {
             if (offset <= 12)
@@ -149,6 +156,7 @@ namespace MOBAManager.UI.Calendar
             else
             {
                 List<Tuple<int, string>> playerEvents = cm.GetEventStatusForTeamInMonth(0, month, year);
+                List<Tuple<int, string>> tournaments = cm.GetTournamentsInMonth(month, year);
                 int baseDayOffset = cm.GetDaysToDate(new DateTime(year, month, 1));
 
                 TableLayoutPanel monthGrid = new TableLayoutPanel();
@@ -175,7 +183,23 @@ namespace MOBAManager.UI.Calendar
                     explanationText.AutoSize = true;
                     explanationText.MaximumSize = new Size(monthGrid.Size.Width - 96, 0);
                     explanationText.MinimumSize = new Size(monthGrid.Size.Width - 96, 48);
-                    explanationText.Text = playerEvents[i - 1].Item2;
+                    string text = playerEvents[i - 1].Item2;
+                    if (text.Length > 0)
+                    {
+                        if (tournaments[i - 1].Item2.Length > 0)
+                        {
+                            text += Environment.NewLine + tournaments[i - 1].Item2;
+                        }
+                    }
+                    else
+                    {
+                        text = tournaments[i - 1].Item2;
+                    }
+                    if (text.Length == 0)
+                    {
+                        text = "---";
+                    }
+                    explanationText.Text = text;
                     explanationText.Margin = new Padding(0);
 
                     //Add button to end if nothing scheduled
@@ -198,7 +222,12 @@ namespace MOBAManager.UI.Calendar
                         explanationText.ForeColor = Color.Gray;
                         affectDate.Enabled = false;
                     }
-
+                    
+                    if (tournaments[i - 1].Item1 == -1)
+                    {
+                        affectDate.Enabled = false;
+                    }
+                    
                     monthGrid.Controls.Add(dateLabel, 0, i - 1);
                     monthGrid.Controls.Add(explanationText, 1, i - 1);
                     monthGrid.Controls.Add(affectDate, 2, i - 1);
