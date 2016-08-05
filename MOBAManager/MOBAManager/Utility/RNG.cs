@@ -24,6 +24,17 @@ namespace MOBAManager.Utility
         }
 
         /// <summary>
+        /// Returns a weighted random number.
+        /// 0 will always be the most likely number, followed by a curve to the (exclusive) maximum number.
+        /// </summary>
+        /// <param name="max">The maximum number for the roll.</param>
+        /// <returns></returns>
+        internal static int RollQuadratic(int max)
+        {
+            return DICE.Next(max - DICE.Next(max));
+        }
+
+        /// <summary>
         /// Returns a random double between 0 and max.
         /// </summary>
         /// <param name="max"></param>

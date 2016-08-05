@@ -135,12 +135,12 @@ namespace MOBAManager.UI
                         bootcamps.Add(gameManager.TranslateEventToBootcamp(ce));
                         break;
                     case EventType.TournamentPlaceholder:
-                        gameManager.tournamentManager.ActivateTournament(ce.tournamentID);
+                        gameManager.tournamentManager.EnableTournament(ce.tournamentID);
                         break;
                 }
             }
 
-            List<Tournament> tournaments = gameManager.tournamentManager.GetActiveTournaments();
+            List<Tournament> tournaments = gameManager.tournamentManager.GetEnabledTournaments();
 
             EventResolutionControl erc = new EventResolutionControl("Events on " + gameManager.calendarManager.GetFormattedDate(), pickupgames, bootcamps, tournaments, ResolveDailyResolution);
 

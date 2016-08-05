@@ -320,13 +320,18 @@ namespace MOBAManager.Management.Tournaments
         }
 
         /// <summary>
-        /// Returns whether or not the tournament is active.
+        /// Variable for whether or not the tournament is active.
         /// </summary>
         public bool enabled
         {
             get
             {
                 return _enabled;
+            }
+
+            set
+            {
+                _enabled = value;
             }
         }
         #endregion

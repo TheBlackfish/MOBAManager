@@ -279,7 +279,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         private void ThreadedSelectHeroes()
         {
-            Dictionary<int, int> baseline = BaselineHeroSelection(1, true, true);
+            Dictionary<int, double> baseline = BaselineHeroSelection(1, true, true);
             List<int> finalists = baseline.Select(kvp => kvp.Key).ToList();
             currentChoiceRandomID = finalists[RNG.Roll(finalists.Count)];
 

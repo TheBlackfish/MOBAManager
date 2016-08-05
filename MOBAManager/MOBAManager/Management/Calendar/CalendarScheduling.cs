@@ -61,7 +61,7 @@ namespace MOBAManager.Management.Calendar
             //We want to roll an integer between 0 - 15 and keep it in x1.
             //Then we roll an integer between 0 - x2, where x2 = 15 - x1.
             //This creates a sort of bell curve where higher values are rolled less often.
-            int randOffset = RNG.Roll(15 - RNG.Roll(15));
+            int randOffset = RNG.RollQuadratic(15);
             while (TeamHasEventsOnDate(t.ID, randOffset))
             {
                 randOffset++;
@@ -80,7 +80,7 @@ namespace MOBAManager.Management.Calendar
             //We want to roll an integer between 0 - 15 and keep it in x1.
             //Then we roll an integer between 0 - x2, where x2 = 15 - x1.
             //This creates a sort of bell curve where higher values are rolled less often.
-            int randOffset = RNG.Roll(15 - RNG.Roll(15));
+            int randOffset = RNG.RollQuadratic(15);
             while (TeamHasEventsOnDate(t.ID, randOffset))
             {
                 randOffset++;

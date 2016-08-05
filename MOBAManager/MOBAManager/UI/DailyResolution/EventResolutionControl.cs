@@ -366,6 +366,8 @@ namespace MOBAManager.UI
         }
         #endregion
 
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Creates a new EventResolutionControl.

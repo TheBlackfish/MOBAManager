@@ -137,9 +137,9 @@ namespace MOBAManager.MatchResolution
         /// <param name="ignoreFriendlies"></param>
         /// <param name="ignoreEnemies"></param>
         /// <returns>A dictionary with hero IDs as the key and their skill levels as the value.</returns>
-        private Dictionary<int, int> BaselineHeroSelection(int team, bool ignoreFriendlies, bool ignoreEnemies)
+        private Dictionary<int, double> BaselineHeroSelection(int team, bool ignoreFriendlies, bool ignoreEnemies)
         {
-            Dictionary<int, int> ret = new Dictionary<int, int>();
+            Dictionary<int, double> ret = new Dictionary<int, double>();
 
             List<int> friendlies = team1Picks;
             List<int> enemies = team2Picks;
@@ -161,7 +161,7 @@ namespace MOBAManager.MatchResolution
 
             foreach (int key in remainingHeroes)
             {
-                int value = allHeroes[key].CalculatePerformance(friendlies, enemies);
+                double value = allHeroes[key].CalculatePerformance(friendlies, enemies);
                 ret.Add(key, value);
             }
 
@@ -173,7 +173,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         /// <param name="team">1 or 2, depending on which team should be picked for.</param>
         /// <returns></returns>
-        private Dictionary<int, int> BaselineHeroSelection(int team)
+        private Dictionary<int, double> BaselineHeroSelection(int team)
         {
             return BaselineHeroSelection(team, false, false);
         }
@@ -187,21 +187,10 @@ namespace MOBAManager.MatchResolution
         /// <returns></returns>
         private int SelectBestOverallChoice(int team)
         {
-            Dictionary<int, int> baseline = BaselineHeroSelection(team);
-            List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.Roll(6);
-            if (rando < 3)
-            {
-                return finalists[0];
-            }
-            else if (rando < 5)
-            {
-                return finalists[1];
-            }
-            else
-            {
-                return finalists[2];
-            }
+            Dictionary<int, double> baseline = BaselineHeroSelection(team);
+            return SelectRandomIDFromList(baseline
+                .Select(kvp => kvp)
+                .ToList());
         }
 
         /// <summary>
@@ -217,21 +206,11 @@ namespace MOBAManager.MatchResolution
             Player actualPlayer = GetPlayerFromTeams(player);
             if (actualPlayer != null)
             {
-                Dictionary<int, int> baseline = BaselineHeroSelection(team);
-                List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value + actualPlayer.GetHeroSkill(kvp.Key)).Take(3).Select(kvp => kvp.Key).ToList();
-                int rando = RNG.Roll(6);
-                if (rando < 3)
-                {
-                    return finalists[0];
-                }
-                else if (rando < 5)
-                {
-                    return finalists[1];
-                }
-                else
-                {
-                    return finalists[2];
-                }
+                Dictionary<int, double> baseline = BaselineHeroSelection(team);
+
+                return SelectRandomIDFromList(baseline
+                    .Select(kvp => new KeyValuePair<int, double>(kvp.Key, kvp.Value + actualPlayer.GetHeroSkill(kvp.Key)))
+                    .ToList());
             }
             else
             {
@@ -249,21 +228,11 @@ namespace MOBAManager.MatchResolution
         /// <returns></returns>
         private int SelectWorstOverallChoice(int team)
         {
-            Dictionary<int, int> baseline = BaselineHeroSelection(team);
-            List<int> finalists = baseline.OrderBy(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.Roll(6);
-            if (rando < 3)
-            {
-                return finalists[0];
-            }
-            else if (rando < 5)
-            {
-                return finalists[1];
-            }
-            else
-            {
-                return finalists[2];
-            }
+            Dictionary<int, double> baseline = BaselineHeroSelection(team);
+
+            return SelectRandomIDFromOrderedList(baseline
+                .OrderBy(kvp => kvp.Value)
+                .ToList());
         }
 
         /// <summary>
@@ -274,21 +243,38 @@ namespace MOBAManager.MatchResolution
         /// <returns></returns>
         private int SelectBestCounterToTeam(int team)
         {
-            Dictionary<int, int> baseline = BaselineHeroSelection(team, true, false);
-            List<int> finalists = baseline.OrderByDescending(kvp => kvp.Value).Take(3).Select(kvp => kvp.Key).ToList();
-            int rando = RNG.Roll(6);
-            if (rando < 3)
-            {
-                return finalists[0];
-            }
-            else if (rando < 5)
-            {
-                return finalists[1];
-            }
-            else
-            {
-                return finalists[2];
-            }
+            Dictionary<int, double> baseline = BaselineHeroSelection(team, true, false);
+            return SelectRandomIDFromList(baseline
+                .Select(kvp => kvp)
+                .ToList());
+        }
+
+        /// <summary>
+        /// Selects a random ID from the list provided.
+        /// The selection is favored towards higher skill values.
+        /// </summary>
+        /// <param name="searchFrom">The list of ID-skill pairs to choose from.</param>
+        /// <returns></returns>
+        private int SelectRandomIDFromList(List<KeyValuePair<int, double>> searchFrom)
+        {
+            return SelectRandomIDFromOrderedList(searchFrom.OrderByDescending(kvp => kvp.Value).ToList());
+        }
+
+        /// <summary>
+        /// Selects a random ID from the ordered list provided.
+        /// The selection is favored towards higher skill values.
+        /// </summary>
+        /// <param name="searchFrom">The ordered list of ID-skill pairs to choose from.</param>
+        /// <returns></returns>
+        private int SelectRandomIDFromOrderedList(List<KeyValuePair<int, double>> searchFrom)
+        {
+            //Find acceptable range of numbers from 3rd position.
+            double minVal = (2 * searchFrom.ElementAtOrDefault(2).Value) - searchFrom.ElementAtOrDefault(0).Value;
+
+            //Choose geometrically
+            KeyValuePair<int, double> chosen = searchFrom.ElementAt(RNG.RollQuadratic(searchFrom.Where(kvp => kvp.Value >= minVal).Count()));
+
+            return chosen.Key;
         }
         #endregion
 
@@ -404,7 +390,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         public int Team1Pick()
         {
-            Dictionary<int, int> start = BaselineHeroSelection(1);
+            Dictionary<int, double> start = BaselineHeroSelection(1);
             int selectionID = -1;
             switch (team1SelectionMode)
             {
@@ -469,7 +455,7 @@ namespace MOBAManager.MatchResolution
         /// </summary>
         public int Team2Pick()
         {
-            Dictionary<int, int> start = BaselineHeroSelection(2);
+            Dictionary<int, double> start = BaselineHeroSelection(2);
             int selectionID = -1;
             switch (team2SelectionMode)
             {

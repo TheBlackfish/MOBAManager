@@ -22,17 +22,17 @@ namespace MOBAManager.Management.Heroes
         /// <summary>
         /// The base power level of the hero. This reflects how good the hero is in a vacuum.
         /// </summary>
-        private int powerLevel = 0;
+        private double powerLevel = 0;
 
         /// <summary>
         /// The synergistic combos with this hero. This represents certain heros performing better with other heros on their team.
         /// </summary>
-        private Dictionary<int, int> synergies;
+        private Dictionary<int, double> synergies;
 
         /// <summary>
         /// The counters to this hero. This represents certain heros being able to shut down this hero when on the opposing team, or this hero doing that much better.
         /// </summary>
-        private Dictionary<int, int> counters;
+        private Dictionary<int, double> counters;
         #endregion
 
         #region Accessors
@@ -62,12 +62,12 @@ namespace MOBAManager.Management.Heroes
         /// <param name="friendlies">The list of all other heroes on the current team selecting.</param>
         /// <param name="enemies">The list of all other heroes on the enemy team.</param>
         /// <returns>The skill level of the hero given the circumstances provided.</returns>
-        public int CalculatePerformance(List<int> friendlies, List<int> enemies)
+        public double CalculatePerformance(List<int> friendlies, List<int> enemies)
         {
-            int ret = this.powerLevel;
+            double ret = this.powerLevel;
             foreach (int friendly in friendlies)
             {
-                int toAdd;
+                double toAdd;
                 if (this.synergies.TryGetValue(friendly, out toAdd))
                 {
                     ret += toAdd;
@@ -76,7 +76,7 @@ namespace MOBAManager.Management.Heroes
 
             foreach (int enemy in enemies)
             {
-                int toAdd;
+                double toAdd;
                 if (this.synergies.TryGetValue(enemy, out toAdd))
                 {
                     ret += toAdd;
@@ -91,7 +91,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         /// <param name="hero">The hero to synergize with.</param>
         /// <param name="val">The value of the synergy.</param>
-        public void SetSynergy(int hero, int val)
+        public void SetSynergy(int hero, double val)
         {
             this.synergies.Add(hero, val);
         }
@@ -101,7 +101,7 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         /// <param name="hero">The hero to counter.</param>
         /// <param name="val">The value of the counter.</param>
-        public void SetCounter(int hero, int val)
+        public void SetCounter(int hero, double val)
         {
             this.counters.Add(hero, val);
         }
@@ -129,8 +129,8 @@ namespace MOBAManager.Management.Heroes
             _id = id;
             _name = name;
             powerLevel = pl;
-            synergies = new Dictionary<int, int>();
-            counters = new Dictionary<int, int>();
+            synergies = new Dictionary<int, double>();
+            counters = new Dictionary<int, double>();
         }
         #endregion
     }

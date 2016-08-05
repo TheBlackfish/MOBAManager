@@ -10,7 +10,7 @@ namespace MOBAManager.Management.Tournaments
         {
             Tournament test = new SingleEliminationTournament("First Tournament", 0, tm.GetAllTeams(), hm.GetHeroDictionary(), 3);
             tournaments.Add(test);
-            cm.AddTournamentDates(test._ID, 0, 3);
+            cm.AddTournamentDates(test.ID, 0, 3);
         }
     }
 }
