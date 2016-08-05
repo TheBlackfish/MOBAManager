@@ -446,6 +446,7 @@ namespace MOBAManager.Management.Tournaments
         public Tournament(string name, int ID, List<Team> teams, Dictionary<int, Hero> heroes, int numberOfDays)
         {
             _name = name;
+            _ID = ID;
             includedTeams = teams;
             upcomingMatchups = new List<TourneyMatchup>();
             resolvedMatchups = new List<TourneyMatchup>();
@@ -464,6 +465,7 @@ namespace MOBAManager.Management.Tournaments
         public Tournament(string name, int ID, List<Team> teams, Dictionary<int, Hero> heroes)
         {
             _name = name;
+            _ID = ID;
             includedTeams = teams;
             upcomingMatchups = new List<TourneyMatchup>();
             resolvedMatchups = new List<TourneyMatchup>();

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Management\Calendar\CalendarEnums.cs" />
     <Compile Include="Management\Calendar\CalendarEvent.cs" />
+    <Compile Include="Management\Calendar\CalendarImportantDates.cs" />
     <Compile Include="Management\Calendar\CalendarManager.cs" />
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />

@@ -74,9 +74,14 @@
             // 
             // heroDataGridView
             // 
+            this.heroDataGridView.AllowUserToAddRows = false;
+            this.heroDataGridView.AllowUserToDeleteRows = false;
+            this.heroDataGridView.AllowUserToResizeColumns = false;
+            this.heroDataGridView.AllowUserToResizeRows = false;
             this.heroDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.heroDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.heroDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.heroDataGridView.Location = new System.Drawing.Point(6, 6);
             this.heroDataGridView.Name = "heroDataGridView";
             this.heroDataGridView.Size = new System.Drawing.Size(956, 150);
@@ -96,9 +101,14 @@
             // 
             // playerDataGridView
             // 
+            this.playerDataGridView.AllowUserToAddRows = false;
+            this.playerDataGridView.AllowUserToDeleteRows = false;
+            this.playerDataGridView.AllowUserToResizeColumns = false;
+            this.playerDataGridView.AllowUserToResizeRows = false;
             this.playerDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.playerDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.playerDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.playerDataGridView.Location = new System.Drawing.Point(6, 6);
             this.playerDataGridView.Name = "playerDataGridView";
             this.playerDataGridView.Size = new System.Drawing.Size(956, 150);
@@ -117,9 +127,15 @@
             // 
             // teamDataGridView
             // 
+            this.teamDataGridView.AllowUserToAddRows = false;
+            this.teamDataGridView.AllowUserToDeleteRows = false;
+            this.teamDataGridView.AllowUserToResizeColumns = false;
+            this.teamDataGridView.AllowUserToResizeRows = false;
             this.teamDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.teamDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.teamDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.teamDataGridView.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.teamDataGridView.Location = new System.Drawing.Point(6, 6);
             this.teamDataGridView.Name = "teamDataGridView";
             this.teamDataGridView.Size = new System.Drawing.Size(956, 150);
