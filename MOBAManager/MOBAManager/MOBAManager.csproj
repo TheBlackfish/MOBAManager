@@ -53,6 +53,7 @@
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
+    <Compile Include="Management\Tournaments\DoubleEliminationTournament.cs" />
     <Compile Include="Management\Tournaments\TournamentCreation.cs" />
     <Compile Include="Management\Tournaments\SingleEliminationTournament.cs" />
     <Compile Include="Management\Tournaments\Tournament.cs" />

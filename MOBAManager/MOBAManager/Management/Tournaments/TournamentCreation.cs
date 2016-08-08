@@ -22,6 +22,10 @@ namespace MOBAManager.Management.Tournaments
             Tournament winterSolstice = new SingleEliminationTournament("Winter Solstice Championship", 1, tm.GetAllTeams(), hm.GetHeroDictionary(), 3);
             tournaments.Add(winterSolstice);
             cm.AddTournamentDates(winterSolstice.ID, cm.GetWinterSolsticeOffset() - 2, 3);
+
+            Tournament deTest = new DoubleEliminationTournament("Test Championship", 2, tm.GetAllTeams(), hm.GetHeroDictionary());
+            tournaments.Add(deTest);
+            cm.AddTournamentDate(deTest.ID, 0);
         }
     }
 }
