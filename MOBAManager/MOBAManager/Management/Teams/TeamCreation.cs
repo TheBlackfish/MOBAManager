@@ -1,4 +1,7 @@
-﻿namespace MOBAManager.Management.Teams
+﻿using System.Linq;
+using System.Xml.Linq;
+
+namespace MOBAManager.Management.Teams
 {
     partial class TeamManager
     {
@@ -8,17 +11,9 @@
         /// </summary>
         private void CreateTeams()
         {
-            string[] names = new string[]
-            {
-                "Alpha Team",
-                "ChimpOut",
-                "China One",
-                "Living Legends",
-                "MaSci",
-                "Screaming Eagles",
-                "Unicorns",
-                "XG Pro"
-            };
+            XDocument teamFile = XDocument.Load("Data/Teams.xml");
+
+            string[] names = teamFile.Descendants("team").Select(xe => xe.Value).ToArray();
 
             foreach (string n in names)
             {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Heroes
 {
@@ -13,43 +14,23 @@ namespace MOBAManager.Management.Heroes
         /// </summary>
         private void CreateHeroes()
         {
-            string[] heroNames = new string[]
-            {
-                "Abdul Alhazred",
-                "Ambrose Dewart",
-                "Arianna",
-                "Bast",
-                "Bran Mak Morn",
-                "Charles Dexter Ward",
-                "Draken",
-                "Eldin The Wanderer",
-                "Gustaf",
-                "Hastur",
-                "Hydra",
-                "Ithaqua",
-                "Juk-Shabb",
-                "Karakal",
-                "Kuranes",
-                "Nodens",
-                "Obed Marsh",
-                "Orryx",
-                "Pickman", 
-                "Randolph Carter",
-                "Sathubbo",
-                "Shathak",
-                "Starbane",
-                "Tstll",
-                "Uvhash",
-                "Vulthoom",
-                "Yharnam",
-                "Yig",
-                "Zathog",
-                "Zo-Kalar"
-            };
+            XDocument heroFile = XDocument.Load("Data/Heroes.xml");
+
+            string[] heroNames = heroFile.Descendants("hero").Select(xe => xe.Value).OrderBy(s => s).ToArray();
 
             //Create initial skills
             List<int> initialSkill = new List<int>();
-            initialSkill.AddRange(new int[] { 7, 6, 5, 5, 4, 4, 3, 3, 2, 2, 2, 1, 1, 1, -1, -1, -1, -1, -2, -2 });
+            initialSkill.AddRange(new int[] {   7, 7, 7, 7,
+                                                6, 6, 6,
+                                                5, 5,
+                                                4, 4,
+                                                3, 3,
+                                                2, 2, 2,
+                                                1, 1, 1, 1,
+                                                -1, -1, -1, -1,
+                                                -2, -2, -2,
+                                                -3, -3,
+                                                -4});
             while (initialSkill.Count != heroNames.Length)
             {
                 initialSkill.Add(0);
@@ -113,9 +94,9 @@ namespace MOBAManager.Management.Heroes
 
             while (counterValues.Count < counterPairs.Count)
             {
-                for (int i = 2; i >= 0; i--)
+                for (int i = 5; i >= 0; i--)
                 {
-                    for (int j = 0; j >= -2; j--)
+                    for (int j = 0; j >= -5; j--)
                     {
                         counterValues.Add(new int[] { i, j });
                     }

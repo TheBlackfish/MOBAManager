@@ -3,6 +3,7 @@ using MOBAManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Players
 {
@@ -14,61 +15,12 @@ namespace MOBAManager.Management.Players
         /// </summary>
         private void CreatePlayers()
         {
-            string[] playerNames = new string[]
-            {
-                "TheBlackfish",
-                "gal_axy",
-                "Dol Amroth",
-                "SergeantPuppers",
-                "XtinctionX",
-                "Fresh",
-                "rainbow&river",
-                "john1337",
-                "Dondo",
-                "Kittey",
-                "FreeZing",
-                "skysky",
-                "EdgeMaster",
-                "nkl",
-                "Smile",
-                "Mango",
-                "TheRealest",
-                "skerg",
-                "Old Man Clint",
-                "waow!",
-                "NO LEGS",
-                "Britishname Complicated",
-                "US[A]",
-                "Darkness",
-                "Chicago Ted",
-                "crybaby",
-                "ebola",
-                "Frostgecko",
-                "420 Booty Wizard",
-                "xXxKILLERxXx",
-                "BobRoss",
-                "KZ",
-                "SirExplosions",
-                "that one guy",
-                "PotatoFarmer",
-                "flinda",
-                "4343",
-                "stupid-bulder",
-                "Amazing Llama!",
-                "Tenty McTentacleface",
-                "Siberian",
-                "genuine",
-                "EGein",
-                "kalem",
-                "Brometheus",
-                "V00D00",
-                "2clid",
-                "go pod",
-                "FULL GANDHI",
-                "JDN"
-            };
+            XDocument playerFile = XDocument.Load("Data/Players.xml");
 
-            int[] initialSkill = new int[] {    5, 5,
+            string[] playerNames = playerFile.Descendants("player").Select(xe => xe.Value).ToArray();
+
+            int[] initialSkill = new int[] {    6, 6,
+                                                5, 5, 5,
                                                 4, 4, 4, 4,
                                                 3, 3, 3, 3, 3,
                                                 2, 2, 2, 2, 2, 2,

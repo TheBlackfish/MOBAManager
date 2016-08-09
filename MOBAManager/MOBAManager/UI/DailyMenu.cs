@@ -203,7 +203,5 @@ namespace MOBAManager.UI
             tvc.BringToFront();
         }
         #endregion
-
-
     }
 }

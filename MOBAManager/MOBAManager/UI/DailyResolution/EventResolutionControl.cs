@@ -166,6 +166,7 @@ namespace MOBAManager.UI
             l.Text = s;
             l.Location = new Point(newLabelPosition.X, newLabelPosition.Y + eventContainer.AutoScrollPosition.Y);
             l.Size = labelSize;
+            l.MouseClick += EventResolutionControl_MouseClick;
             newLabelPosition.Y += l.Height + 4;
             Action action = () => eventContainer.Controls.Add(l);
             BeginInvoke(action);

@@ -25,7 +25,7 @@ namespace MOBAManager.Management.Tournaments
 
             Tournament deTest = new DoubleEliminationTournament("Test Championship", 2, tm.GetAllTeams(), hm.GetHeroDictionary(), 2);
             tournaments.Add(deTest);
-            cm.AddTournamentDate(deTest.ID, 0);
+            cm.AddTournamentDates(deTest.ID, 0, 2);
         }
     }
 }
