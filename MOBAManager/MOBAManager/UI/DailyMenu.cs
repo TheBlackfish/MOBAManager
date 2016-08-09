@@ -15,6 +15,7 @@ using System.Threading;
 using MOBAManager.UI.Calendar;
 using MOBAManager.Resolution.BootcampResolution;
 using MOBAManager.Management.Tournaments;
+using MOBAManager.UI.TournamentView;
 
 namespace MOBAManager.UI
 {
@@ -175,6 +176,34 @@ namespace MOBAManager.UI
             Controls.Add(cvc);
             cvc.BringToFront();
         }
+
+        /// <summary>
+        /// Called when the tournament button is clicked. Creates a new tournament view control and displays.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tournamentButton_Click(object sender, EventArgs e)
+        {
+            Action closeTournamentView = () =>
+            {
+                foreach (Control c in Controls)
+                {
+                    if (c is TournamentViewControl)
+                    {
+                        c.Hide();
+                        Controls.Remove(c);
+                        SetButtonStates(true);
+                    }
+                }
+            };
+            TournamentViewControl tvc = new TournamentViewControl(gameManager.tournamentManager, closeTournamentView);
+
+            SetButtonStates(false);
+            Controls.Add(tvc);
+            tvc.BringToFront();
+        }
         #endregion
+
+
     }
 }

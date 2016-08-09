@@ -56,7 +56,7 @@ namespace MOBAManager.UI.Calendar
         /// Submits the given event to the calendar manager and updates the current month grid to reflect the new data.
         /// </summary>
         /// <param name="submit"></param>
-        public void SubmitCalenderEvent(CalendarEvent submit)
+        public void SubmitCalendarEvent(CalendarEvent submit)
         {
             if (submit != null)
             {
@@ -256,7 +256,7 @@ namespace MOBAManager.UI.Calendar
         /// <param name="offset"></param>
         private void ShowScheduleControl(int offset)
         {
-            CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset, SubmitCalenderEvent);
+            CalendarScheduleControl csc = new CalendarScheduleControl(cm, tm, offset, SubmitCalendarEvent);
             Controls.Add(csc);
             csc.BringToFront();
         }

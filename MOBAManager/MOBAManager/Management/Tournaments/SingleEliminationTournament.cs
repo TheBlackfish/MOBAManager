@@ -22,15 +22,17 @@ namespace MOBAManager.Management.Tournaments
             //Create the first round by assigning each slot into a match.
             List<TourneyMatchup> currentRound = new List<TourneyMatchup>();
 
-            int team1Tracker = 0;
-            int team2Tracker = includedTeams.Count - 1;
+            int lowerBound = 0;
+            int upperBound = includedTeams.Count - 1;
 
-            while (team1Tracker < team2Tracker)
+            while (lowerBound < upperBound)
             {
-                currentRound.Add(new TourneyMatchup(3, getTeamInSlot, getTeamInSlot, team1Tracker, team2Tracker));
-                team1Tracker++;
-                team2Tracker--;
+                currentRound.Add(new TourneyMatchup(3, getTeamInSlot, getTeamInSlot, new int[] { 0, lowerBound }, lowerBound, upperBound));
+                lowerBound++;
+                upperBound--;
             }
+
+            int currentXPos = 1;
 
             //Create rounds until we have one with only one match
             while (currentRound.Count > 1)
@@ -38,7 +40,7 @@ namespace MOBAManager.Management.Tournaments
                 List<TourneyMatchup> nextRound = new List<TourneyMatchup>();
                 for (int i = 0; (i + 1) < currentRound.Count; i = i + 2)
                 {
-                    nextRound.Add(new TourneyMatchup(3, currentRound[i].GetWinner, currentRound[i + 1].GetWinner));
+                    nextRound.Add(new TourneyMatchup(3, currentRound[i].GetWinner, currentRound[i + 1].GetWinner, new int[] { currentXPos, currentRound[i].cellPosition[1] }));
                 }
                 
                 foreach(TourneyMatchup tm in currentRound)
@@ -47,6 +49,7 @@ namespace MOBAManager.Management.Tournaments
                 }
 
                 currentRound = nextRound;
+                currentXPos++;
             }
 
             foreach (TourneyMatchup tm in currentRound)

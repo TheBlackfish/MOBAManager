@@ -33,7 +33,7 @@
             this.calendarButton = new System.Windows.Forms.Button();
             this.metaButton = new System.Windows.Forms.Button();
             this.resolutionButton = new System.Windows.Forms.Button();
-            this.dailySummaryArea = new System.Windows.Forms.TextBox();
+            this.tournamentButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -96,25 +96,23 @@
             this.resolutionButton.UseVisualStyleBackColor = true;
             this.resolutionButton.Click += new System.EventHandler(this.resolutionButton_Click);
             // 
-            // dailySummaryArea
+            // tournamentButton
             // 
-            this.dailySummaryArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.tournamentButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dailySummaryArea.Location = new System.Drawing.Point(3, 215);
-            this.dailySummaryArea.Multiline = true;
-            this.dailySummaryArea.Name = "dailySummaryArea";
-            this.dailySummaryArea.ReadOnly = true;
-            this.dailySummaryArea.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dailySummaryArea.Size = new System.Drawing.Size(1034, 116);
-            this.dailySummaryArea.TabIndex = 5;
-            this.dailySummaryArea.Text = "Daily Summary goes here.";
+            this.tournamentButton.Location = new System.Drawing.Point(3, 215);
+            this.tournamentButton.Name = "tournamentButton";
+            this.tournamentButton.Size = new System.Drawing.Size(1034, 50);
+            this.tournamentButton.TabIndex = 5;
+            this.tournamentButton.Text = "View Tournaments";
+            this.tournamentButton.UseVisualStyleBackColor = true;
+            this.tournamentButton.Click += new System.EventHandler(this.tournamentButton_Click);
             // 
             // DailyMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dailySummaryArea);
+            this.Controls.Add(this.tournamentButton);
             this.Controls.Add(this.resolutionButton);
             this.Controls.Add(this.metaButton);
             this.Controls.Add(this.calendarButton);
@@ -124,7 +122,6 @@
             this.Size = new System.Drawing.Size(1040, 391);
             this.ParentChanged += new System.EventHandler(this.DailyMenu_ParentChanged);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -135,6 +132,6 @@
         private System.Windows.Forms.Button calendarButton;
         private System.Windows.Forms.Button metaButton;
         private System.Windows.Forms.Button resolutionButton;
-        private System.Windows.Forms.TextBox dailySummaryArea;
+        private System.Windows.Forms.Button tournamentButton;
     }
 }

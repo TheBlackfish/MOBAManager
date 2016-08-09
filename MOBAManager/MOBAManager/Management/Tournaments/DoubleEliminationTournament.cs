@@ -15,6 +15,9 @@ namespace MOBAManager.Management.Tournaments
         /// </summary>
         public override void setupMatches()
         {
+            bool firstLowerRoundPlacement = true;
+            int currentRound = 0;
+
             //Set up current winner and loser func delegate lists
             List<Func<int, Team>> currentWinnerFunctions = new List<Func<int, Team>>();
             List<Func<int, Team>> currentLoserFunctions = new List<Func<int, Team>>();
@@ -28,7 +31,7 @@ namespace MOBAManager.Management.Tournaments
 
             while (lowerBound < upperBound)
             {
-                TourneyMatchup tm = new TourneyMatchup(1, getTeamInSlot, getTeamInSlot, lowerBound, upperBound);
+                TourneyMatchup tm = new TourneyMatchup(1, getTeamInSlot, getTeamInSlot, new int[] { currentRound, lowerBound }, lowerBound, upperBound);
                 lowerBound++;
                 upperBound--;
                 currentWinnerFunctions.Add(tm.GetWinner);
@@ -36,22 +39,42 @@ namespace MOBAManager.Management.Tournaments
                 upcomingMatchups.Add(tm);
             }
 
+            int tempLowerBound = lowerBound;
+            currentRound++;
+
             //while (winner func delegates != 1 && loser func delegates != 1)
             while (currentWinnerFunctions.Count > 1 || currentLoserFunctions.Count > 1)
             {
                 //create match using current loser functions, grabbing mirrored positions
                 while (currentLoserFunctions.Count > 1)
                 {
-                    TourneyMatchup tm = new TourneyMatchup(1, currentLoserFunctions[0], currentLoserFunctions[currentLoserFunctions.Count - 1]);
+                    int[] cellPos = new int[] { -1, -1 };
+
+                    if (firstLowerRoundPlacement)
+                    {
+                        cellPos = new int[] { currentRound, lowerBound };
+                        lowerBound++;
+                    }
+                    else
+                    {
+                        cellPos = new int[] { currentRound, ((TourneyMatchup)currentLoserFunctions[0].Target).cellPosition[1] };
+                        if (cellPos[1] < tempLowerBound)
+                        {
+                            cellPos = new int[] { cellPos[0], tempLowerBound };
+                        }
+                    }
+
+                    TourneyMatchup tm = new TourneyMatchup(1, currentLoserFunctions[0], currentLoserFunctions[currentLoserFunctions.Count - 1], cellPos);
                     currentLoserFunctions = currentLoserFunctions.Skip(1).Take(currentLoserFunctions.Count - 2).ToList();
                     upcomingMatchups.Add(tm);
                     upcomingLoserFunctions.Add(tm.GetWinner);
                 }
+                firstLowerRoundPlacement = false;
 
                 //if winner func delegates > 1
                 while (currentWinnerFunctions.Count > 1)
                 {
-                    TourneyMatchup tm = new TourneyMatchup(1, currentWinnerFunctions[0], currentWinnerFunctions[1]);
+                    TourneyMatchup tm = new TourneyMatchup(1, currentWinnerFunctions[0], currentWinnerFunctions[1], new int[] { currentRound, ((TourneyMatchup)currentWinnerFunctions[0].Target).cellPosition[1] });
                     currentWinnerFunctions = currentWinnerFunctions.Skip(2).ToList();
                     upcomingMatchups.Add(tm);
                     upcomingWinnerFunctions.Add(tm.GetWinner);
@@ -62,10 +85,12 @@ namespace MOBAManager.Management.Tournaments
                 currentLoserFunctions = currentLoserFunctions.Concat(upcomingLoserFunctions).ToList();
                 upcomingWinnerFunctions = new List<Func<int, Team>>();
                 upcomingLoserFunctions = new List<Func<int, Team>>();
+
+                currentRound++;
             }
 
             //Create final match using last remaining winner func and loser func
-            TourneyMatchup finalMatch = new TourneyMatchup(3, currentWinnerFunctions[0], currentLoserFunctions[0]);
+            TourneyMatchup finalMatch = new TourneyMatchup(3, currentWinnerFunctions[0], currentLoserFunctions[0], new int[] { currentRound, 0 });
             upcomingMatchups.Add(finalMatch);
         }
 

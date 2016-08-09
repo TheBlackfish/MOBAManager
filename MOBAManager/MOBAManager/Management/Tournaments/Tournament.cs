@@ -3,9 +3,11 @@ using MOBAManager.Management.Teams;
 using MOBAManager.MatchResolution;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MOBAManager.Management.Tournaments
 {
@@ -76,6 +78,11 @@ namespace MOBAManager.Management.Tournaments
             /// The tournament day this match-up occurs on.
             /// </summary>
             public int DayOfMatch = 0;
+
+            /// <summary>
+            /// The position of the tournament in the display table.
+            /// </summary>
+            public int[] cellPosition = new int[] { -1, -1 };
             #endregion
 
             #region Private methods
@@ -180,6 +187,22 @@ namespace MOBAManager.Management.Tournaments
             }
 
             /// <summary>
+            /// Returns a display label with the match-up information.
+            /// </summary>
+            /// <returns></returns>
+            public Label GetLabel()
+            {
+                Label l = new Label();
+
+                Team one = GetTeam1();
+                Team two = GetTeam2();
+
+                l.Text = (one != null ? one.TeamName : "TBD") + Environment.NewLine + "VS" + Environment.NewLine + (two != null ? two.TeamName : "TBD");
+                l.TextAlign = ContentAlignment.MiddleCenter;
+                return l;          
+            }
+
+            /// <summary>
             /// Adds a match to the list of matches in this match-up.
             /// </summary>
             /// <param name="m"></param>
@@ -196,10 +219,11 @@ namespace MOBAManager.Management.Tournaments
             /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
             /// <param name="team1Function">The function delegate for team 1 in this match.</param>
             /// <param name="team2Function">The function delegate for team 2 in this match.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function)
+            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition)
             {
                 matchesInMatchup = new List<Match>();
                 this.numberOfMatches = numberOfMatches;
+                this.cellPosition = cellPosition;
                 getTeam1Func = team1Function;
                 getTeam2Func = team2Function;
             }
@@ -212,8 +236,8 @@ namespace MOBAManager.Management.Tournaments
             /// <param name="team2Function">The function delegate for team 2 in this match.</param>
             /// <param name="team1Slot">The integer to use as a parameter for team1Function.</param>
             /// <param name="team2Slot">The integer to use as a parameter for team2Function.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int team1Slot, int team2Slot)
-                : this(numberOfMatches, team1Function, team2Function)
+            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot)
+                : this(numberOfMatches, team1Function, team2Function, cellPosition)
             {
                 this.team1Slot = team1Slot;
                 this.team2Slot = team2Slot;
@@ -228,8 +252,8 @@ namespace MOBAManager.Management.Tournaments
             /// <param name="team1Slot">The integer to use as a parameter for team1Function.</param>
             /// <param name="team2Slot">The integer to use as a parameter for team2Function.</param>
             /// <param name="dayOfMatch">The offset from the start of the tournament that this match-up occurs on.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int team1Slot, int team2Slot, int dayOfMatch)
-                : this(numberOfMatches, team1Function, team2Function, team1Slot, team2Slot)
+            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch)
+                : this(numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot)
             {
                 this.DayOfMatch = dayOfMatch;
             }
@@ -405,7 +429,7 @@ namespace MOBAManager.Management.Tournaments
         /// <returns></returns>
         public bool isComplete()
         {
-            return ((currentDay + 1) == totalDays);
+            return ((currentDay + 1) == totalDays && upcomingMatchups.Count == 0);
         }
 
         /// <summary>
@@ -431,6 +455,72 @@ namespace MOBAManager.Management.Tournaments
             {
                 return name + " has finished Day " + (currentDay + 1) + ".";
             }
+        }
+
+        /// <summary>
+        /// Creates a grid for displaying the tournament bracket.
+        /// </summary>
+        /// <returns></returns>
+        public TableLayoutPanel GetDisplayPanel()
+        {
+            TableLayoutPanel tlp = new TableLayoutPanel();
+            tlp.SuspendLayout();
+
+            int maxWidth = 0;
+            int maxHeight = 0;
+
+            foreach (TourneyMatchup tm in upcomingMatchups.Concat(resolvedMatchups))
+            {
+                Label l = tm.GetLabel();
+
+                if (l.ClientSize.Height > maxHeight)
+                {
+                    maxHeight = l.Size.Height;
+                }
+
+                if (l.ClientSize.Width > maxWidth)
+                {
+                    maxWidth = l.Size.Width;
+                }
+
+                if (tlp.ColumnCount <= tm.cellPosition[0])
+                {
+                    tlp.ColumnCount = tm.cellPosition[0] + 1;
+                }
+
+                if (tlp.RowCount <= tm.cellPosition[1])
+                {
+                    tlp.RowCount = tm.cellPosition[1] + 1;
+                }
+
+                tlp.Controls.Add(l, tm.cellPosition[0], tm.cellPosition[1]);
+            }
+
+            maxWidth += 20;
+            maxHeight += 20;
+
+            foreach (Control c in tlp.Controls)
+            {
+                if (c is Label)
+                {
+                    c.Size = new Size(maxWidth, maxHeight);
+                }
+            }
+
+            for (int i = 0; i <= tlp.ColumnCount; i++)
+            {
+                tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, maxWidth));
+            }
+
+            for (int i = 0; i <= tlp.RowCount; i++)
+            {
+                tlp.RowStyles.Add(new RowStyle(SizeType.Absolute, maxHeight));
+            }
+
+            tlp.Size = new Size(tlp.ColumnCount * maxWidth, tlp.RowCount * maxHeight);
+
+            tlp.ResumeLayout();
+            return tlp;
         }
         #endregion
 

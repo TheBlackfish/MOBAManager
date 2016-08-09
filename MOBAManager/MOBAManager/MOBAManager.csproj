@@ -134,6 +134,18 @@
     <Compile Include="UI\Meta\StatisticsControl.Designer.cs">
       <DependentUpon>StatisticsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\TournamentView\TournamentDetailControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TournamentView\TournamentDetailControl.Designer.cs">
+      <DependentUpon>TournamentDetailControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TournamentView\TournamentViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TournamentView\TournamentViewControl.Designer.cs">
+      <DependentUpon>TournamentViewControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility\RNG.cs" />
     <EmbeddedResource Include="UI\Calendar\CalendarScheduleControl.resx">
       <DependentUpon>CalendarScheduleControl.cs</DependentUpon>
@@ -171,6 +183,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Meta\StatisticsControl.resx">
       <DependentUpon>StatisticsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TournamentView\TournamentDetailControl.resx">
+      <DependentUpon>TournamentDetailControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TournamentView\TournamentViewControl.resx">
+      <DependentUpon>TournamentViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">

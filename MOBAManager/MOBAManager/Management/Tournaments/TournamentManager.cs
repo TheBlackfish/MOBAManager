@@ -62,6 +62,15 @@ namespace MOBAManager.Management.Tournaments
         }
 
         /// <summary>
+        /// Returns a list of all incomplete tournaments.
+        /// </summary>
+        /// <returns></returns>
+        public List<Tournament> GetIncompleteTournaments()
+        {
+            return tournaments.Where(t => !t.isComplete()).OrderBy(t => t.name).ToList();
+        }
+
+        /// <summary>
         /// Creates a new tournament manager.
         /// </summary>
         public TournamentManager()
