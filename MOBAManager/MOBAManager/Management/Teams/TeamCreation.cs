@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using MOBAManager.Management.Players;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace MOBAManager.Management.Teams
@@ -20,6 +21,20 @@ namespace MOBAManager.Management.Teams
                 Team newTeam = new Team(teams.Count, n);
                 teams.Add(teams.Count, newTeam);
             }
+        }
+
+        /// <summary>
+        /// Creates a new temporary team consisting of randomized players. This team has an ID of -1, denoting that its stats will not be recorded.
+        /// </summary>
+        /// <returns></returns>
+        public Team CreatePUBTeam()
+        {
+            Team ret = new Teams.Team(-1, "PUB Team");
+            for (int i = 0; i < 5; i++)
+            {
+                ret.AddMember(pm.CreatePUBPlayer());
+            }
+            return ret;
         }
     }
 }

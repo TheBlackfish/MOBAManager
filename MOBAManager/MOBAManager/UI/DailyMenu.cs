@@ -54,6 +54,9 @@ namespace MOBAManager.UI
                     SetButtonStates(true);
                 }
             }
+
+            gameManager.ResolvePubs();
+
             gameManager.calendarManager.IncrementCalender();
             gameManager.tournamentManager.advanceDay();
             gameManager.calendarManager.ScheduleRandomEventsForEachAITeam();

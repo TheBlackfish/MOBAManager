@@ -12,6 +12,11 @@ namespace MOBAManager.Management.Teams
     {
         #region Variables
         /// <summary>
+        /// The player manager that this team manager uses for players.
+        /// </summary>
+        private PlayerManager pm;
+        
+        /// <summary>
         /// The dictionary containing all of the teams.
         /// </summary>
         private Dictionary<int, Team> teams;
@@ -87,10 +92,12 @@ namespace MOBAManager.Management.Teams
         #region Constructors
         /// <summary>
         /// Creates a new team manager with the default teams created.
+        /// <param name="pm">The player manager to use with this team manager.</param>
         /// </summary>
-        public TeamManager()
+        public TeamManager(PlayerManager pm)
         {
             teams = new Dictionary<int, Team>();
+            this.pm = pm;
             CreateTeams();   
         }
         #endregion

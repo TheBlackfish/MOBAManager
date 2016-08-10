@@ -366,24 +366,30 @@ namespace MOBAManager.Management.Statistics
 
             foreach (KeyValuePair<int, bool> kvp in pw.Select(kvp => kvp).ToList())
             {
-                if (!playerDict.ContainsKey(kvp.Key))
+                if (kvp.Key >= 0)
                 {
-                    PlayerStats newPlayer = new PlayerStats(pm.GetPlayerName(kvp.Key));
-                    playerDict.Add(kvp.Key, newPlayer);
-                }
+                    if (!playerDict.ContainsKey(kvp.Key))
+                    {
+                        PlayerStats newPlayer = new PlayerStats(pm.GetPlayerName(kvp.Key));
+                        playerDict.Add(kvp.Key, newPlayer);
+                    }
 
-                playerDict[kvp.Key].AddWinLoss(kvp.Value);
+                    playerDict[kvp.Key].AddWinLoss(kvp.Value);
+                }
             }
 
             foreach (KeyValuePair<int, bool> kvp in tw.Select(kvp => kvp).ToList())
             {
-                if (!teamDict.ContainsKey(kvp.Key))
+                if (kvp.Key >= 0)
                 {
-                    TeamStats newTeam = new TeamStats(tm.GetTeamName(kvp.Key));
-                    teamDict.Add(kvp.Key, newTeam);
-                }
+                    if (!teamDict.ContainsKey(kvp.Key))
+                    {
+                        TeamStats newTeam = new TeamStats(tm.GetTeamName(kvp.Key));
+                        teamDict.Add(kvp.Key, newTeam);
+                    }
 
-                teamDict[kvp.Key].AddWinLoss(kvp.Value);
+                    teamDict[kvp.Key].AddWinLoss(kvp.Value);
+                }
             }
         }
 

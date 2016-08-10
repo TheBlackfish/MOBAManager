@@ -68,43 +68,71 @@ namespace MOBAManager.Management.Statistics
         }
 
         /// <summary>
-        /// Adds the data for a hero being either picked or banned to the bundle.
+        /// Adds the data for a hero being either picked or banned to the bundle, replacing any previously set value if necessary.
         /// </summary>
         /// <param name="ID">The ID of the hero.</param>
         /// <param name="wasPicked">If true, the hero was picked. If false, the hero was banned.</param>
         public void AddHeroPickBan(int ID, bool wasPicked)
         {
-            heroPicks.Add(ID, wasPicked);
+            if (heroPicks.ContainsKey(ID))
+            {
+                heroPicks[ID] = wasPicked;
+            }
+            else
+            {
+                heroPicks.Add(ID, wasPicked);
+            }
         }
 
         /// <summary>
-        /// Adds the data for a hero either winning or losing to the bundle.
+        /// Adds the data for a hero either winning or losing to the bundle, replacing any previously set value if necessary.
         /// </summary>
         /// <param name="ID">The ID of the hero.</param>
         /// <param name="won">If true, the hero won. If false, the hero lost.</param>
         public void AddHeroWin(int ID, bool won)
         {
-            heroWins.Add(ID, won);
+            if (heroWins.ContainsKey(ID))
+            {
+                heroWins[ID] = won;
+            }
+            else
+            {
+                heroWins.Add(ID, won);
+            }
         }
 
         /// <summary>
-        /// Adds the data for a player either winning or losing to the bundle.
+        /// Adds the data for a player either winning or losing to the bundle, replacing any previously set value if necessary.
         /// </summary>
         /// <param name="ID">The ID of the player.</param>
         /// <param name="won">If true, the player won. If false, the player lost.</param>
         public void AddPlayerWin(int ID, bool won)
         {
-            playerWins.Add(ID, won);
+            if (playerWins.ContainsKey(ID))
+            {
+                playerWins[ID] = won;
+            }
+            else
+            {
+                playerWins.Add(ID, won);
+            }
         }
 
         /// <summary>
-        /// Adds the data for a team either winning or losing to the bundle.
+        /// Adds the data for a team either winning or losing to the bundle, replacing any previously set value if necessary.
         /// </summary>
         /// <param name="ID">The ID of the team.</param>
         /// <param name="won">If true, the team won. If false, the team lost.</param>
         public void AddTeamWin(int ID, bool won)
         {
-            teamWins.Add(ID, won);
+            if (teamWins.ContainsKey(ID))
+            {
+                teamWins[ID] = won;
+            }
+            else
+            {
+                teamWins.Add(ID, won);
+            }
         }
         #endregion
 

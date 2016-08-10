@@ -17,6 +17,11 @@ namespace MOBAManager.Management
 {
     sealed public class GameManager
     {
+        #region Private variables
+        private int minPubsPerDay = 100;
+        private int maxPubsAddedPerDay = 50;
+        #endregion
+
         #region Temporarily Public Variables
         /// <summary>
         /// The calendar manager of the current game.
@@ -84,6 +89,35 @@ namespace MOBAManager.Management
                 return new Match(teamManager.GetTeamByID(ce.team1ID), teamManager.GetTeamByID(ce.team2ID), heroManager.GetHeroDictionary());
             }
         }
+
+        /// <summary>
+        /// Resolves a random number of public matches consisting of randomized teams of randomized players.
+        /// Only the hero win/loss and pick/ban statistics are relevant for these matches.
+        /// </summary>
+        public void ResolvePubs()
+        {
+            int actualPubs = minPubsPerDay + RNG.Roll(maxPubsAddedPerDay);
+            List<StatsBundle> pubData = new List<StatsBundle>();
+            for (int i = 0; i < actualPubs; i++)
+            {
+                Match m = new Match(teamManager.CreatePUBTeam(), teamManager.CreatePUBTeam(), heroManager.GetHeroDictionary());
+                m.InstantlyResolve();
+                pubData.Add(m.GetStats());
+            }
+            statsManager.ProcessManyBundles(pubData, heroManager, playerManager, teamManager);
+        }
+
+        /// <summary>
+        /// Calls ResolvePubs() a number of times equal to the multiplier.
+        /// </summary>
+        /// <param name="multiplier">The multiplier for how many ResolvePubs() calls should be made.</param>
+        public void ResolvePubs(int multiplier)
+        {
+            for (int i = 0; i < multiplier; i++)
+            {
+                ResolvePubs();
+            }
+        }
         #endregion
 
         #region Constructors
@@ -96,7 +130,7 @@ namespace MOBAManager.Management
 
             playerManager = new PlayerManager();
 
-            teamManager = new TeamManager();
+            teamManager = new TeamManager(playerManager);
 
             tournamentManager = new TournamentManager();
 
@@ -107,6 +141,8 @@ namespace MOBAManager.Management
             teamManager.PopulateTeams(playerManager.GetAllPlayers());
 
             tournamentManager.CreateTournaments(calendarManager, teamManager, heroManager);
+
+            ResolvePubs(5);
         }
         #endregion
     }

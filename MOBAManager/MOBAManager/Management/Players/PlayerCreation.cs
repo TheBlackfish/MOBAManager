@@ -50,7 +50,7 @@ namespace MOBAManager.Management.Players
             foreach (Player p in players)
             {
                 List<int> allHeroIDs = new List<int>();
-                for (int i = 0; i < 30; i++)
+                for (int i = 0; i < 40; i++)
                 {
                     allHeroIDs.Add(i);
                 }
@@ -82,6 +82,63 @@ namespace MOBAManager.Management.Players
                     allHeroIDs.Remove(id);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates a temporary player with an ID of -1 with random stats. The ID of -1 denotes that its stats will not be recorded.
+        /// </summary>
+        /// <returns></returns>
+        public Player CreatePUBPlayer()
+        {
+            Player p = new Player(-1, "Pubber", 10 - RNG.Roll(20));
+
+            List<int> allHeroIDs = new List<int>();
+            for (int i = 0; i < 40; i++)
+            {
+                allHeroIDs.Add(i);
+            }
+
+            List<int> allSkills = new List<int>();
+            int maxSkill = RNG.Roll(8) + 2;
+            int minSkill = 0 - RNG.Roll(10);
+
+            for (int i = maxSkill; i >= 0; i--)
+            {
+                for (int j = i; j <= maxSkill; j++)
+                {
+                    allSkills.Add(i);
+                }
+            }
+
+            for (int i = minSkill; i <= 0; i++)
+            {
+                for (int j = i; j >= minSkill; j--)
+                {
+                    allSkills.Add(i);
+                }
+            }
+
+            for (int i = 0; i < allSkills.Count * 2; i++)
+            {
+                int x = RNG.Roll(allSkills.Count);
+                int y = RNG.Roll(allSkills.Count);
+
+                int temp = allSkills[x];
+                allSkills[x] = allSkills[y];
+                allSkills[y] = temp;
+            }
+
+            foreach (int val in allSkills)
+            {
+                if (allHeroIDs.Count > 0)
+                {
+                    int id = allHeroIDs[RNG.Roll(allHeroIDs.Count)];
+                    p.SetHeroSkill(id, val);
+                    allHeroIDs.Remove(id);
+                }
+            }
+
+            return p;
         }
     }
 }
