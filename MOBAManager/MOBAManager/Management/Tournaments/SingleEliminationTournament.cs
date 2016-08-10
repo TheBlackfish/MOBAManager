@@ -17,7 +17,7 @@ namespace MOBAManager.Management.Tournaments
         /// Starting with the initial X teams, each round gets X/2 matches. Each round beyond the first pulls from the previously created round, until only one match is made in a round.
         /// All of these matches only pull winners from previous matches. Losers are eliminated.
         /// </summary>
-        public override void setupMatches()
+        public override void SetupMatches()
         {
             //Create the first round by assigning each slot into a match.
             List<TourneyMatchup> currentRound = new List<TourneyMatchup>();
@@ -27,7 +27,7 @@ namespace MOBAManager.Management.Tournaments
 
             while (lowerBound < upperBound)
             {
-                currentRound.Add(new TourneyMatchup(3, getTeamInSlot, getTeamInSlot, new int[] { 0, lowerBound }, lowerBound, upperBound));
+                currentRound.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { 0, lowerBound }, lowerBound, upperBound));
                 lowerBound++;
                 upperBound--;
             }
@@ -62,9 +62,9 @@ namespace MOBAManager.Management.Tournaments
         /// Splits all created matches evenly over the number of days specified.
         /// </summary>
         /// <param name="overDays">The number of days the tournament occurs over.</param>
-        public override void setupMatches(int overDays)
+        public override void SetupMatches(int overDays)
         {
-            setupMatches();
+            SetupMatches();
 
             //Find out how many matches should occur each day, adding more to the first days if necessary.
             List<int> matchesPerDay = new List<int>();
@@ -93,6 +93,35 @@ namespace MOBAManager.Management.Tournaments
             {
                 upcomingMatchups[i].DayOfMatch = matchesPerDay[i];
             }
+        }
+
+        /// <summary>
+        /// Returns a list of all teams participating in this tournament, ranked by number of wins.
+        /// </summary>
+        /// <returns></returns>
+        override public List<Team> GetRankedResults()
+        {
+            List<Tuple<Team, int>> teamsByWins = new List<Tuple<Team, int>>();
+            foreach (Team t in includedTeams)
+            {
+                teamsByWins.Add(new Tuple<Team, int>(t, 0));
+            }
+
+            foreach (TourneyMatchup tm in resolvedMatchups)
+            {
+                Team winner = tm.GetWinner(0);
+                bool found = false;
+                for (int i = 0; i < teamsByWins.Count && !found; i++)
+                {
+                    if (teamsByWins[i].Item1.ID == winner.ID)
+                    {
+                        teamsByWins[i] = new Tuple<Team, int>(winner, teamsByWins[i].Item2 + 1);
+                        found = true;
+                    }
+                }
+            }
+
+            return teamsByWins.OrderByDescending(t => t.Item2).Select(t => t.Item1).ToList();
         }
         #endregion
 

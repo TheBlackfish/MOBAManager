@@ -20,7 +20,7 @@ namespace MOBAManager.Management.Tournaments
         {
             foreach(Tournament t in tournaments.Where(t => t.enabled).ToList())
             {
-                t.advanceDay();
+                t.AdvanceDay();
             }
         }
 
@@ -67,7 +67,7 @@ namespace MOBAManager.Management.Tournaments
         /// <returns></returns>
         public List<Tournament> GetIncompleteTournaments()
         {
-            return tournaments.Where(t => !t.isComplete()).OrderBy(t => t.name).ToList();
+            return tournaments.Where(t => !t.IsComplete()).OrderBy(t => t.name).ToList();
         }
 
         /// <summary>

@@ -312,12 +312,18 @@ namespace MOBAManager.Management.Tournaments
         /// <summary>
         /// Override this to create the specific way the subclass sets up matches.
         /// </summary>
-        public abstract void setupMatches();
+        public abstract void SetupMatches();
 
         /// <summary>
         /// Override this to create the specific way the subclass sets up matches over multiple days.
         /// </summary>
-        public abstract void setupMatches(int overDays);
+        public abstract void SetupMatches(int overDays);
+
+        /// <summary>
+        /// Override this to create the way to determine team rankings in this tournament.
+        /// </summary>
+        /// <returns></returns>
+        public abstract List<Team> GetRankedResults();
         #endregion
 
         #region Public variables
@@ -366,7 +372,7 @@ namespace MOBAManager.Management.Tournaments
         /// </summary>
         /// <param name="slot"></param>
         /// <returns></returns>
-        protected Team getTeamInSlot(int slot)
+        protected Team GetTeamInSlot(int slot)
         {
             return includedTeams[slot];
         }
@@ -377,7 +383,7 @@ namespace MOBAManager.Management.Tournaments
         /// Returns the next match of the tournament, or null if no matches are left to be completed today.
         /// </summary>
         /// <returns></returns>
-        public Match getMatch()
+        public Match GetMatch()
         {
             TourneyMatchup cur = upcomingMatchups[0];
 
@@ -417,7 +423,7 @@ namespace MOBAManager.Management.Tournaments
         /// <summary>
         /// Advances the day and disables the tournament.
         /// </summary>
-        public void advanceDay()
+        public void AdvanceDay()
         {
             currentDay++;
             _enabled = false;
@@ -427,7 +433,7 @@ namespace MOBAManager.Management.Tournaments
         /// Returns true if there are no more days left to resolve in this tournament.
         /// </summary>
         /// <returns></returns>
-        public bool isComplete()
+        public bool IsComplete()
         {
             return ((currentDay + 1) == totalDays && upcomingMatchups.Count == 0);
         }
@@ -442,14 +448,28 @@ namespace MOBAManager.Management.Tournaments
         }
 
         /// <summary>
+        /// Returns a list of the current top X teams in this tournament, where X = the number provided.
+        /// </summary>
+        /// <param name="ranks">The number of teams to retrieve.</param>
+        /// <returns></returns>
+        public List<Team> GetTopRankedTeams(int ranks)
+        {
+            if (ranks >= includedTeams.Count)
+            {
+                return GetRankedResults();
+            }
+            return GetRankedResults().Take(ranks).ToList();
+        }
+
+        /// <summary>
         /// Returns a summary of what the tournament has done on the current day.
         /// </summary>
         /// <returns></returns>
         public string GetSummary()
         {
-            if (isComplete())
+            if (IsComplete())
             {
-                return name + " has completed!";
+                return name + " has completed! " + GetTopRankedTeams(1)[0].TeamName + " has come out on top!";
             }
             else
             {
@@ -542,7 +562,7 @@ namespace MOBAManager.Management.Tournaments
             resolvedMatchups = new List<TourneyMatchup>();
             allowedHeroes = heroes;
             totalDays = numberOfDays;
-            setupMatches(numberOfDays);
+            SetupMatches(numberOfDays);
         }
 
         /// <summary>
@@ -560,7 +580,7 @@ namespace MOBAManager.Management.Tournaments
             upcomingMatchups = new List<TourneyMatchup>();
             resolvedMatchups = new List<TourneyMatchup>();
             allowedHeroes = heroes;
-            setupMatches();
+            SetupMatches();
         }
         #endregion
     }

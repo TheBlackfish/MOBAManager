@@ -335,10 +335,10 @@ namespace MOBAManager.UI
         /// </summary>
         private void resolveTournamentMatch()
         {
-            Match m = tournaments[0].getMatch();
+            Match m = tournaments[0].GetMatch();
             if (m != null)
             {
-                if (m.IsThreaded)
+                /*if (m.IsThreaded)
                 {
                     currentPlayerMatch = m;
                     waitingToStartPlayerEvent = true;
@@ -346,13 +346,13 @@ namespace MOBAManager.UI
                     AddEventNotification("Click to begin the tournament match against " + m.GetAITeamName());
                 }
                 else
-                {
+                {*/
                     m.InstantlyResolve();
                     statistics.Add(m.GetStats());
                     m.ResolveMatchEffects();
                     AddEventNotification(m.GetMatchSummary());
                     resolutionTimer.Enabled = true;
-                }
+                //}
             }
             else
             {
