@@ -42,8 +42,8 @@ namespace MOBAManager.Management.Tournaments
                 {
                     nextRound.Add(new TourneyMatchup(3, currentRound[i].GetWinner, currentRound[i + 1].GetWinner, new int[] { currentXPos, currentRound[i].cellPosition[1] }));
                 }
-                
-                foreach(TourneyMatchup tm in currentRound)
+
+                foreach (TourneyMatchup tm in currentRound)
                 {
                     upcomingMatchups.Add(tm);
                 }
@@ -66,32 +66,35 @@ namespace MOBAManager.Management.Tournaments
         {
             SetupMatches();
 
-            //Find out how many matches should occur each day, adding more to the first days if necessary.
-            List<int> matchesPerDay = new List<int>();
-
-            while ((matchesPerDay.Count + overDays) <= upcomingMatchups.Count)
+            if (overDays > 1)
             {
-                for (int i = 0; i < overDays; i++)
+                //Find out how many matches should occur each day, adding more to the first days if necessary.
+                List<int> matchesPerDay = new List<int>();
+
+                while ((matchesPerDay.Count + overDays) <= upcomingMatchups.Count)
                 {
-                    matchesPerDay.Add(i + 0);
+                    for (int i = 0; i < overDays; i++)
+                    {
+                        matchesPerDay.Add(i + 0);
+                    }
                 }
-            }
 
-            int remainingAmount = upcomingMatchups.Count - matchesPerDay.Count;
-            if (remainingAmount > 0)
-            {
-                for (int i = 0; i < remainingAmount; i++)
+                int remainingAmount = upcomingMatchups.Count - matchesPerDay.Count;
+                if (remainingAmount > 0)
                 {
-                    matchesPerDay.Add(i + 0);
+                    for (int i = 0; i < remainingAmount; i++)
+                    {
+                        matchesPerDay.Add(i + 0);
+                    }
                 }
-            }
 
-            matchesPerDay = matchesPerDay.OrderBy(num => num).ToList();
+                matchesPerDay = matchesPerDay.OrderBy(num => num).ToList();
 
-            //Assign upcoming matchups to days equal to what each day should have.
-            for (int i = 0; i < upcomingMatchups.Count; i++)
-            {
-                upcomingMatchups[i].DayOfMatch = matchesPerDay[i];
+                //Assign upcoming matchups to days equal to what each day should have.
+                for (int i = 0; i < upcomingMatchups.Count; i++)
+                {
+                    upcomingMatchups[i].DayOfMatch = matchesPerDay[i];
+                }
             }
         }
 
@@ -151,6 +154,33 @@ namespace MOBAManager.Management.Tournaments
             : base(name, id, teams, heroes, numberOfDays)
         {
             //blank because why not
+        }
+
+        /// <summary>
+        /// Creates a new Single Elimination tournament that uses invites instead of fixed teams.
+        /// </summary>
+        /// <param name="name">The name of the tournament</param>
+        /// <param name="ID">The ID of the tournament</param>
+        /// <param name="numberOfTeams">The minimum number of teams participating in the tournament.</param>
+        /// <param name="heroes">All of the heroes allowed in the tournament</param>
+        public SingleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes)
+            : base(name, ID, numberOfTeams, heroes)
+        {
+            //blank
+        }
+
+        /// <summary>
+        /// Creates a new Single Elimination tournament that uses invites instead of fixed teams and spans multiple days.
+        /// </summary>
+        /// <param name="name">The name of the tournament</param>
+        /// <param name="ID">The ID of the tournament</param>
+        /// <param name="numberOfTeams">The minimum number of teams participating in the tournament.</param>
+        /// <param name="heroes">All of the heroes allowed in the tournament</param>
+        /// <param name="numberOfDays">The number of days this tournament spans</param>
+        public SingleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes, int numberOfDays)
+            : base(name, ID, numberOfTeams, heroes, numberOfDays)
+        {
+            //blank
         }
         #endregion
     }

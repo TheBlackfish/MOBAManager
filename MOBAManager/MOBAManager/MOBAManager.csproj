@@ -54,9 +54,11 @@
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
     <Compile Include="Management\Tournaments\DoubleEliminationTournament.cs" />
+    <Compile Include="Management\Tournaments\RoundRobinTournament.cs" />
     <Compile Include="Management\Tournaments\TournamentCreation.cs" />
     <Compile Include="Management\Tournaments\SingleEliminationTournament.cs" />
     <Compile Include="Management\Tournaments\Tournament.cs" />
+    <Compile Include="Management\Tournaments\TournamentInvitations.cs" />
     <Compile Include="Management\Tournaments\TournamentManager.cs" />
     <Compile Include="Resolution\MatchResolution\Match.cs" />
     <Compile Include="Resolution\MatchResolution\MatchAI.cs" />

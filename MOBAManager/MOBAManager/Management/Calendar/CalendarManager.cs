@@ -78,10 +78,13 @@ namespace MOBAManager.Management.Calendar
             }
             if (ce.tournamentID != -1)
             {
-                List<int> ids = tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList();
-                foreach (int i in ids)
+                if (tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Count > 0)
                 {
-                    RemoveAllEventsForTeamOnOffset(i, ce.daysToResolution);
+                    List<int> ids = tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList();
+                    foreach (int i in ids)
+                    {
+                        RemoveAllEventsForTeamOnOffset(i, ce.daysToResolution);
+                    }
                 }
             }
             allEvents.Add(ce);
@@ -431,6 +434,10 @@ namespace MOBAManager.Management.Calendar
                     {
                         if (ce.type == EventType.TournamentPlaceholder)
                         {
+                            if (evtdesc.Length > 0)
+                            {
+                                evtdesc += Environment.NewLine;
+                            }
                             evtdesc += tournamentManager.GetTournamentByID(ce.tournamentID).name;
                         }
                     }

@@ -10,6 +10,7 @@ namespace MOBAManager.Management.Tournaments
 {
     class DoubleEliminationTournament : Tournament
     {
+        #region Public methods
         /// <summary>
         /// Creates all of the matches for the double elimination tournament.
         /// </summary>
@@ -102,32 +103,35 @@ namespace MOBAManager.Management.Tournaments
         {
             SetupMatches();
 
-            //Find out how many matches should occur each day, adding more to the first days if necessary.
-            List<int> matchesPerDay = new List<int>();
-
-            while ((matchesPerDay.Count + overDays) <= upcomingMatchups.Count)
+            if (overDays > 1)
             {
-                for (int i = 0; i < overDays; i++)
+                //Find out how many matches should occur each day, adding more to the first days if necessary.
+                List<int> matchesPerDay = new List<int>();
+
+                while ((matchesPerDay.Count + overDays) <= upcomingMatchups.Count)
                 {
-                    matchesPerDay.Add(i + 0);
+                    for (int i = 0; i < overDays; i++)
+                    {
+                        matchesPerDay.Add(i + 0);
+                    }
                 }
-            }
 
-            int remainingAmount = upcomingMatchups.Count - matchesPerDay.Count;
-            if (remainingAmount > 0)
-            {
-                for (int i = 0; i < remainingAmount; i++)
+                int remainingAmount = upcomingMatchups.Count - matchesPerDay.Count;
+                if (remainingAmount > 0)
                 {
-                    matchesPerDay.Add(i + 0);
+                    for (int i = 0; i < remainingAmount; i++)
+                    {
+                        matchesPerDay.Add(i + 0);
+                    }
                 }
-            }
 
-            matchesPerDay = matchesPerDay.OrderBy(num => num).ToList();
+                matchesPerDay = matchesPerDay.OrderBy(num => num).ToList();
 
-            //Assign upcoming matchups to days equal to what each day should have.
-            for (int i = 0; i < upcomingMatchups.Count; i++)
-            {
-                upcomingMatchups[i].DayOfMatch = matchesPerDay[i];
+                //Assign upcoming matchups to days equal to what each day should have.
+                for (int i = 0; i < upcomingMatchups.Count; i++)
+                {
+                    upcomingMatchups[i].DayOfMatch = matchesPerDay[i];
+                }
             }
         }
 
@@ -175,9 +179,10 @@ namespace MOBAManager.Management.Tournaments
 
             return teamsByWins.OrderByDescending(t => t.Item3).ThenByDescending(t => t.Item2).Select(t => t.Item1).ToList();
         }
+        #endregion
 
         /// <summary>
-        /// Creates a new Single Elimination tournament.
+        /// Creates a new Double Elimination tournament.
         /// </summary>
         /// <param name="name">The name of the tournament</param>
         /// <param name="id">The ID of the tournament</param>
@@ -190,7 +195,7 @@ namespace MOBAManager.Management.Tournaments
         }
 
         /// <summary>
-        /// Creates a new Single Elimination tournament that spans multiple days.
+        /// Creates a new Double Elimination tournament that spans multiple days.
         /// </summary>
         /// <param name="name">The name of the tournament</param>
         /// <param name="id">The ID of the tournament</param>
@@ -201,6 +206,33 @@ namespace MOBAManager.Management.Tournaments
             : base(name, id, teams, heroes, numberOfDays)
         {
             //blank because why not
+        }
+
+        /// <summary>
+        /// Creates a new Double Elimination tournament that uses invites instead of fixed teams.
+        /// </summary>
+        /// <param name="name">The name of the tournament</param>
+        /// <param name="ID">The ID of the tournament</param>
+        /// <param name="numberOfTeams">The minimum number of teams participating in the tournament.</param>
+        /// <param name="heroes">All of the heroes allowed in the tournament</param>
+        public DoubleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes)
+            : base(name, ID, numberOfTeams, heroes)
+        {
+            //blank
+        }
+
+        /// <summary>
+        /// Creates a new Double Elimination tournament that uses invites instead of fixed teams and spans multiple days.
+        /// </summary>
+        /// <param name="name">The name of the tournament</param>
+        /// <param name="ID">The ID of the tournament</param>
+        /// <param name="numberOfTeams">The minimum number of teams participating in the tournament.</param>
+        /// <param name="heroes">All of the heroes allowed in the tournament</param>
+        /// <param name="numberOfDays">The number of days this tournament spans</param>
+        public DoubleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes, int numberOfDays)
+            : base(name, ID, numberOfTeams, heroes, numberOfDays)
+        {
+            //blank
         }
     }
 }

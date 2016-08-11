@@ -2,6 +2,7 @@
 using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Teams;
 using System;
+using System.Linq;
 
 namespace MOBAManager.Management.Tournaments
 {
@@ -23,9 +24,19 @@ namespace MOBAManager.Management.Tournaments
             tournaments.Add(winterSolstice);
             cm.AddTournamentDates(winterSolstice.ID, cm.GetWinterSolsticeOffset() - 2, 3);
 
-            Tournament deTest = new DoubleEliminationTournament("Test Championship", 2, tm.GetAllTeams(), hm.GetHeroDictionary(), 2);
-            tournaments.Add(deTest);
-            cm.AddTournamentDates(deTest.ID, 0, 2);
+            Tournament deTestA = new RoundRobinTournament("Test Championship Group A", 2, tm.GetAllTeams().Take(8).ToList(), hm.GetHeroDictionary(), 2);
+            tournaments.Add(deTestA);
+            cm.AddTournamentDates(deTestA.ID, 0, 2);
+
+            Tournament deTestB = new RoundRobinTournament("Test Championship Group B", 3, tm.GetAllTeams().Skip(8).ToList(), hm.GetHeroDictionary(), 2);
+            tournaments.Add(deTestB);
+            cm.AddTournamentDates(deTestB.ID, 0, 2);
+
+            Tournament deTestC = new SingleEliminationTournament("Test Championship Finals", 4, 8, hm.GetHeroDictionary());
+            deTestC.addInviteFunction(deTestA.GetTopRankedTeams, 4);
+            deTestC.addInviteFunction(deTestB.GetTopRankedTeams, 4);
+            tournaments.Add(deTestC);
+            cm.AddTournamentDate(deTestC.ID, 3);
         }
     }
 }

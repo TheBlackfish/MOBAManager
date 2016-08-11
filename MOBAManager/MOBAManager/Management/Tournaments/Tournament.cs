@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace MOBAManager.Management.Tournaments
 {
-    public abstract class Tournament
+    public abstract partial class Tournament
     {
         #region Internal classes
         /// <summary>
@@ -385,6 +385,12 @@ namespace MOBAManager.Management.Tournaments
         /// <returns></returns>
         public Match GetMatch()
         {
+            if (usesInvites && upcomingMatchups.Count == 0 && resolvedMatchups.Count == 0 && includedTeams.Count == 0)
+            {
+                ResolveInvitations();
+                SetupMatches(totalDays);
+            }
+
             TourneyMatchup cur = upcomingMatchups[0];
 
             if (cur.isComplete())
@@ -435,7 +441,14 @@ namespace MOBAManager.Management.Tournaments
         /// <returns></returns>
         public bool IsComplete()
         {
-            return ((currentDay + 1) == totalDays && upcomingMatchups.Count == 0);
+            if (includedTeams.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return ((currentDay + 1) == totalDays && upcomingMatchups.Count == 0);
+            }
         }
 
         /// <summary>
