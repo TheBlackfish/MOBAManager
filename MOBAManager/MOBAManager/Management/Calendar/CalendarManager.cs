@@ -305,13 +305,7 @@ namespace MOBAManager.Management.Calendar
         {
             if (allEvents.Any(ce => ce.type == EventType.TournamentPlaceholder && ce.daysToResolution == dayOffset))
             {
-                foreach (CalendarEvent ce in allEvents.Where(ce => ce.type == EventType.TournamentPlaceholder && ce.daysToResolution == dayOffset).ToList())
-                {
-                    if (tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList().Contains(teamID))
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
             
             return (allEvents.Where(ce => ce.daysToResolution == dayOffset).Where(ce => ce.team1ID == teamID || ce.team2ID == teamID).Count() > 0);
