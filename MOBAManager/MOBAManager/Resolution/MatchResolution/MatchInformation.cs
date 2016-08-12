@@ -4,6 +4,7 @@ using MOBAManager.Management.Statistics;
 using MOBAManager.Management.Teams;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MOBAManager.MatchResolution
 {
@@ -222,6 +223,7 @@ namespace MOBAManager.MatchResolution
             bundle = UpdateBundleWithTeamStats(bundle);
             bundle = UpdateBundleWithPlayerStats(bundle);
             bundle = UpdateBundleWithHeroStats(bundle);
+            bundle = UpdateBundleWithPlayerHeroCombinations(bundle);
 
             return bundle;
         }
@@ -297,6 +299,15 @@ namespace MOBAManager.MatchResolution
                 }
             }
 
+            return bundle;
+        }
+
+        private StatsBundle UpdateBundleWithPlayerHeroCombinations(StatsBundle bundle)
+        {
+            foreach (Tuple<int, int> tpl in ms.GetPlayerHeroCombinationsForTeam(1).Concat(ms.GetPlayerHeroCombinationsForTeam(2)))
+            {
+                bundle.AddPlayerHeroCombination(tpl.Item1, tpl.Item2);
+            }
             return bundle;
         }
         #endregion

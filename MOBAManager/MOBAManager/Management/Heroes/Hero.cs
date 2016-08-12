@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Heroes
 {
-    sealed public class Hero
+    sealed public partial class Hero
     {
         #region Private Variables
         /// <summary>

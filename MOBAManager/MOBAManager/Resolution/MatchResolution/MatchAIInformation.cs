@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MOBAManager.Management.Heroes;
+using MOBAManager.Management.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,6 +57,28 @@ namespace MOBAManager.MatchResolution
             placeholder[3] = min.ToString() + ":" + ((seconds < 10) ? ("0") : ("")) + seconds.ToString();
 
             return new Tuple<string, string, string, string>(placeholder[0], placeholder[1], placeholder[2], placeholder[3]);
+        }
+
+        public List<Tuple<int, int>> GetPlayerHeroCombinationsForTeam(int team)
+        {
+            List<Tuple<int, int>> ret = new List<Tuple<int, int>>();
+
+            if (team == 1)
+            {
+                foreach (Tuple<Player, Hero> tph in team1Lineup)
+                {
+                    ret.Add(new Tuple<int, int>(tph.Item1.ID, tph.Item2.ID));
+                }
+            }
+            else if (team == 2)
+            {
+                foreach (Tuple<Player, Hero> tph in team2Lineup)
+                {
+                    ret.Add(new Tuple<int, int>(tph.Item1.ID, tph.Item2.ID));
+                }
+            }
+
+            return ret;
         }
         #endregion
     }

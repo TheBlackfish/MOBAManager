@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Teams
 {
-    sealed public class Team
+    sealed public partial class Team
     {
         #region Static Variables
         /// <summary>

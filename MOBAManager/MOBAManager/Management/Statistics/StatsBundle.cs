@@ -28,6 +28,8 @@ namespace MOBAManager.Management.Statistics
         /// The dictionary containing data for team wins and losses.
         /// </summary>
         private Dictionary<int, bool> teamWins;
+
+        private List<Tuple<int, int>> playerHeroCombinations;
         #endregion
 
         #region Public methods
@@ -65,6 +67,11 @@ namespace MOBAManager.Management.Statistics
         public Dictionary<int, bool> GetTeamWins()
         {
             return teamWins;
+        }
+
+        public List<Tuple<int, int>> GetPlayerHeroPicks()
+        {
+            return playerHeroCombinations;
         }
 
         /// <summary>
@@ -118,6 +125,11 @@ namespace MOBAManager.Management.Statistics
             }
         }
 
+        public void AddPlayerHeroCombination(int playerID, int heroID)
+        {
+            playerHeroCombinations.Add(new Tuple<int, int>(playerID, heroID));
+        }
+
         /// <summary>
         /// Adds the data for a team either winning or losing to the bundle, replacing any previously set value if necessary.
         /// </summary>
@@ -146,6 +158,8 @@ namespace MOBAManager.Management.Statistics
             heroWins = new Dictionary<int, bool>();
             playerWins = new Dictionary<int, bool>();
             teamWins = new Dictionary<int, bool>();
+
+            playerHeroCombinations = new List<Tuple<int, int>>();
         }
         #endregion
     }

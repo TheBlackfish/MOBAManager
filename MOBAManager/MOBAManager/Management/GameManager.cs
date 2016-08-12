@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management
 {
@@ -118,6 +119,26 @@ namespace MOBAManager.Management
                 ResolvePubs();
             }
         }
+
+        public void Save()
+        {
+            //Todo
+        }
+        #endregion
+
+        #region Private methods
+
+        private XDocument ToXML()
+        {
+            XElement root = new XElement("game");
+
+            root.Add(heroManager.ToXML());
+
+            XDocument saveFile = new XDocument(root);
+
+            return saveFile;
+        }
+
         #endregion
 
         #region Constructors
@@ -143,6 +164,11 @@ namespace MOBAManager.Management
             tournamentManager.CreateTournaments(calendarManager, teamManager, heroManager);
 
             ResolvePubs(5);
+        }
+
+        public GameManager(XDocument xml)
+        {
+            heroManager = new HeroManager(xml.Descendants("heroes").First());
         }
         #endregion
     }

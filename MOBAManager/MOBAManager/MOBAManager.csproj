@@ -51,8 +51,14 @@
     <Compile Include="Management\Calendar\CalendarImportantDates.cs" />
     <Compile Include="Management\Calendar\CalendarManager.cs" />
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
+    <Compile Include="Management\Heroes\HeroManagerXML.cs" />
+    <Compile Include="Management\Heroes\HeroXML.cs" />
+    <Compile Include="Management\Players\PlayerManagerXML.cs" />
+    <Compile Include="Management\Players\PlayerXML.cs" />
     <Compile Include="Management\Statistics\StatisticsManager.cs" />
     <Compile Include="Management\Statistics\StatsBundle.cs" />
+    <Compile Include="Management\Teams\TeamManagerXML.cs" />
+    <Compile Include="Management\Teams\TeamXML.cs" />
     <Compile Include="Management\Tournaments\DoubleEliminationTournament.cs" />
     <Compile Include="Management\Tournaments\RoundRobinTournament.cs" />
     <Compile Include="Management\Tournaments\TournamentCreation.cs" />

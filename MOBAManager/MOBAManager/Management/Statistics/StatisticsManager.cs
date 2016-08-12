@@ -142,6 +142,8 @@ namespace MOBAManager.Management.Statistics
             /// The number of losses the player has.
             /// </summary>
             private int _losses;
+
+            private Dictionary<int, Tuple<int, int>> _heroStatistics;
             #endregion
 
             #region Constructors
@@ -154,10 +156,25 @@ namespace MOBAManager.Management.Statistics
                 _name = s;
                 _wins = 0;
                 _losses = 0;
+                _heroStatistics = new Dictionary<int, Tuple<int, int>>();
             }
             #endregion
 
             #region Public properties
+            public void AddWinLoss(int heroID, bool didWin)
+            {
+                AddWinLoss(didWin);
+                if (_heroStatistics.ContainsKey(heroID))
+                {
+                    Tuple<int, int> historical = _heroStatistics[heroID];
+                    _heroStatistics[heroID] = new Tuple<int, int>(historical.Item1 + (didWin ? 1 : 0), historical.Item2 + (didWin ? 0 : 1));
+                }
+                else
+                {
+                    _heroStatistics.Add(heroID, new Tuple<int, int>(didWin ? 1 : 0, didWin ? 0 : 1));
+                }
+            }
+
             public void AddWinLoss(bool didWin)
             {
                 if (didWin)
@@ -170,12 +187,41 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            public string HeroTotalGames(int heroID)
+            {
+                if (_heroStatistics.ContainsKey(heroID))
+                {
+                    return (_heroStatistics[heroID].Item1 + _heroStatistics[heroID].Item2).ToString();
+                }
+                return "-";
+            }
+
+            public string HeroWinrate(int heroID)
+            {
+                if (_heroStatistics.ContainsKey(heroID))
+                {
+                    double temp = (double)_heroStatistics[heroID].Item1 / (_heroStatistics[heroID].Item1 + _heroStatistics[heroID].Item2);
+                    temp = Math.Round(temp, 2, MidpointRounding.AwayFromZero);
+                    return temp.ToString("0.00");
+                }
+                return "-";
+            }
+
             public string Name
             {
                 get
                 {
                     return _name;
                 }
+            }
+
+            public int[] TopHeroes()
+            {
+                int[] topHeroes = _heroStatistics.OrderByDescending(kvp => (double)kvp.Value.Item1 / (kvp.Value.Item1 + kvp.Value.Item2))
+                    .Select(kvp => kvp.Key)
+                    .Take(3)
+                    .ToArray();
+                return topHeroes;
             }
 
             /// <summary>
@@ -341,6 +387,7 @@ namespace MOBAManager.Management.Statistics
             Dictionary<int, bool> hw = bundle.GetHeroWins();
             Dictionary<int, bool> pw = bundle.GetPlayerWins();
             Dictionary<int, bool> tw = bundle.GetTeamWins();
+            List<Tuple<int, int>> phc = bundle.GetPlayerHeroPicks();
 
             foreach(KeyValuePair<int, bool> kvp in pb.Select(kvp => kvp).ToList())
             {
@@ -374,7 +421,9 @@ namespace MOBAManager.Management.Statistics
                         playerDict.Add(kvp.Key, newPlayer);
                     }
 
-                    playerDict[kvp.Key].AddWinLoss(kvp.Value);
+                    playerDict[kvp.Key].AddWinLoss(phc.Where(t => t.Item1 == kvp.Key)
+                                                    .Select(t => t.Item2)
+                                                    .First(), kvp.Value);
                 }
             }
 
@@ -431,7 +480,17 @@ namespace MOBAManager.Management.Statistics
 
             foreach (PlayerStats ps in pStats)
             {
-                Tuple<string, string, int> res = new Tuple<string, string, int>(ps.Name, ps.Winrate, ps.TotalGames);
+                int[] notableHeroes = ps.TopHeroes();
+                string nhstr = "";
+                foreach (int i in notableHeroes)
+                {
+                    if (nhstr.Length > 0)
+                    {
+                        nhstr += ", ";
+                    }
+                    nhstr += heroDict[i].Name;
+                }
+                Tuple<string, string, int, string> res = new Tuple<string, string, int, string>(ps.Name, ps.Winrate, ps.TotalGames, nhstr);
                 bs.Add(res);
             }
 

@@ -96,6 +96,13 @@ namespace MOBAManager.UI.Meta
                 column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 playerDataGridView.Columns.Add(column);
 
+                column = new DataGridViewTextBoxColumn();
+                column.DataPropertyName = "Item4";
+                column.Name = "Top 3 Heroes";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                column.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+                playerDataGridView.Columns.Add(column);
+
                 playerDataGridView.Invalidate();
             };
             BeginInvoke(addStats);

@@ -235,11 +235,11 @@ namespace MOBAManager.Management.Tournaments
                 {
                     if (swap)
                     {
-                        tempHolder.Add(new TourneyMatchup(1, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item2, pairing.Item1));
+                        tempHolder.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item2, pairing.Item1));
                     }
                     else
                     {
-                        tempHolder.Add(new TourneyMatchup(1, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item1, pairing.Item2));
+                        tempHolder.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item1, pairing.Item2));
                     }
                     swap = !swap;
                 }
