@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Tournaments
 {
@@ -50,6 +51,10 @@ namespace MOBAManager.Management.Tournaments
             /// </summary>
             int numberOfMatches = 0;
 
+            int fixedTeam1Wins = 0;
+
+            int fixedTeam2Wins = 0;
+
             /// <summary>
             /// The number of wins for team 1 thus far.
             /// </summary>
@@ -57,7 +62,7 @@ namespace MOBAManager.Management.Tournaments
             {
                 get
                 {
-                    return matchesInMatchup.Where(m => m.WinnerID == GetTeam1().ID).Count();
+                    return matchesInMatchup.Where(m => m.WinnerID == GetTeam1().ID).Count() + fixedTeam1Wins;
                 }
             }
 
@@ -68,7 +73,7 @@ namespace MOBAManager.Management.Tournaments
             {
                 get
                 {
-                    return matchesInMatchup.Where(m => m.WinnerID == GetTeam2().ID).Count();
+                    return matchesInMatchup.Where(m => m.WinnerID == GetTeam2().ID).Count() + fixedTeam2Wins;
                 }
             }
             #endregion
@@ -83,6 +88,8 @@ namespace MOBAManager.Management.Tournaments
             /// The position of the tournament in the display table.
             /// </summary>
             public int[] cellPosition = new int[] { -1, -1 };
+
+            public int ID;
             #endregion
 
             #region Private methods
@@ -210,6 +217,62 @@ namespace MOBAManager.Management.Tournaments
             {
                 matchesInMatchup.Add(m);
             }
+
+            public XElement ToXML()
+            {
+                XElement root = new XElement("tm");
+                root.SetAttributeValue("id", ID);
+                root.SetAttributeValue("matches", numberOfMatches);
+                root.SetAttributeValue("dayOfMatch", DayOfMatch);
+
+                root.Add(new XElement("cellPos", cellPosition[0] + "," + cellPosition[1]));
+
+                XElement team1Element = new XElement("teamOne", team1Wins);
+                if (team1Slot != -1)
+                {
+                    team1Element.SetAttributeValue("func", "GetSlot");
+                    team1Element.SetAttributeValue("slot", team1Slot);
+                }
+                else
+                {
+                    TourneyMatchup target = (TourneyMatchup)getTeam1Func.Target;
+                    if (getTeam1Func == target.GetWinner)
+                    {
+                        team1Element.SetAttributeValue("func", "GetWinner");
+                        team1Element.SetAttributeValue("match", target.ID);
+                    }
+                    else if (getTeam1Func == target.GetLoser)
+                    {
+                        team1Element.SetAttributeValue("func", "GetLoser");
+                        team1Element.SetAttributeValue("match", target.ID);
+                    }
+                }
+                root.Add(team1Element);
+
+                XElement team2Element = new XElement("teamOne", team2Wins);
+                if (team2Slot != -1)
+                {
+                    team2Element.SetAttributeValue("func", "GetSlot");
+                    team2Element.SetAttributeValue("slot", team2Slot);
+                }
+                else
+                {
+                    TourneyMatchup target = (TourneyMatchup)getTeam2Func.Target;
+                    if (getTeam2Func == target.GetWinner)
+                    {
+                        team2Element.SetAttributeValue("func", "GetWinner");
+                        team2Element.SetAttributeValue("match", target.ID);
+                    }
+                    else if (getTeam2Func == target.GetLoser)
+                    {
+                        team2Element.SetAttributeValue("func", "GetLoser");
+                        team2Element.SetAttributeValue("match", target.ID);
+                    }
+                }
+                root.Add(team2Element);
+
+                return root;
+            }
             #endregion
 
             #region Constructors
@@ -219,7 +282,7 @@ namespace MOBAManager.Management.Tournaments
             /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
             /// <param name="team1Function">The function delegate for team 1 in this match.</param>
             /// <param name="team2Function">The function delegate for team 2 in this match.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition)
+            public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition)
             {
                 matchesInMatchup = new List<Match>();
                 this.numberOfMatches = numberOfMatches;
@@ -228,32 +291,15 @@ namespace MOBAManager.Management.Tournaments
                 getTeam2Func = team2Function;
             }
 
-            /// <summary>
-            /// Creates a new match-up.
-            /// </summary>
-            /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
-            /// <param name="team1Function">The function delegate for team 1 in this match.</param>
-            /// <param name="team2Function">The function delegate for team 2 in this match.</param>
-            /// <param name="team1Slot">The integer to use as a parameter for team1Function.</param>
-            /// <param name="team2Slot">The integer to use as a parameter for team2Function.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot)
-                : this(numberOfMatches, team1Function, team2Function, cellPosition)
+            public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot)
+                : this(ID, numberOfMatches, team1Function, team2Function, cellPosition)
             {
                 this.team1Slot = team1Slot;
                 this.team2Slot = team2Slot;
             }
 
-            /// <summary>
-            /// Creates a new match-up.
-            /// </summary>
-            /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
-            /// <param name="team1Function">The function delegate for team 1 in this match.</param>
-            /// <param name="team2Function">The function delegate for team 2 in this match.</param>
-            /// <param name="team1Slot">The integer to use as a parameter for team1Function.</param>
-            /// <param name="team2Slot">The integer to use as a parameter for team2Function.</param>
-            /// <param name="dayOfMatch">The offset from the start of the tournament that this match-up occurs on.</param>
-            public TourneyMatchup(int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch)
-                : this(numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot)
+            public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch)
+                : this(ID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot)
             {
                 this.DayOfMatch = dayOfMatch;
             }

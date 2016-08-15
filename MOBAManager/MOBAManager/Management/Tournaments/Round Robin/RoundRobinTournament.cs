@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using MOBAManager.Management.Teams;
 using MOBAManager.Utility;
 using MOBAManager.Management.Heroes;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Tournaments
 {
     class RoundRobinTournament : Tournament
     {
+        protected override string GetTournamentType()
+        {
+            return "Round Robin";
+        }
+
         #region Public methods
         /// <summary>
         /// Returns the ranked list of all teams participating in this tournament.
@@ -47,6 +53,7 @@ namespace MOBAManager.Management.Tournaments
         public override void SetupMatches()
         {
             List<List<Tuple<int, int>>> allRounds = new List<List<Tuple<int, int>>>();
+            int currentID = 0;
 
             //Create initial round seedings
             for (int i = 1; i < includedTeams.Count; i++)
@@ -235,12 +242,13 @@ namespace MOBAManager.Management.Tournaments
                 {
                     if (swap)
                     {
-                        tempHolder.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item2, pairing.Item1));
+                        tempHolder.Add(new TourneyMatchup(currentID, 3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item2, pairing.Item1));
                     }
                     else
                     {
-                        tempHolder.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item1, pairing.Item2));
+                        tempHolder.Add(new TourneyMatchup(currentID, 3, GetTeamInSlot, GetTeamInSlot, new int[] { allRounds.IndexOf(round), round.IndexOf(pairing) }, pairing.Item1, pairing.Item2));
                     }
+                    currentID++;
                     swap = !swap;
                 }
 
@@ -353,6 +361,12 @@ namespace MOBAManager.Management.Tournaments
         /// <param name="numberOfDays">The number of days this tournament spans</param>
         public RoundRobinTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes, int numberOfDays)
             : base(name, ID, numberOfTeams, heroes, numberOfDays)
+        {
+            //blank
+        }
+
+        public RoundRobinTournament(TeamManager tm, HeroManager hm, XElement src)
+            : base(tm, hm, src)
         {
             //blank
         }

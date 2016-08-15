@@ -5,11 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Tournaments
 {
     class DoubleEliminationTournament : Tournament
     {
+        protected override string GetTournamentType()
+        {
+            return "Double Elimination";
+        }
+
         #region Public methods
         /// <summary>
         /// Creates all of the matches for the double elimination tournament.
@@ -18,6 +24,7 @@ namespace MOBAManager.Management.Tournaments
         {
             bool firstLowerRoundPlacement = true;
             int currentRound = 0;
+            int currentID = 0;
 
             //Set up current winner and loser func delegate lists
             List<Func<int, Team>> currentWinnerFunctions = new List<Func<int, Team>>();
@@ -32,7 +39,8 @@ namespace MOBAManager.Management.Tournaments
 
             while (lowerBound < upperBound)
             {
-                TourneyMatchup tm = new TourneyMatchup(1, GetTeamInSlot, GetTeamInSlot, new int[] { currentRound, lowerBound }, lowerBound, upperBound);
+                TourneyMatchup tm = new TourneyMatchup(currentID, 1, GetTeamInSlot, GetTeamInSlot, new int[] { currentRound, lowerBound }, lowerBound, upperBound);
+                currentID++;
                 lowerBound++;
                 upperBound--;
                 currentWinnerFunctions.Add(tm.GetWinner);
@@ -65,7 +73,8 @@ namespace MOBAManager.Management.Tournaments
                         }
                     }
 
-                    TourneyMatchup tm = new TourneyMatchup(1, currentLoserFunctions[0], currentLoserFunctions[currentLoserFunctions.Count - 1], cellPos);
+                    TourneyMatchup tm = new TourneyMatchup(currentID, 1, currentLoserFunctions[0], currentLoserFunctions[currentLoserFunctions.Count - 1], cellPos);
+                    currentID++;
                     currentLoserFunctions = currentLoserFunctions.Skip(1).Take(currentLoserFunctions.Count - 2).ToList();
                     upcomingMatchups.Add(tm);
                     upcomingLoserFunctions.Add(tm.GetWinner);
@@ -75,7 +84,8 @@ namespace MOBAManager.Management.Tournaments
                 //if winner func delegates > 1
                 while (currentWinnerFunctions.Count > 1)
                 {
-                    TourneyMatchup tm = new TourneyMatchup(1, currentWinnerFunctions[0], currentWinnerFunctions[1], new int[] { currentRound, ((TourneyMatchup)currentWinnerFunctions[0].Target).cellPosition[1] });
+                    TourneyMatchup tm = new TourneyMatchup(currentID, 1, currentWinnerFunctions[0], currentWinnerFunctions[1], new int[] { currentRound, ((TourneyMatchup)currentWinnerFunctions[0].Target).cellPosition[1] });
+                    currentID++;
                     currentWinnerFunctions = currentWinnerFunctions.Skip(2).ToList();
                     upcomingMatchups.Add(tm);
                     upcomingWinnerFunctions.Add(tm.GetWinner);
@@ -91,7 +101,7 @@ namespace MOBAManager.Management.Tournaments
             }
 
             //Create final match using last remaining winner func and loser func
-            TourneyMatchup finalMatch = new TourneyMatchup(3, currentWinnerFunctions[0], currentLoserFunctions[0], new int[] { currentRound, 0 });
+            TourneyMatchup finalMatch = new TourneyMatchup(currentID, 3, currentWinnerFunctions[0], currentLoserFunctions[0], new int[] { currentRound, 0 });
             upcomingMatchups.Add(finalMatch);
         }
 
@@ -231,6 +241,12 @@ namespace MOBAManager.Management.Tournaments
         /// <param name="numberOfDays">The number of days this tournament spans</param>
         public DoubleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes, int numberOfDays)
             : base(name, ID, numberOfTeams, heroes, numberOfDays)
+        {
+            //blank
+        }
+
+        public DoubleEliminationTournament(TeamManager tm, HeroManager hm, XElement src)
+            : base(tm, hm, src)
         {
             //blank
         }

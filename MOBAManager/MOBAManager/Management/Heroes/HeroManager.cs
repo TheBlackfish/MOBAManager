@@ -26,6 +26,11 @@ namespace MOBAManager.Management.Heroes
             return allHeroes[id].HeroName;
         }
 
+        public Hero GetHeroByID(int id)
+        {
+            return allHeroes[id];
+        }
+
         /// <summary>
         /// Gets a list of all of the heroes in the game.
         /// </summary>

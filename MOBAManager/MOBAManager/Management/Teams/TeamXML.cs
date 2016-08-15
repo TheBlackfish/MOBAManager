@@ -22,7 +22,7 @@ namespace MOBAManager.Management.Teams
                 }
                 playersStr += p.ID;
             }
-            root.Add("players", playersStr);
+            root.Add(new XElement("players", playersStr));
 
             return root;
         }

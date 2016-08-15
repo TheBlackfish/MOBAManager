@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using MOBAManager.Management.Teams;
 using MOBAManager.MatchResolution;
 using MOBAManager.Management.Heroes;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Tournaments
 {
     class SingleEliminationTournament : Tournament
     {
+        protected override string GetTournamentType()
+        {
+            return "Single Elimination";
+        }
+
         #region Public methods
         /// <summary>
         /// Creates all matches for the tournament.
@@ -22,12 +28,14 @@ namespace MOBAManager.Management.Tournaments
             //Create the first round by assigning each slot into a match.
             List<TourneyMatchup> currentRound = new List<TourneyMatchup>();
 
+            int currentID = 0;
             int lowerBound = 0;
             int upperBound = includedTeams.Count - 1;
 
             while (lowerBound < upperBound)
             {
-                currentRound.Add(new TourneyMatchup(3, GetTeamInSlot, GetTeamInSlot, new int[] { 0, lowerBound }, lowerBound, upperBound));
+                currentRound.Add(new TourneyMatchup(currentID, 3, GetTeamInSlot, GetTeamInSlot, new int[] { 0, lowerBound }, lowerBound, upperBound));
+                currentID++;
                 lowerBound++;
                 upperBound--;
             }
@@ -40,7 +48,8 @@ namespace MOBAManager.Management.Tournaments
                 List<TourneyMatchup> nextRound = new List<TourneyMatchup>();
                 for (int i = 0; (i + 1) < currentRound.Count; i = i + 2)
                 {
-                    nextRound.Add(new TourneyMatchup(3, currentRound[i].GetWinner, currentRound[i + 1].GetWinner, new int[] { currentXPos, currentRound[i].cellPosition[1] }));
+                    nextRound.Add(new TourneyMatchup(currentID, 3, currentRound[i].GetWinner, currentRound[i + 1].GetWinner, new int[] { currentXPos, currentRound[i].cellPosition[1] }));
+                    currentID++;
                 }
 
                 foreach (TourneyMatchup tm in currentRound)
@@ -179,6 +188,12 @@ namespace MOBAManager.Management.Tournaments
         /// <param name="numberOfDays">The number of days this tournament spans</param>
         public SingleEliminationTournament(string name, int ID, int numberOfTeams, Dictionary<int, Hero> heroes, int numberOfDays)
             : base(name, ID, numberOfTeams, heroes, numberOfDays)
+        {
+            //blank
+        }
+
+        public SingleEliminationTournament(TeamManager tm, HeroManager hm, XElement src)
+            : base(tm, hm, src)
         {
             //blank
         }

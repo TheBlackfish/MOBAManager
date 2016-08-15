@@ -133,6 +133,9 @@ namespace MOBAManager.Management
             XElement root = new XElement("game");
 
             root.Add(heroManager.ToXML());
+            root.Add(playerManager.ToXML());
+            root.Add(teamManager.ToXML());
+            root.Add(tournamentManager.ToXML());
 
             XDocument saveFile = new XDocument(root);
 
@@ -164,11 +167,13 @@ namespace MOBAManager.Management
             tournamentManager.CreateTournaments(calendarManager, teamManager, heroManager);
 
             ResolvePubs(5);
+
+            ToXML();
         }
 
         public GameManager(XDocument xml)
         {
-            heroManager = new HeroManager(xml.Descendants("heroes").First());
+            //TODO
         }
         #endregion
     }
