@@ -47,7 +47,11 @@ namespace MOBAManager.Management.Players
             pureSkill = int.Parse(src.Descendants("skill").First().Value);
 
             heroSkills = new Dictionary<int, double>();
-            List<string> heroSplit = src.Descendants("heroes").First().Value.Split(new char[] { ',' }).ToList();
+            List<string> heroSplit = src.Descendants("heroes")
+                .First()
+                .Value
+                .Split(new char[] { ',' })
+                .ToList();
             if (heroSplit.Count % 2 != 0)
             {
                 System.Console.WriteLine("Heroes do not have enough values");
@@ -61,10 +65,14 @@ namespace MOBAManager.Management.Players
             }
 
             teamworkSkills = new Dictionary<int, double>();
-            List<string> teamworkSplit = src.Descendants("counters").First().Value.Split(new char[] { ',' }).ToList();
+            List<string> teamworkSplit = src.Descendants("teamwork")
+                .First()
+                .Value
+                .Split(new char[] { ',' })
+                .ToList();
             if (teamworkSplit.Count % 2 != 0)
             {
-                System.Console.WriteLine("Counters do not have enough values");
+                System.Console.WriteLine("Teamwork does not have enough values");
             }
             while (teamworkSplit.Count >= 2)
             {

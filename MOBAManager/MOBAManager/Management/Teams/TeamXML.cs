@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Players;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace MOBAManager.Management.Teams
@@ -32,9 +33,14 @@ namespace MOBAManager.Management.Teams
             _id = int.Parse(src.Attribute("id").Value);
             _name = src.Attribute("name").Value;
             teammates = new List<Player>();
-            foreach (XElement p in src.Descendants("players"))
+            List<int> playerIDs = src.Element("players")
+                .Value
+                .Split(new char[] { ',' })
+                .Select(str => int.Parse(str))
+                .ToList();
+            foreach (int id in playerIDs)
             {
-                teammates.Add(new Player(p));
+                teammates.Add(pm.GetPlayerByID(id));
             }
         }
     }

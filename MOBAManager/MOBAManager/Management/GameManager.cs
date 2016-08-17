@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace MOBAManager.Management
@@ -122,7 +123,8 @@ namespace MOBAManager.Management
 
         public void Save()
         {
-            //Todo
+            XDocument saveFile = ToXML();
+            saveFile.Save("save.xml");
         }
         #endregion
 
@@ -136,6 +138,8 @@ namespace MOBAManager.Management
             root.Add(playerManager.ToXML());
             root.Add(teamManager.ToXML());
             root.Add(tournamentManager.ToXML());
+            root.Add(calendarManager.ToXML());
+            root.Add(statsManager.ToXML());
 
             XDocument saveFile = new XDocument(root);
 
@@ -168,12 +172,26 @@ namespace MOBAManager.Management
 
             ResolvePubs(5);
 
-            ToXML();
+            Save();
         }
 
         public GameManager(XDocument xml)
         {
-            //TODO
+            XElement root = xml.Root;
+
+            try
+            {
+                heroManager = new HeroManager(root.Element("heroes"));
+                playerManager = new PlayerManager(root.Element("players"));
+                teamManager = new TeamManager(playerManager, root.Element("teams"));
+                tournamentManager = new TournamentManager(teamManager, heroManager, root.Element("tournaments"));
+                calendarManager = new CalendarManager(teamManager, tournamentManager, root.Element("calendar"));
+                statsManager = new StatisticsManager(heroManager, playerManager, teamManager, root.Element("stats"));
+            }
+            catch (NullReferenceException)
+            {
+                throw new XmlException("Save file is not properly formatted.");
+            }
         }
         #endregion
     }

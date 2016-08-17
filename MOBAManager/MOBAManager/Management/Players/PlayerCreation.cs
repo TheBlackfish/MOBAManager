@@ -17,7 +17,9 @@ namespace MOBAManager.Management.Players
         {
             XDocument playerFile = XDocument.Load("Data/Players.xml");
 
-            string[] playerNames = playerFile.Descendants("player").Select(xe => xe.Value).ToArray();
+            string[] playerNames = playerFile.Descendants("player")
+                .Select(xe => xe.Value)
+                .ToArray();
 
             int[] initialSkill = new int[] {    6, 6,
                                                 5, 5, 5,

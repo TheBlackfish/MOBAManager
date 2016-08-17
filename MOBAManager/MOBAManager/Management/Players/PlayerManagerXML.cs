@@ -22,7 +22,7 @@ namespace MOBAManager.Management.Players
         {
             allPlayers = new Dictionary<int, Player>();
 
-            foreach (XElement p in src.Descendants("players"))
+            foreach (XElement p in src.Descendants("player"))
             {
                 Player player = new Player(p);
                 allPlayers.Add(player.ID, player);

@@ -12,6 +12,21 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,8 +63,10 @@
   <ItemGroup>
     <Compile Include="Management\Calendar\CalendarEnums.cs" />
     <Compile Include="Management\Calendar\CalendarEvent.cs" />
+    <Compile Include="Management\Calendar\CalendarEventXML.cs" />
     <Compile Include="Management\Calendar\CalendarImportantDates.cs" />
     <Compile Include="Management\Calendar\CalendarManager.cs" />
+    <Compile Include="Management\Calendar\CalendarManagerXML.cs" />
     <Compile Include="Management\Calendar\CalendarScheduling.cs" />
     <Compile Include="Management\Heroes\HeroManagerXML.cs" />
     <Compile Include="Management\Heroes\HeroXML.cs" />
@@ -138,6 +155,12 @@
     <Compile Include="UI\DailyResolution\MatchResultsControl.Designer.cs">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MainMenuControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MainMenuControl.Designer.cs">
+      <DependentUpon>MainMenuControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Meta\StatisticsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -191,6 +214,9 @@
     <EmbeddedResource Include="UI\DailyResolution\MatchResultsControl.resx">
       <DependentUpon>MatchResultsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainMenuControl.resx">
+      <DependentUpon>MainMenuControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Meta\StatisticsControl.resx">
       <DependentUpon>StatisticsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -214,7 +240,18 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Art\Icons\confirmation.png" />
     <Content Include="Data\Heroes.xml">

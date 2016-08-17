@@ -41,6 +41,18 @@ namespace MOBAManager.Management.Teams
             }
         }
 
+        public int GetTeamID(string name)
+        {
+            foreach (Team t in teams.Select(kvp => kvp.Value).ToList())
+            {
+                if (t.TeamName == name)
+                {
+                    return t.ID;
+                }
+            }
+            return -1;
+        }
+
         /// <summary>
         /// Returns the name of the team with the ID specified.
         /// </summary>

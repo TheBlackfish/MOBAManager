@@ -16,19 +16,15 @@ namespace MOBAManager
 {
     sealed public partial class MainForm : Form
     {
-        private readonly GameManager gm;      
-
         public MainForm()
         {
             InitializeComponent();
 
             RNG.InitRNG();
-            
-            gm = new GameManager();
 
-            DailyMenu dm = new DailyMenu(gm);
+            MainMenuControl mmc = new MainMenuControl();
 
-            Controls.Add(dm);
+            Controls.Add(mmc);
         }
     }
 }

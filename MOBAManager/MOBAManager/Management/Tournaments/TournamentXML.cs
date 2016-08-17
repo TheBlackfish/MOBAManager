@@ -1,5 +1,6 @@
 ﻿using MOBAManager.Management.Heroes;
 using MOBAManager.Management.Teams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -74,7 +75,97 @@ namespace MOBAManager.Management.Tournaments
 
         private void AddMatchupFromXML(XElement src, bool resolved)
         {
+            //Create tourneymatchup by going through each variable needed
+            int tmID = int.Parse(src.Attribute("id").Value);
+            int numberOfMatches = int.Parse(src.Attribute("matches").Value);
+            int dayOfMatch = int.Parse(src.Attribute("dayOfMatch").Value);
+            int[] cellPosition = src.Element("cellPos")
+                .Value
+                .Split(new char[] { ',' })
+                .Select(str => int.Parse(str))
+                .ToArray();
 
+            XElement teamOne = src.Element("teamOne");
+            int team1Slot = -1;
+            int team1Wins = int.Parse(teamOne.Value);
+            if (teamOne.Attribute("slot") != null)
+            {
+                team1Slot = int.Parse(teamOne.Attribute("slot").Value);
+            }
+            Func<int, Team> team1Function = null;
+            switch (teamOne.Attribute("func").Value)
+            {
+                case "GetWinner":
+                    int targetID = int.Parse(teamOne.Attribute("match").Value);
+                    foreach (TourneyMatchup prev in upcomingMatchups.Concat(resolvedMatchups))
+                    {
+                        if (prev.ID == targetID)
+                        {
+                            team1Function = prev.GetWinner;
+                        }
+                    }
+                    break;
+                case "GetLoser":
+                    targetID = int.Parse(teamOne.Attribute("match").Value);
+                    foreach (TourneyMatchup prev in upcomingMatchups.Concat(resolvedMatchups))
+                    {
+                        if (prev.ID == targetID)
+                        {
+                            team1Function = prev.GetLoser;
+                        }
+                    }
+                    break;
+                case "GetSlot":
+                    team1Function = GetTeamInSlot;
+                    break;
+            }
+
+
+            XElement teamTwo = src.Element("teamTwo");
+            int team2Slot = -1;
+            int team2Wins = int.Parse(teamOne.Value);
+            if (teamTwo.Attribute("slot") != null)
+            {
+                team2Slot = int.Parse(teamTwo.Attribute("slot").Value);
+            }
+            Func<int, Team> team2Function = null;
+            switch (teamTwo.Attribute("func").Value)
+            {
+                case "GetWinner":
+                    int targetID = int.Parse(teamTwo.Attribute("match").Value);
+                    foreach (TourneyMatchup prev in upcomingMatchups.Concat(resolvedMatchups))
+                    {
+                        if (prev.ID == targetID)
+                        {
+                            team2Function = prev.GetWinner;
+                        }
+                    }
+                    break;
+                case "GetLoser":
+                    targetID = int.Parse(teamTwo.Attribute("match").Value);
+                    foreach (TourneyMatchup prev in upcomingMatchups.Concat(resolvedMatchups))
+                    {
+                        if (prev.ID == targetID)
+                        {
+                            team2Function = prev.GetLoser;
+                        }
+                    }
+                    break;
+                case "GetSlot":
+                    team2Function = GetTeamInSlot;
+                    break;
+            }
+
+            TourneyMatchup tm = new TourneyMatchup(tmID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot, dayOfMatch, team1Wins, team2Wins);
+
+            if (resolved)
+            {
+                resolvedMatchups.Add(tm);
+            }
+            else
+            {
+                upcomingMatchups.Add(tm);
+            }
         }
 
         public Tournament(TeamManager tm, HeroManager hm, XElement src)
@@ -84,9 +175,9 @@ namespace MOBAManager.Management.Tournaments
             totalDays = int.Parse(src.Attribute("totalDays").Value);
             currentDay = int.Parse(src.Attribute("currentDay").Value);
 
+            allowedHeroes = new Dictionary<int, Hero>();
             if (src.Descendants("heroes").Count() > 0)
             {
-                allowedHeroes = new Dictionary<int, Hero>();
                 List<int> heroList = src.Descendants("heroes")
                     .First()
                     .Value
@@ -108,10 +199,10 @@ namespace MOBAManager.Management.Tournaments
             {
                 allowedHeroes = hm.GetHeroDictionary();
             }
-            
+
+            includedTeams = new List<Team>();
             if (src.Descendants("teams").Count() > 0)
             {
-                includedTeams = new List<Team>();
                 List<int> teamList = src.Descendants("teams")
                     .First()
                     .Value
@@ -124,9 +215,9 @@ namespace MOBAManager.Management.Tournaments
                 }
             }
 
+            resolvedMatchups = new List<TourneyMatchup>();
             if (src.Descendants("resolved").Count() > 0)
             {
-                resolvedMatchups = new List<TourneyMatchup>();
                 List<XElement> resolvedMatchXML = src.Descendants("resolved")
                     .Descendants("tm")
                     .ToList();
@@ -136,9 +227,9 @@ namespace MOBAManager.Management.Tournaments
                 }
             }
 
+            upcomingMatchups = new List<TourneyMatchup>();
             if (src.Descendants("upcoming").Count() > 0)
             {
-                upcomingMatchups = new List<TourneyMatchup>();
                 List<XElement> upcomingMatchXML = src.Descendants("upcoming")
                     .Descendants("tm")
                     .ToList();

@@ -249,7 +249,7 @@ namespace MOBAManager.Management.Tournaments
                 }
                 root.Add(team1Element);
 
-                XElement team2Element = new XElement("teamOne", team2Wins);
+                XElement team2Element = new XElement("teamTwo", team2Wins);
                 if (team2Slot != -1)
                 {
                     team2Element.SetAttributeValue("func", "GetSlot");
@@ -284,6 +284,7 @@ namespace MOBAManager.Management.Tournaments
             /// <param name="team2Function">The function delegate for team 2 in this match.</param>
             public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition)
             {
+                this.ID = ID;
                 matchesInMatchup = new List<Match>();
                 this.numberOfMatches = numberOfMatches;
                 this.cellPosition = cellPosition;
@@ -302,6 +303,13 @@ namespace MOBAManager.Management.Tournaments
                 : this(ID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot)
             {
                 this.DayOfMatch = dayOfMatch;
+            }
+
+            public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch, int team1Wins, int team2Wins)
+                : this(ID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot, dayOfMatch)
+            {
+                fixedTeam1Wins = team1Wins;
+                fixedTeam2Wins = team2Wins;
             }
             #endregion
         }

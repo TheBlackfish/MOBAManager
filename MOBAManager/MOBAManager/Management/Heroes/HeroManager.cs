@@ -26,6 +26,18 @@ namespace MOBAManager.Management.Heroes
             return allHeroes[id].HeroName;
         }
 
+        public int GetHeroID(string name)
+        {
+            foreach (KeyValuePair<int, Hero> kvp in allHeroes)
+            {
+                if (kvp.Value.HeroName == name)
+                {
+                    return kvp.Key;
+                }
+            }
+            return -1;
+        }
+
         public Hero GetHeroByID(int id)
         {
             return allHeroes[id];

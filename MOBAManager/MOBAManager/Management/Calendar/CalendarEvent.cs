@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MOBAManager.Management.Calendar
 {
-    sealed public class CalendarEvent
+    sealed public partial class CalendarEvent
     {
         #region Public variables
         /// <summary>

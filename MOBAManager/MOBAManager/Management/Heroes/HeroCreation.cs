@@ -16,7 +16,10 @@ namespace MOBAManager.Management.Heroes
         {
             XDocument heroFile = XDocument.Load("Data/Heroes.xml");
 
-            string[] heroNames = heroFile.Descendants("hero").Select(xe => xe.Value).OrderBy(s => s).ToArray();
+            string[] heroNames = heroFile.Descendants("hero")
+                .Select(xe => xe.Value)
+                .OrderBy(s => s)
+                .ToArray();
 
             //Create initial skills
             List<int> initialSkill = new List<int>();

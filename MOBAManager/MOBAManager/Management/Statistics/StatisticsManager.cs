@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace MOBAManager.Management.Statistics
 {
@@ -57,6 +58,15 @@ namespace MOBAManager.Management.Statistics
                 _bans = 0;
                 _wins = 0;
                 _losses = 0;
+            }
+
+            public HeroStats(XElement src)
+            {
+                _name = src.Attribute("name").Value;
+                _picks = int.Parse(src.Element("picks").Value);
+                _bans = int.Parse(src.Element("bans").Value);
+                _wins = int.Parse(src.Element("wins").Value);
+                _losses = int.Parse(src.Element("losses").Value);
             }
             #endregion
 
@@ -119,6 +129,19 @@ namespace MOBAManager.Management.Statistics
                     }
                 }
             }
+
+            public XElement ToXML()
+            {
+                XElement root = new XElement("hs");
+
+                root.SetAttributeValue("name", _name);
+                root.Add(new XElement("wins", _wins));
+                root.Add(new XElement("losses", _losses));
+                root.Add(new XElement("picks", _picks));
+                root.Add(new XElement("bans", _bans));
+
+                return root;
+            }
             #endregion
         }
 
@@ -157,6 +180,22 @@ namespace MOBAManager.Management.Statistics
                 _wins = 0;
                 _losses = 0;
                 _heroStatistics = new Dictionary<int, Tuple<int, int>>();
+            }
+
+            public PlayerStats(XElement src)
+            {
+                _name = src.Attribute("name").Value;
+                _wins = int.Parse(src.Element("wins").Value);
+                _losses = int.Parse(src.Element("losses").Value);
+                _heroStatistics = new Dictionary<int, Tuple<int, int>>();
+                foreach (XElement elem in src.Element("heroStats").Elements("stat"))
+                {
+                    int[] vals = elem.Value
+                        .Split(new char[] { ',' })
+                        .Select(i => int.Parse(i))
+                        .ToArray();
+                    _heroStatistics.Add(vals[0], new Tuple<int, int>(vals[1], vals[2]));
+                }
             }
             #endregion
 
@@ -251,6 +290,24 @@ namespace MOBAManager.Management.Statistics
                     return _wins + _losses;
                 }
             }
+
+            public XElement ToXML()
+            {
+                XElement root = new XElement("ps");
+
+                root.SetAttributeValue("name", _name);
+                root.Add(new XElement("wins", _wins));
+                root.Add(new XElement("losses", _losses));
+
+                XElement heroStats = new XElement("heroStats");
+                foreach (KeyValuePair<int, Tuple<int, int>> kvp in _heroStatistics)
+                {
+                    heroStats.Add(new XElement("stat", kvp.Key + "-" + kvp.Value.Item1 + "-" + kvp.Value.Item2));
+                }
+                root.Add(heroStats);
+
+                return root;
+            }
             #endregion
         }
 
@@ -286,6 +343,13 @@ namespace MOBAManager.Management.Statistics
                 _name = s;
                 _wins = 0;
                 _losses = 0;
+            }
+
+            public TeamStats(XElement src)
+            {
+                _name = src.Attribute("name").Value;
+                _wins = int.Parse(src.Element("wins").Value);
+                _losses = int.Parse(src.Element("losses").Value);
             }
             #endregion
 
@@ -336,6 +400,17 @@ namespace MOBAManager.Management.Statistics
                 {
                     _losses++;
                 }
+            }
+
+            public XElement ToXML()
+            {
+                XElement root = new XElement("ts");
+
+                root.SetAttributeValue("name", _name);
+                root.Add(new XElement("wins", _wins));
+                root.Add(new XElement("losses", _losses));
+
+                return root;
             }
             #endregion
         }
@@ -454,7 +529,10 @@ namespace MOBAManager.Management.Statistics
         {
             BindingSource bs = new BindingSource();
 
-            List<HeroStats> hStats = heroDict.Select(kvp => kvp.Value).OrderByDescending(hs => hs.Winrate).ThenByDescending(hs => hs.Picks + hs.Bans).ToList();
+            List<HeroStats> hStats = heroDict.Select(kvp => kvp.Value)
+                .OrderByDescending(hs => hs.Winrate)
+                .ThenByDescending(hs => hs.Picks + hs.Bans)
+                .ToList();
 
             foreach (HeroStats hs in hStats)
             {
@@ -476,7 +554,10 @@ namespace MOBAManager.Management.Statistics
         {
             BindingSource bs = new BindingSource();
 
-            List<PlayerStats> pStats = playerDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.Winrate).ThenByDescending(ps => ps.TotalGames).ToList();
+            List<PlayerStats> pStats = playerDict.Select(kvp => kvp.Value)
+                .OrderByDescending(ps => ps.Winrate)
+                .ThenByDescending(ps => ps.TotalGames)
+                .ToList();
 
             foreach (PlayerStats ps in pStats)
             {
@@ -508,7 +589,10 @@ namespace MOBAManager.Management.Statistics
         {
             BindingSource bs = new BindingSource();
 
-            List<TeamStats> tStats = teamDict.Select(kvp => kvp.Value).OrderByDescending(ps => ps.Winrate).ThenByDescending(ps => ps.TotalGames).ToList();
+            List<TeamStats> tStats = teamDict.Select(kvp => kvp.Value)
+                .OrderByDescending(ps => ps.Winrate)
+                .ThenByDescending(ps => ps.TotalGames)
+                .ToList();
 
             foreach (TeamStats ts in tStats)
             {
@@ -517,6 +601,34 @@ namespace MOBAManager.Management.Statistics
             }
 
             return bs;
+        }
+
+        public XElement ToXML()
+        {
+            XElement root = new XElement("stats");
+
+            XElement heroRoot = new XElement("heroStats");
+            foreach (HeroStats hs in heroDict.Select(kvp => kvp.Value).ToList()) 
+            {
+                heroRoot.Add(hs.ToXML());
+            }
+            root.Add(heroRoot);
+
+            XElement playerRoot = new XElement("playerStats");
+            foreach (PlayerStats ps in playerDict.Select(kvp => kvp.Value).ToList())
+            {
+                playerRoot.Add(ps.ToXML());
+            }
+            root.Add(playerRoot);
+
+            XElement teamRoot = new XElement("teamStats");
+            foreach (TeamStats ts in teamDict.Select(kvp => kvp.Value).ToList())
+            {
+                teamRoot.Add(ts.ToXML());
+            }
+            root.Add(teamRoot);
+
+            return root;
         }
         #endregion
 
@@ -545,6 +657,30 @@ namespace MOBAManager.Management.Statistics
             foreach (KeyValuePair<int, Team> kvp in teamIDs)
             {
                 teamDict.Add(kvp.Key, new TeamStats(kvp.Value.TeamName));
+            }
+        }
+
+        public StatisticsManager(HeroManager hm, PlayerManager pm, TeamManager tm, XElement src)
+        {
+            heroDict = new Dictionary<int, HeroStats>();
+            foreach (XElement elem in src.Element("heroStats").Elements("hs"))
+            {
+                HeroStats hs = new HeroStats(elem);
+                heroDict.Add(hm.GetHeroID(hs.Name), hs);
+            }
+
+            playerDict = new Dictionary<int, PlayerStats>();
+            foreach (XElement elem in src.Element("playerStats").Elements("ps"))
+            {
+                PlayerStats ps = new PlayerStats(elem);
+                playerDict.Add(pm.GetPlayerID(ps.Name), ps);
+            }
+
+            teamDict = new Dictionary<int, TeamStats>();
+            foreach (XElement elem in src.Element("teamStats").Elements("ts"))
+            {
+                TeamStats ts = new TeamStats(elem);
+                teamDict.Add(tm.GetTeamID(ts.Name), ts);
             }
         }
         #endregion

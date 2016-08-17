@@ -26,6 +26,23 @@ namespace MOBAManager.Management.Players
             return allPlayers[id].PlayerName;
         }
 
+        public int GetPlayerID(string name)
+        {
+            foreach (Player p in allPlayers.Select(kvp => kvp.Value).ToList())
+            {
+                if (p.PlayerName == name)
+                {
+                    return p.ID;
+                }
+            }
+            return -1;
+        }
+
+        public Player GetPlayerByID(int id)
+        {
+            return allPlayers[id];
+        }
+
         /// <summary>
         /// Gets a list of all of the heroes in the game.
         /// </summary>

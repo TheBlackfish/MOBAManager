@@ -47,7 +47,11 @@ namespace MOBAManager.Management.Heroes
             powerLevel = int.Parse(src.Descendants("skill").First().Value);
 
             synergies = new Dictionary<int, double>();
-            List<string> synergySplit = src.Descendants("synergies").First().Value.Split(new char[] { ',' }).ToList();
+            List<string> synergySplit = src.Descendants("synergies")
+                .First()
+                .Value
+                .Split(new char[] { ',' })
+                .ToList();
             if (synergySplit.Count % 2 != 0)
             {
                 System.Console.WriteLine("Synergies do not have enough values");
@@ -61,7 +65,11 @@ namespace MOBAManager.Management.Heroes
             }
 
             counters = new Dictionary<int, double>();
-            List<string> counterSplit = src.Descendants("counters").First().Value.Split(new char[] { ',' }).ToList();
+            List<string> counterSplit = src.Descendants("counters")
+                .First()
+                .Value
+                .Split(new char[] { ',' })
+                .ToList();
             if (counterSplit.Count % 2 != 0)
             {
                 System.Console.WriteLine("Counters do not have enough values");

@@ -80,7 +80,10 @@ namespace MOBAManager.Management.Calendar
             {
                 if (tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Count > 0)
                 {
-                    List<int> ids = tournamentManager.GetTournamentByID(ce.tournamentID).GetAllTeams().Select(t => t.ID).ToList();
+                    List<int> ids = tournamentManager.GetTournamentByID(ce.tournamentID)
+                        .GetAllTeams()
+                        .Select(t => t.ID)
+                        .ToList();
                     foreach (int i in ids)
                     {
                         RemoveAllEventsForTeamOnOffset(i, ce.daysToResolution);
@@ -263,7 +266,9 @@ namespace MOBAManager.Management.Calendar
                     bool shouldAddBootcamp = true;
                     if (todaysEvents.Any(ce => ce.type == EventType.TournamentPlaceholder))
                     {
-                        foreach(int tid in todaysEvents.Where(ce => ce.type == EventType.TournamentPlaceholder).Select(ce => ce.tournamentID).ToList())
+                        foreach(int tid in todaysEvents.Where(ce => ce.type == EventType.TournamentPlaceholder)
+                            .Select(ce => ce.tournamentID)
+                            .ToList())
                         {
                             if (tournamentManager.GetTournamentByID(tid).GetAllTeams().Contains(t)) {
                                 shouldAddBootcamp = false;
