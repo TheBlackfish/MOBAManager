@@ -11,20 +11,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace MOBAManager
 {
     sealed public partial class MainForm : Form
     {
+        public bool currentlyRunningGame = false;
+
+        private DailyMenu gameView;
+        private MainMenuControl menuView;
+
         public MainForm()
         {
             InitializeComponent();
 
             RNG.InitRNG();
 
-            MainMenuControl mmc = new MainMenuControl();
+            menuView = new MainMenuControl();
 
-            Controls.Add(mmc);
+            Controls.Add(menuView);
+        }
+
+        public void RunGame()
+        {
+            currentlyRunningGame = true;
+            GameManager gm = new GameManager();
+            gameView = new DailyMenu(gm);
+            if (!Controls.Contains(gameView))
+            {
+                Controls.Add(gameView);
+            }
+            gameView.BringToFront();
+        }
+
+        public void RunGame(string fileLocation)
+        {
+            if (currentlyRunningGame)
+            {
+                gameView.BringToFront();
+            }
+            else
+            {
+                currentlyRunningGame = true;
+                GameManager gm = new GameManager(XDocument.Load(fileLocation));
+                gameView = new DailyMenu(gm);
+                if (!Controls.Contains(gameView))
+                {
+                    Controls.Add(gameView);
+                }
+                gameView.BringToFront();
+            }
+            
         }
     }
 }

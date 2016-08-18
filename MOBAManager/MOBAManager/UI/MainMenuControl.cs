@@ -21,7 +21,7 @@ namespace MOBAManager.UI
         public MainMenuControl()
         {
             InitializeComponent();
-            button2.Enabled = File.Exists("save.xml");
+            continueButton.Enabled = File.Exists("save.xml");
         }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            GameManager gm = new GameManager();
-            DailyMenu dm = new DailyMenu(gm);
-            Parent.Controls.Add(dm);
-            dm.BringToFront();
+            if (Parent is MainForm)
+            {
+                ((MainForm)Parent).RunGame();
+            }
         }
 
         /// <summary>
@@ -44,10 +44,10 @@ namespace MOBAManager.UI
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
-            GameManager gm = new GameManager(XDocument.Load("save.xml"));
-            DailyMenu dm = new DailyMenu(gm);
-            Parent.Controls.Add(dm);
-            dm.BringToFront();
+            if (Parent is MainForm)
+            {
+                ((MainForm)Parent).RunGame("save.xml");
+            }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace MOBAManager.UI
         }
 
         /// <summary>
-        /// Called when the main menu's parent changes. Centers the menu in the middle of the parent.
+        /// Called when the main menu's parent changes. Centers the menu panel in the middle of the parent.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -70,7 +70,8 @@ namespace MOBAManager.UI
         {
             if (Parent != null)
             {
-                Location = new Point((Parent.ClientSize.Width - Size.Width) / 2, (Parent.ClientSize.Height - Size.Height) / 2);
+                Size = new Size(Parent.ClientSize.Width, Parent.ClientSize.Height);
+                centerPanel.Location = new Point((Parent.ClientSize.Width - centerPanel.Size.Width) / 2, (Parent.ClientSize.Height - centerPanel.Size.Height) / 2);
             }
         }
     }

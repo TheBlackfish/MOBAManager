@@ -28,59 +28,71 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.newGameButton = new System.Windows.Forms.Button();
+            this.continueButton = new System.Windows.Forms.Button();
+            this.exitButton = new System.Windows.Forms.Button();
+            this.centerPanel = new System.Windows.Forms.Panel();
+            this.centerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // newGameButton
             // 
-            this.button1.Location = new System.Drawing.Point(3, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(394, 40);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "New Game";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.newGameButton.Location = new System.Drawing.Point(3, 3);
+            this.newGameButton.Name = "newGameButton";
+            this.newGameButton.Size = new System.Drawing.Size(394, 40);
+            this.newGameButton.TabIndex = 0;
+            this.newGameButton.Text = "New Game";
+            this.newGameButton.UseVisualStyleBackColor = true;
+            this.newGameButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // continueButton
             // 
-            this.button2.Location = new System.Drawing.Point(3, 49);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(394, 40);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Continue";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.continueButton.Location = new System.Drawing.Point(3, 49);
+            this.continueButton.Name = "continueButton";
+            this.continueButton.Size = new System.Drawing.Size(394, 40);
+            this.continueButton.TabIndex = 1;
+            this.continueButton.Text = "Continue";
+            this.continueButton.UseVisualStyleBackColor = true;
+            this.continueButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // exitButton
             // 
-            this.button3.Location = new System.Drawing.Point(3, 95);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(394, 40);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Exit";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.exitButton.Location = new System.Drawing.Point(3, 95);
+            this.exitButton.Name = "exitButton";
+            this.exitButton.Size = new System.Drawing.Size(394, 40);
+            this.exitButton.TabIndex = 2;
+            this.exitButton.Text = "Exit";
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // centerPanel
+            // 
+            this.centerPanel.Controls.Add(this.newGameButton);
+            this.centerPanel.Controls.Add(this.exitButton);
+            this.centerPanel.Controls.Add(this.continueButton);
+            this.centerPanel.Location = new System.Drawing.Point(400, 256);
+            this.centerPanel.Name = "centerPanel";
+            this.centerPanel.Size = new System.Drawing.Size(400, 138);
+            this.centerPanel.TabIndex = 3;
             // 
             // MainMenuControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.centerPanel);
             this.Name = "MainMenuControl";
-            this.Size = new System.Drawing.Size(400, 138);
+            this.Size = new System.Drawing.Size(1146, 641);
             this.ParentChanged += new System.EventHandler(this.MainMenuControl_ParentChanged);
+            this.centerPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button newGameButton;
+        private System.Windows.Forms.Button continueButton;
+        private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.Panel centerPanel;
     }
 }
