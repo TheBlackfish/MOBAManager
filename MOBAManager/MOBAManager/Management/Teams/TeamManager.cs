@@ -41,6 +41,11 @@ namespace MOBAManager.Management.Teams
             }
         }
 
+        /// <summary>
+        /// Returns the team's ID that matches the name provided, or -1 if no team has that name.
+        /// </summary>
+        /// <param name="name">The name of the team to retrieve the ID for.</param>
+        /// <returns></returns>
         public int GetTeamID(string name)
         {
             foreach (Team t in teams.Select(kvp => kvp.Value).ToList())

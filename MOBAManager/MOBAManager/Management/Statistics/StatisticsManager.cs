@@ -60,6 +60,10 @@ namespace MOBAManager.Management.Statistics
                 _losses = 0;
             }
 
+            /// <summary>
+            /// Creates a new heroStats using the XElement provided.
+            /// </summary>
+            /// <param name="src">The XElement to build from.</param>
             public HeroStats(XElement src)
             {
                 _name = src.Attribute("name").Value;
@@ -71,21 +75,35 @@ namespace MOBAManager.Management.Statistics
             #endregion
 
             #region Public properties
+            /// <summary>
+            /// Returns the name of the hero.
+            /// </summary>
             public string Name
             {
                 get { return _name; }
             }
 
+            /// <summary>
+            /// Returns the number of times this hero has been picked.
+            /// </summary>
             public int Picks
             {
                 get { return _picks; }
             }
 
+            /// <summary>
+            /// Returns the number of times this hero has been banned.
+            /// </summary>
             public int Bans
             {
                 get { return _bans; }
             }
 
+            /// <summary>
+            /// Increments either the picks or bans of this hero according to what the boolean provided is set to. If true, the pick amount increases.
+            /// If false, the ban amount increases.
+            /// </summary>
+            /// <param name="wasPicked">The control variable for if the hero was picked or banned.</param>
             public void AddPickBan(bool wasPicked)
             {
                 if (wasPicked)
@@ -98,6 +116,11 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Increments either the wins or losses of this hero according to what the boolean provided is set to. If true, the win amount increases.
+            /// If false, the loss amount increases.
+            /// </summary>
+            /// <param name="didWin">The control variable for if the hero won or lost.</param>
             public void AddWinLoss(bool didWin)
             {
                 if (didWin)
@@ -130,6 +153,31 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// <para>Returns the heroStats in an XElement with the type 'hs'.</para>
+            /// <para>The XElement has 1 attribute.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>name - The name of the hero.</description>
+            ///     </item>
+            /// </list> 
+            /// <para>The XElement has 4 nested elements.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>wins - The number of wins this hero has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>losses - The number of losses this hero has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>picks - The number of picks this hero has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>bans - The number of bans this hero has.</description>
+            ///     </item>
+            /// </list>
+            /// </summary>
+            /// <returns></returns>
             public XElement ToXML()
             {
                 XElement root = new XElement("hs");
@@ -166,6 +214,9 @@ namespace MOBAManager.Management.Statistics
             /// </summary>
             private int _losses;
 
+            /// <summary>
+            /// The dictionary corresponding to this player's winrates with different heroes.
+            /// </summary>
             private Dictionary<int, Tuple<int, int>> _heroStatistics;
             #endregion
 
@@ -182,6 +233,10 @@ namespace MOBAManager.Management.Statistics
                 _heroStatistics = new Dictionary<int, Tuple<int, int>>();
             }
 
+            /// <summary>
+            /// Creates a new playerStats from the provided XElement.
+            /// </summary>
+            /// <param name="src">The XElement to build from.</param>
             public PlayerStats(XElement src)
             {
                 _name = src.Attribute("name").Value;
@@ -200,6 +255,13 @@ namespace MOBAManager.Management.Statistics
             #endregion
 
             #region Public properties
+            /// <summary>
+            /// Increments either the wins or losses of this player according to what the boolean provided is set to. If true, the win amount increases.
+            /// If false, the loss amount increases.
+            /// <para>Additionally, this increments the same value for the hero in this player's hero statistics.</para>
+            /// </summary>
+            /// <param name="heroID">The ID of the hero played.</param>
+            /// <param name="didWin">The control variable for if the hero won or lost.</param>
             public void AddWinLoss(int heroID, bool didWin)
             {
                 AddWinLoss(didWin);
@@ -214,6 +276,11 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Increments either the wins or losses of this player according to what the boolean provided is set to. If true, the win amount increases.
+            /// If false, the loss amount increases.
+            /// </summary>
+            /// <param name="didWin">The control variable for if the hero won or lost.</param>
             public void AddWinLoss(bool didWin)
             {
                 if (didWin)
@@ -226,6 +293,11 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Returns the total number of games this player has played with the specified hero.
+            /// </summary>
+            /// <param name="heroID">The ID of the hero.</param>
+            /// <returns></returns>
             public string HeroTotalGames(int heroID)
             {
                 if (_heroStatistics.ContainsKey(heroID))
@@ -235,6 +307,11 @@ namespace MOBAManager.Management.Statistics
                 return "-";
             }
 
+            /// <summary>
+            /// Returns the winrate this player has with the specified hero.
+            /// </summary>
+            /// <param name="heroID">The ID of the hero.</param>
+            /// <returns></returns>
             public string HeroWinrate(int heroID)
             {
                 if (_heroStatistics.ContainsKey(heroID))
@@ -246,6 +323,9 @@ namespace MOBAManager.Management.Statistics
                 return "-";
             }
 
+            /// <summary>
+            /// Returns the name of the player.
+            /// </summary>
             public string Name
             {
                 get
@@ -254,6 +334,10 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Returns the top 3 heroes for this player according to the winrate the player has with them.
+            /// </summary>
+            /// <returns></returns>
             public int[] TopHeroes()
             {
                 int[] topHeroes = _heroStatistics.OrderByDescending(kvp => (double)kvp.Value.Item1 / (kvp.Value.Item1 + kvp.Value.Item2))
@@ -283,6 +367,9 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Returns the total number of games this player has played.
+            /// </summary>
             public int TotalGames
             {
                 get
@@ -291,6 +378,28 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// <para>Returns the playerStats in an XElement with the type 'ps'.</para>
+            /// <para>The XElement has 1 attribute.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>name - The name of the player.</description>
+            ///     </item>
+            /// </list> 
+            /// <para>The XElement has 3 nested elements.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>wins - The number of wins this player has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>losses - The number of losses this player has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>heroStats - The container element holding multiple 'stat' elements representing this player's wins and losses with different heroes.</description>
+            ///     </item>
+            /// </list>
+            /// </summary>
+            /// <returns></returns>
             public XElement ToXML()
             {
                 XElement root = new XElement("ps");
@@ -345,6 +454,10 @@ namespace MOBAManager.Management.Statistics
                 _losses = 0;
             }
 
+            /// <summary>
+            /// Creates a new teamStats from the provided XElement.
+            /// </summary>
+            /// <param name="src">The XElement to build from.</param>
             public TeamStats(XElement src)
             {
                 _name = src.Attribute("name").Value;
@@ -354,6 +467,9 @@ namespace MOBAManager.Management.Statistics
             #endregion
 
             #region Public methods
+            /// <summary>
+            /// Returns the name of the team.
+            /// </summary>
             public string Name
             {
                 get
@@ -382,6 +498,9 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Returns the total number of games this team has played.
+            /// </summary>
             public int TotalGames
             {
                 get
@@ -390,6 +509,11 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// Increments either the wins or losses of this player according to what the boolean provided is set to. If true, the win amount increases.
+            /// If false, the loss amount increases.
+            /// </summary>
+            /// <param name="didWin">The control variable for if the hero won or lost.</param>
             public void AddWinLoss(bool didWin)
             {
                 if (didWin)
@@ -402,6 +526,25 @@ namespace MOBAManager.Management.Statistics
                 }
             }
 
+            /// <summary>
+            /// <para>Returns the teamStats in an XElement with the type 'ts'.</para>
+            /// <para>The XElement has 1 attribute.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>name - The name of the team.</description>
+            ///     </item>
+            /// </list> 
+            /// <para>The XElement has 2 nested elements.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>wins - The number of wins this team has.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>losses - The number of losses this team has.</description>
+            ///     </item>
+            /// </list>
+            /// </summary>
+            /// <returns></returns>
             public XElement ToXML()
             {
                 XElement root = new XElement("ts");
@@ -603,6 +746,20 @@ namespace MOBAManager.Management.Statistics
             return bs;
         }
 
+        /// <summary>
+        /// <para>Returns the StatisticsManager in an XElement with the type 'stats'.</para>
+        /// <para>The XElement has no attributes</para>
+        /// <para>The XElement has 3 nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>wins - The number of wins this team has.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>losses - The number of losses this team has.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
+        /// <returns></returns>
         public XElement ToXML()
         {
             XElement root = new XElement("stats");
@@ -660,6 +817,13 @@ namespace MOBAManager.Management.Statistics
             }
         }
 
+        /// <summary>
+        /// Creates a new StatisticsManager given the appropriate managers and a XElement representing the stats of a saved game.
+        /// </summary>
+        /// <param name="hm">The hero manager that relates to this statistics manager.</param>
+        /// <param name="pm">The player manager that relates to this statistics manager.</param>
+        /// <param name="tm">The team manager that relates to this statistics manager.</param>
+        /// <param name="src">The XElement to build from.</param>
         public StatisticsManager(HeroManager hm, PlayerManager pm, TeamManager tm, XElement src)
         {
             heroDict = new Dictionary<int, HeroStats>();

@@ -12,6 +12,10 @@ namespace MOBAManager.Management.Tournaments
 {
     class RoundRobinTournament : Tournament
     {
+        /// <summary>
+        /// Returns "Round Robin".
+        /// </summary>
+        /// <returns></returns>
         protected override string GetTournamentType()
         {
             return "Round Robin";
@@ -365,6 +369,12 @@ namespace MOBAManager.Management.Tournaments
             //blank
         }
 
+        /// <summary>
+        /// Creates a new Round Robin tournament from the XElement provided.
+        /// </summary>
+        /// <param name="tm">The TeamManager that relates to this tournament.</param>
+        /// <param name="hm">The HeroManager that relates to this tournament.</param>
+        /// <param name="src">The XElement to build from.</param>
         public RoundRobinTournament(TeamManager tm, HeroManager hm, XElement src)
             : base(tm, hm, src)
         {

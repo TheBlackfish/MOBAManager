@@ -6,6 +6,16 @@ namespace MOBAManager.Management.Players
 {
     sealed public partial class PlayerManager
     {
+        /// <summary>
+        /// <para>Turns the PlayerManager into an XElement with the type 'players'.</para>
+        /// <para>The XElement has no attributes.</para>
+        /// <para>The XElement has 1+ nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>player (Numerous) - The Player in XML form.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("players");
@@ -18,6 +28,10 @@ namespace MOBAManager.Management.Players
             return root;
         }
 
+        /// <summary>
+        /// Creates a new PlayerManager object from the provided XElement.
+        /// </summary>
+        /// <param name="src">The XElement to build from.</param>
         public PlayerManager(XElement src)
         {
             allPlayers = new Dictionary<int, Player>();

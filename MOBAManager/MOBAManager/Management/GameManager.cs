@@ -20,7 +20,14 @@ namespace MOBAManager.Management
     sealed public class GameManager
     {
         #region Private variables
+        /// <summary>
+        /// The minimum number of pub games to resolve each day.
+        /// </summary>
         private int minPubsPerDay = 100;
+
+        /// <summary>
+        /// The maximum number of pub games to be added to minPubsPerDay for pub resolution each day.
+        /// </summary>
         private int maxPubsAddedPerDay = 50;
         #endregion
 
@@ -121,6 +128,9 @@ namespace MOBAManager.Management
             }
         }
 
+        /// <summary>
+        /// Saves the game to the default save location.
+        /// </summary>
         public void Save()
         {
             XDocument saveFile = ToXML();
@@ -129,7 +139,10 @@ namespace MOBAManager.Management
         #endregion
 
         #region Private methods
-
+        /// <summary>
+        /// Translates this game manager into a XDocument meant to be saved.
+        /// </summary>
+        /// <returns></returns>
         private XDocument ToXML()
         {
             XElement root = new XElement("game");
@@ -145,7 +158,6 @@ namespace MOBAManager.Management
 
             return saveFile;
         }
-
         #endregion
 
         #region Constructors
@@ -175,6 +187,10 @@ namespace MOBAManager.Management
             Save();
         }
 
+        /// <summary>
+        /// Creates the game manager using the provided XDocument.
+        /// </summary>
+        /// <param name="xml">The XDocument to build from.</param>
         public GameManager(XDocument xml)
         {
             XElement root = xml.Root;

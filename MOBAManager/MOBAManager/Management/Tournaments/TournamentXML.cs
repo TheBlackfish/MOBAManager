@@ -9,8 +9,48 @@ namespace MOBAManager.Management.Tournaments
 {
     public abstract partial class Tournament
     {
+        /// <summary>
+        /// Returns a string describing the tournament type.
+        /// </summary>
+        /// <returns></returns>
         protected abstract string GetTournamentType();
 
+        /// <summary>
+        /// <para>Turns the Tournament into an XElement with the type 'team'.</para>
+        /// <para>The XElement has 5 attributes.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>type - The type of tournament this tournament is.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>id - The ID of the tournament.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>name - The name of the tournament.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>totalDays - The total number of days this tournament takes place over.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>currentDay - The current day of the tournament.</description>
+        ///     </item>
+        /// </list>
+        /// <para>The XElement has 4 nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>heroes - The string containing all of the hero IDs allowed in this tournament.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>teams - The string containing all of the team IDs participating in this tournament.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>resolved - The container for all resolved matchups in XML form.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>upcoming - The container for all upcoming matchups in XML form.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("tournament");
@@ -73,6 +113,11 @@ namespace MOBAManager.Management.Tournaments
             return root;
         }
 
+        /// <summary>
+        /// Adds a TourneyMatchup built from an XElement to either the upcoming matchups or resolved matchups depending on the parameters set.
+        /// </summary>
+        /// <param name="src">The XElement to build a matchup from.</param>
+        /// <param name="resolved">If true, the matchup will be added to the resolved matchups. Else it gets added to the upcoming matchups instead.</param>
         private void AddMatchupFromXML(XElement src, bool resolved)
         {
             //Create tourneymatchup by going through each variable needed
@@ -168,6 +213,12 @@ namespace MOBAManager.Management.Tournaments
             }
         }
 
+        /// <summary>
+        /// Creates a new Tournament from the XElement provided.
+        /// </summary>
+        /// <param name="tm">The TeamManager that relates to this tournament.</param>
+        /// <param name="hm">The HeroManager that relates to this tournament.</param>
+        /// <param name="src">The XElement to build from.</param>
         public Tournament(TeamManager tm, HeroManager hm, XElement src)
         {
             _ID = int.Parse(src.Attribute("id").Value);

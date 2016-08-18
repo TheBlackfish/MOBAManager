@@ -6,6 +6,30 @@ namespace MOBAManager.Management.Heroes
 {
     sealed public partial class Hero
     {
+        /// <summary>
+        /// <para>Turns the CalendarEvent into an XElement with the type 'ce'.</para>
+        /// <para>The XElement has 2 attributes.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>id - The ID of the hero.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>name - The name of the hero.</description>
+        ///     </item>
+        /// </list>
+        /// <para>The XElement has 3 nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>skill - The pure skill level of the hero.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>synergies - The string representing this hero's hero synergies.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>counters - The string representing this hero's hero counters.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("hero");
@@ -40,6 +64,10 @@ namespace MOBAManager.Management.Heroes
             return root;
         }
 
+        /// <summary>
+        /// Creates a new hero from the provided XElement.
+        /// </summary>
+        /// <param name="src">The XElement to build a hero from.</param>
         public Hero(XElement src)
         {
             _id = int.Parse(src.Attribute("id").Value);

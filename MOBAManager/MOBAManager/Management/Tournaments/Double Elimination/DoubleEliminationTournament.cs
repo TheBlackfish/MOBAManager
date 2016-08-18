@@ -11,6 +11,10 @@ namespace MOBAManager.Management.Tournaments
 {
     class DoubleEliminationTournament : Tournament
     {
+        /// <summary>
+        /// Returns "Double Elimination".
+        /// </summary>
+        /// <returns></returns>
         protected override string GetTournamentType()
         {
             return "Double Elimination";
@@ -245,6 +249,12 @@ namespace MOBAManager.Management.Tournaments
             //blank
         }
 
+        /// <summary>
+        /// Creates a new Double Elimination tournament from the XElement provided.
+        /// </summary>
+        /// <param name="tm">The TeamManager that relates to this tournament.</param>
+        /// <param name="hm">The HeroManager that relates to this tournament.</param>
+        /// <param name="src">The XElement to build from.</param>
         public DoubleEliminationTournament(TeamManager tm, HeroManager hm, XElement src)
             : base(tm, hm, src)
         {

@@ -26,6 +26,11 @@ namespace MOBAManager.Management.Players
             return allPlayers[id].PlayerName;
         }
 
+        /// <summary>
+        /// Returns the player ID of the player sharing the name provided, or -1 if none match.
+        /// </summary>
+        /// <param name="name">The name of the player to get the ID of.</param>
+        /// <returns></returns>
         public int GetPlayerID(string name)
         {
             foreach (Player p in allPlayers.Select(kvp => kvp.Value).ToList())
@@ -38,6 +43,11 @@ namespace MOBAManager.Management.Players
             return -1;
         }
 
+        /// <summary>
+        /// Returs a player with the matching ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Player GetPlayerByID(int id)
         {
             return allPlayers[id];
@@ -64,7 +74,7 @@ namespace MOBAManager.Management.Players
 
         #region Constructors
         /// <summary>
-        /// Creates the HeroManager object.
+        /// Creates the PlayerManager object.
         /// </summary>
         public PlayerManager()
         {

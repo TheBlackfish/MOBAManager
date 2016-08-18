@@ -12,6 +12,10 @@ namespace MOBAManager.Management.Tournaments
 {
     class SingleEliminationTournament : Tournament
     {
+        /// <summary>
+        /// Returns "Single Elimination".
+        /// </summary>
+        /// <returns></returns>
         protected override string GetTournamentType()
         {
             return "Single Elimination";
@@ -192,6 +196,12 @@ namespace MOBAManager.Management.Tournaments
             //blank
         }
 
+        /// <summary>
+        /// Creates a new Single Elimination tournament from the XElement provided.
+        /// </summary>
+        /// <param name="tm">The TeamManager that relates to this tournament.</param>
+        /// <param name="hm">The HeroManager that relates to this tournament.</param>
+        /// <param name="src">The XElement to build from.</param>
         public SingleEliminationTournament(TeamManager tm, HeroManager hm, XElement src)
             : base(tm, hm, src)
         {

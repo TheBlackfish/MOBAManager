@@ -69,6 +69,10 @@ namespace MOBAManager.Management.Statistics
             return teamWins;
         }
 
+        /// <summary>
+        /// Returns the linked playerID - heroID list.
+        /// </summary>
+        /// <returns></returns>
         public List<Tuple<int, int>> GetPlayerHeroPicks()
         {
             return playerHeroCombinations;
@@ -125,6 +129,11 @@ namespace MOBAManager.Management.Statistics
             }
         }
 
+        /// <summary>
+        /// Adds the linked pair of hero and player IDs from the team line-ups for the bundle.
+        /// </summary>
+        /// <param name="playerID">The player ID of the player.</param>
+        /// <param name="heroID">The hero ID of the hero the player played.</param>
         public void AddPlayerHeroCombination(int playerID, int heroID)
         {
             playerHeroCombinations.Add(new Tuple<int, int>(playerID, heroID));

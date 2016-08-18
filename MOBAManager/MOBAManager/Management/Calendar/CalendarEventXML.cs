@@ -5,6 +5,30 @@ namespace MOBAManager.Management.Calendar
 {
     sealed public partial class CalendarEvent
     {
+        /// <summary>
+        /// <para>Turns the CalendarEvent into an XElement with the type 'ce'.</para>
+        /// <para>The XElement has 1 attribute.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>type - The type of event that this CalendarEvent is.</description>
+        ///     </item>
+        /// </list>
+        /// <para>The XElement has 1-4 nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>daysToResolution - The number of days until this CalendarEvent transpires.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>team1ID (Optional) - The ID of the first team involved in this event.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>team2ID (Optional) - The ID of the second team involved in this event.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>tournamentID (Optional) - The ID of the tournament involved in this event.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("ce");
@@ -30,6 +54,10 @@ namespace MOBAManager.Management.Calendar
             return root;
         }
 
+        /// <summary>
+        /// Creates a new CalendarEvent from the XElement provided.
+        /// </summary>
+        /// <param name="src">The XElement that this CalendarEvent will be built from.</param>
         public CalendarEvent(XElement src)
         {
             type = (EventType) Enum.Parse(typeof(EventType), src.Attribute("type").Value);

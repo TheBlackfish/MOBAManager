@@ -7,6 +7,16 @@ namespace MOBAManager.Management.Tournaments
 {
     public partial class TournamentManager
     {
+        /// <summary>
+        /// <para>Turns the TournamentManager into an XElement with the type 'tournaments'.</para>
+        /// <para>The XElement has no attributes.</para>
+        /// <para>The XElement has 1+ nested element.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>tournament - The tournament in XML form.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("tournaments");
@@ -19,6 +29,12 @@ namespace MOBAManager.Management.Tournaments
             return root;
         }
 
+        /// <summary>
+        /// Creates a TournamentManager from the provided XElement.
+        /// </summary>
+        /// <param name="tm">The TeamManager that relates to this TournamentManager.</param>
+        /// <param name="hm">The HeroManager that relates to this TournamentManager.</param>
+        /// <param name="src">The XElement to build from.</param>
         public TournamentManager(TeamManager tm, HeroManager hm, XElement src)
             :this()
         {

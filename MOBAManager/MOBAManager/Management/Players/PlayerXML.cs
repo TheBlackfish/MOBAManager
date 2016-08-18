@@ -6,6 +6,30 @@ namespace MOBAManager.Management.Players
 {
     sealed public partial class Player
     {
+        /// <summary>
+        /// <para>Turns the Player into an XElement with the type 'player'.</para>
+        /// <para>The XElement has 2 attributes.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>id - The ID of the player.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>name - The name of the player.</description>
+        ///     </item>
+        /// </list>
+        /// <para>The XElement has 3 nested elements.</para>
+        /// <list type="bullet">
+        ///     <item>
+        ///         <description>skill - The pure skill of the player.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>heroes - The string representing the player's various hero skills.</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>teamwork - The string representing the player's teamwork skills with other players.</description>
+        ///     </item>
+        /// </list>
+        /// </summary>
         public XElement ToXML()
         {
             XElement root = new XElement("player");
@@ -40,6 +64,10 @@ namespace MOBAManager.Management.Players
             return root;
         }
 
+        /// <summary>
+        /// Creates a new Player from the provided XElement.
+        /// </summary>
+        /// <param name="src">The XElement to build from.</param>
         public Player(XElement src)
         {
             _id = int.Parse(src.Attribute("id").Value);

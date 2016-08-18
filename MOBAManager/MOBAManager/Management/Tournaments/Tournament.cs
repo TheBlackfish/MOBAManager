@@ -51,8 +51,14 @@ namespace MOBAManager.Management.Tournaments
             /// </summary>
             int numberOfMatches = 0;
 
+            /// <summary>
+            /// The fixed wins for team 1 in this matchup.
+            /// </summary>
             int fixedTeam1Wins = 0;
 
+            /// <summary>
+            /// The fixed wins for team 2 in this matchup.
+            /// </summary>
             int fixedTeam2Wins = 0;
 
             /// <summary>
@@ -218,6 +224,33 @@ namespace MOBAManager.Management.Tournaments
                 matchesInMatchup.Add(m);
             }
 
+            /// <summary>
+            /// <para>Turns the TourneyMatchup into an XElement with the type 'tm'.</para>
+            /// <para>The XElement has 3 attributes.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>id - The ID of the matchup.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>matches - The number of matches in this matchup.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>dayOfMatch - The offset for what day this tournament occurs on.</description>
+            ///     </item>
+            /// </list>
+            /// <para>The XElement has 3 nested elements.</para>
+            /// <list type="bullet">
+            ///     <item>
+            ///         <description>cellPos - The position of this matchup in the tournament panel.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>teamOne - The XML describing team 1.</description>
+            ///     </item>
+            ///     <item>
+            ///         <description>teamTwo - The XML describing team 2.</description>
+            ///     </item>
+            /// </list>
+            /// </summary>
             public XElement ToXML()
             {
                 XElement root = new XElement("tm");
@@ -279,9 +312,11 @@ namespace MOBAManager.Management.Tournaments
             /// <summary>
             /// Creates a new match-up.
             /// </summary>
+            /// <param name="ID">The ID of the matchup.</param>
             /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
             /// <param name="team1Function">The function delegate for team 1 in this match.</param>
             /// <param name="team2Function">The function delegate for team 2 in this match.</param>
+            /// <param name="cellPosition">The position of this matchup in the tournament panel.</param>
             public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition)
             {
                 this.ID = ID;
@@ -292,6 +327,16 @@ namespace MOBAManager.Management.Tournaments
                 getTeam2Func = team2Function;
             }
 
+            /// <summary>
+            /// Creates a new match-up.
+            /// </summary>
+            /// <param name="ID">The ID of the matchup.</param>
+            /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
+            /// <param name="team1Function">The function delegate for team 1 in this match.</param>
+            /// <param name="team2Function">The function delegate for team 2 in this match.</param>
+            /// <param name="cellPosition">The position of this matchup in the tournament panel.</param>
+            /// <param name="team1Slot">The fixed slot for team 1's function to use.</param>
+            /// <param name="team2Slot">The fixed slot for team 2's function to use.</param>
             public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot)
                 : this(ID, numberOfMatches, team1Function, team2Function, cellPosition)
             {
@@ -299,12 +344,36 @@ namespace MOBAManager.Management.Tournaments
                 this.team2Slot = team2Slot;
             }
 
+            /// <summary>
+            /// Creates a new match-up.
+            /// </summary>
+            /// <param name="ID">The ID of the matchup.</param>
+            /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
+            /// <param name="team1Function">The function delegate for team 1 in this match.</param>
+            /// <param name="team2Function">The function delegate for team 2 in this match.</param>
+            /// <param name="cellPosition">The position of this matchup in the tournament panel.</param>
+            /// <param name="team1Slot">The fixed slot for team 1's function to use.</param>
+            /// <param name="team2Slot">The fixed slot for team 2's function to use.</param>
+            /// <param name="dayOfMatch">The offset day when this matchup occurs.</param>
             public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch)
                 : this(ID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot)
             {
                 this.DayOfMatch = dayOfMatch;
             }
 
+            /// <summary>
+            /// Creates a new match-up.
+            /// </summary>
+            /// <param name="ID">The ID of the matchup.</param>
+            /// <param name="numberOfMatches">Number of matches this match-up will take, max.</param>
+            /// <param name="team1Function">The function delegate for team 1 in this match.</param>
+            /// <param name="team2Function">The function delegate for team 2 in this match.</param>
+            /// <param name="cellPosition">The position of this matchup in the tournament panel.</param>
+            /// <param name="team1Slot">The fixed slot for team 1's function to use.</param>
+            /// <param name="team2Slot">The fixed slot for team 2's function to use.</param>
+            /// <param name="dayOfMatch">The offset day when this matchup occurs.</param>
+            /// <param name="team1Wins">The fixed number of wins for team 1.</param>
+            /// <param name="team2Wins">The fixed number of wins for team 2.</param>
             public TourneyMatchup(int ID, int numberOfMatches, Func<int, Team> team1Function, Func<int, Team> team2Function, int[] cellPosition, int team1Slot, int team2Slot, int dayOfMatch, int team1Wins, int team2Wins)
                 : this(ID, numberOfMatches, team1Function, team2Function, cellPosition, team1Slot, team2Slot, dayOfMatch)
             {

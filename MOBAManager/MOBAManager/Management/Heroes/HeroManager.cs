@@ -26,6 +26,11 @@ namespace MOBAManager.Management.Heroes
             return allHeroes[id].HeroName;
         }
 
+        /// <summary>
+        /// Returns the ID of the hero with the name provided, or -1 if none match.
+        /// </summary>
+        /// <param name="name">The name of the hero to retrieve the ID for.</param>
+        /// <returns></returns>
         public int GetHeroID(string name)
         {
             foreach (KeyValuePair<int, Hero> kvp in allHeroes)
@@ -38,6 +43,11 @@ namespace MOBAManager.Management.Heroes
             return -1;
         }
 
+        /// <summary>
+        /// Returns the Hero with the ID provided.
+        /// </summary>
+        /// <param name="id">The ID of the hero needed.</param>
+        /// <returns></returns>
         public Hero GetHeroByID(int id)
         {
             return allHeroes[id];
