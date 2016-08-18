@@ -45,13 +45,13 @@ namespace MOBAManager.Management.Tournaments
                     switch (tourney.Attribute("type").Value)
                     {
                         case "Double Elimination":
-                            tournaments.Add(new DoubleEliminationTournament(tm, hm, tourney));
+                            tournaments.Add(new DoubleEliminationTournament(tm, hm, this, tourney));
                             break;
                         case "Round Robin":
-                            tournaments.Add(new RoundRobinTournament(tm, hm, tourney));
+                            tournaments.Add(new RoundRobinTournament(tm, hm, this, tourney));
                             break;
                         case "Single Elimination":
-                            tournaments.Add(new SingleEliminationTournament(tm, hm, tourney));
+                            tournaments.Add(new SingleEliminationTournament(tm, hm, this, tourney));
                             break;
                     }
                 }

@@ -85,9 +85,21 @@ namespace MOBAManager.Management.Tournaments
                 }
                 root.Add(new XElement("teams", teamStr));
             }
-            else
+
+            if (usesInvites)
             {
-                //Invitations *shudder*
+                XElement inviteRoot = new XElement("invites");
+                for (int i = 0; i < inviteFunctions.Count; i++)
+                {
+                    XElement invite = new XElement("invite", ((Tournament)inviteFunctions[i].Target).ID);
+                    invite.SetAttributeValue("type", "TopRanked");
+                    if (inviteNumbers[i] != -1)
+                    {
+                        invite.SetAttributeValue("num", inviteNumbers[i]);
+                    }
+                    inviteRoot.Add(invite);
+                }
+                root.Add(inviteRoot);
             }
 
             if (upcomingMatchups.Count > 0)
@@ -219,7 +231,7 @@ namespace MOBAManager.Management.Tournaments
         /// <param name="tm">The TeamManager that relates to this tournament.</param>
         /// <param name="hm">The HeroManager that relates to this tournament.</param>
         /// <param name="src">The XElement to build from.</param>
-        public Tournament(TeamManager tm, HeroManager hm, XElement src)
+        public Tournament(TeamManager tm, HeroManager hm, TournamentManager tym, XElement src)
         {
             _ID = int.Parse(src.Attribute("id").Value);
             _name = src.Attribute("name").Value;
@@ -263,6 +275,31 @@ namespace MOBAManager.Management.Tournaments
                 foreach (int i in teamList)
                 {
                     includedTeams.Add(tm.GetTeamByID(i));
+                }
+            }
+
+            inviteFunctions = new List<Func<int, List<Team>>>();
+            inviteNumbers = new List<int>();
+
+            if (src.Element("invites") != null)
+            {
+                usesInvites = true;
+                foreach (XElement invite in src.Element("invites").Descendants("invite"))
+                {
+                    switch (invite.Attribute("type").Value)
+                    {
+                        case "TopRanked":
+                            int tourneyID = int.Parse(invite.Value);
+                            if (invite.Attribute("num") != null)
+                            {
+                                addInviteFunction(tym.GetTournamentByID(tourneyID).GetTopRankedTeams, int.Parse(invite.Attribute("num").Value));
+                            }
+                            else
+                            {
+                                addInviteFunction(tym.GetTournamentByID(tourneyID).GetTopRankedTeams);
+                            }
+                            break;
+                    }
                 }
             }
 

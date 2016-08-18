@@ -255,8 +255,8 @@ namespace MOBAManager.Management.Tournaments
         /// <param name="tm">The TeamManager that relates to this tournament.</param>
         /// <param name="hm">The HeroManager that relates to this tournament.</param>
         /// <param name="src">The XElement to build from.</param>
-        public DoubleEliminationTournament(TeamManager tm, HeroManager hm, XElement src)
-            : base(tm, hm, src)
+        public DoubleEliminationTournament(TeamManager tm, HeroManager hm, TournamentManager tym, XElement src)
+            : base(tm, hm, tym, src)
         {
             //blank
         }
